@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webjump_BraspagPagador>
+            <active>true</active>
+            <codePool>community</codePool>
+            <!-- <depends><Webjump_License /></depends> -->
+        </Webjump_BraspagPagador>
+    </modules>
+</config>

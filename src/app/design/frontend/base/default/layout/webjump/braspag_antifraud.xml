@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<webjump_braspag_devicefingerprint>
+		<reference name="before_body_end">
+			<block type="webjump_braspag_antifraud/devicefingerprint" name="webjump.braspag_antifraud.devicefingerprint" as="devicefingerprint" template="webjump/braspag_antifraud/devicefingerprint.phtml" />
+    	</reference>
+	</webjump_braspag_devicefingerprint>
+	
+	<checkout_onepage_index>
+		<update handle="webjump_braspag_devicefingerprint" />
+	</checkout_onepage_index>
+</layout>

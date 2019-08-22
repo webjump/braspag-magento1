@@ -1,0 +1,187 @@
+<?php $_code = $this->getMethodCode(); ?>
+<?php $_paymentRequestIndex = 0; ?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <li>
+        <h4><?php echo $this->__('Credit Card 1') ?></h4>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_total_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_total" class="required"><em>*</em><?php echo $this->__('How much do you want to pay by Credit card?') ?></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" title="<?php echo $this->__('Total for Credit card') ?>" class="input-text required-entry validate-number" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_total" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][amount]" value="<?php if (isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['amount'])) { echo $this->escapeHtml($_additionalInformation['payment_request'][$_paymentRequestIndex]['amount']); } ?>" />
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_div">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
+        <div class="input-box">
+            <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_type]" class="required-entry" title="<?php echo $this->__('Credit Card Type') ?>">
+            <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+                <option value="<?php echo $_typeCode ?>"><?php echo $_typeName ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_owner]" value="<?php if (isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner'])) { echo $this->escapeHtml($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner']); } ?>" />
+        </div>
+    </li>
+    <li>
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" pattern="\d*" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_number" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text required-entry" value="" />
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_exp_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_exp_month]" class="month validate-cc-exp required-entry">
+                <?php foreach ($this->getCardMonths() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+            <div class="v-fix">
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration_yr" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_exp_year]" class="year required-entry">
+                <?php foreach ($this->getCardYears() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </li>
+    <?php echo $this->getChildHtml() ?>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_cvv_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <input autocomplete="off" type="text" pattern="\d*" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_cid]" value="" />
+            </div>
+            <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
+        </div>
+    </li>
+
+    <?php if($this->isInstallmentsEnabled()): ?>
+        <li>
+            <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
+            <div class="input-box">
+                <div class="v-fix">
+                    <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry" disabled></select>
+                </div>
+            </div>
+        </li>
+    <?php endif;?>
+
+    <?php if ($this->isShowJustclickOption()): ?>
+        <li>
+            <div class="input-box">
+                <div class="v-fix">
+                    <input autocomplete="off" type="checkbox" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_justclick]" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_justclick"/><label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_justclick"><em>*</em><?php echo $this->__('add To Braspag JustClick') ?></label>
+                </div>
+            </div>
+        </li>
+    <?php endif ?>
+    <?php $_paymentRequestIndex = 1 ?>
+    <li>
+        <h4><?php echo $this->__('Credit Card 2') ?></h4>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_div">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
+        <div class="input-box">
+            <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_type]" class="required-entry" title="<?php echo $this->__('Credit Card Type') ?>">
+            <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+                <option value="<?php echo $_typeCode ?>"><?php echo $_typeName ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_owner]" value="<?php if (isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner'])) { echo $this->escapeHtml($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner']); } ?>" />
+        </div>
+    </li>
+    <li>
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" pattern="\d*" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_number" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text required-entry" value="" />
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_exp_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_exp_month]" class="month validate-cc-exp required-entry">
+                <?php foreach ($this->getCardMonths() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+            <div class="v-fix">
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration_yr" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_exp_year]" class="year required-entry">
+                <?php foreach ($this->getCardYears() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </li>
+    <?php echo $this->getChildHtml() ?>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_cvv_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <input autocomplete="off" type="text" pattern="\d*" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_cid]" value="" />
+            </div>
+            <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
+        </div>
+    </li>
+
+    <?php if($this->isInstallmentsEnabled()): ?>
+        <li>
+            <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
+            <div class="input-box">
+                <div class="v-fix">
+                    <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry" disabled></select>
+                </div>
+            </div>
+        </li>
+    <?php endif;?>
+
+    <?php if ($this->isShowJustclickOption()): ?>
+        <li>
+            <div class="input-box">
+                <div class="v-fix">
+                    <input autocomplete="off" type="checkbox" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_justclick]" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_justclick"/><label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_justclick"><em>*</em><?php echo $this->__('add To Braspag JustClick') ?></label>
+                </div>
+            </div>
+        </li>
+    <?php endif ?>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_total_div">
+        <div class="input-box">
+            <input autocomplete="off" type="hidden" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_total" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][amount]" value="<?php if (isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['amount'])) { echo $this->escapeHtml($_additionalInformation['payment_request'][$_paymentRequestIndex]['amount']); } ?>" />
+        </div>
+    </li>
+</ul>
+<script>
+    $('webjump_braspag_multi_cccc_0_cc_total').observe('blur', function (e) {
+        new Ajax.Request('<?php echo $this->getUrl("braspag_pagador/cccc/apportionment/"); ?>', {
+            parameters: {
+                cc0: $('webjump_braspag_multi_cccc_0_cc_total').value,
+            },
+            onLoaded: function (argument) {
+                $('webjump_braspag_multi_cccc_0_installments').disabled();
+            },
+            onSuccess: function(response) {
+                $('webjump_braspag_multi_cccc_0_installments').enable();
+                $('webjump_braspag_multi_cccc_0_installments').update(response.responseJSON.cc0.installments);
+                $('webjump_braspag_multi_cccc_1_cc_total').value = response.responseJSON.cc1.value;
+                $('webjump_braspag_multi_cccc_1_installments').enable();
+                $('webjump_braspag_multi_cccc_1_installments').update(response.responseJSON.cc1.installments);
+            }
+        }); 
+    });
+</script>   

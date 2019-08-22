@@ -1,0 +1,7 @@
+# Codeception Test Suite Configuration
+
+# suite for unit (internal) tests.
+actor: UnitTester
+class_name: UnitTester
+modules:
+    enabled: [Asserts, UnitHelper, \Magento\Codeception\Helper\Magento]

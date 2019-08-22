@@ -1,0 +1,14 @@
+<?php 
+$_code = $this->getMethodCode();
+
+$_paymentInstructions = $this->getPaymentInstructions();
+$_paymentRequestIndex = 0
+?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+	<li>
+<p><?php echo $_paymentInstructions; ?></p>
+            <input type="hidden" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][boleto_type]" value="<?php echo $this->getBoletoType();?>">
+<input type="hidden" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][type]" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_boleto_payment_type" value="<?php echo $_code ?>" />
+            <input type="hidden" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_boleto_total" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][amount]" value="<?php echo $this->getAmount(); ?>" />           
+	</li>
+</ul>

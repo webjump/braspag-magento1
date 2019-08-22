@@ -1,0 +1,18 @@
+<?php 
+	$_code = $this->getMethodCode();
+	$_paymentRequestIndex = 0;
+?>
+<ul class="form-list" id="payment_form_<?php echo $_code  ?>" style="display:none;">
+	<li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_div">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Dedit Card Type') ?></label>
+        <div class="input-box">
+            <select id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_type]" class="required-entry" title="<?php echo $this->__('Credit Card Type') ?>">
+                <option value=""><?php echo $this->__('--Please Select--')?></option>
+	            <?php foreach ($this->getAvailableTypes() as $key => $label): ?>
+                    <option value="<?php echo $key ?>"><?php echo $label ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+</ul>

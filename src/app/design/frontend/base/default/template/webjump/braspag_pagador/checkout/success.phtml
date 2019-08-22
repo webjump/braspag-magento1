@@ -1,0 +1,16 @@
+<?php
+$_hlp = Mage::helper('webjump_braspag_pagador');
+$paymentLink = $this->getPaymentLink();
+$paymentCode = $this->getOrder()->getPayment()->getMethodInstance()->getCode();
+?>
+<?php if (!empty($paymentLink)): $r = end($paymentLink); ?>
+	<div class="braspag_pay_wrapper">
+		<a id="braspag_pay_button" <?php if (!empty($r['target'])):?>target="<?php echo $r['target'];?>"<?php endif;?> href="<?php echo $r['url'];?>" class="button webjump-braspagpagador print-boleto-button payment-code-<?php echo $paymentCode;?>"><?php echo $_hlp->__($r['label']); ?></a> 
+		<br /><br />
+		<?php if (trim($r['autoredirect']) != ''): ?>
+			<script>
+				setTimeout(function(){document.getElementById('braspag_pay_button').click();}, <?php echo ($r['autoredirect']*1000);?>);
+			</script>
+		<?php endif; ?>
+	</div>
+<?php endif; ?>

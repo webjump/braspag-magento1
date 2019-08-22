@@ -1,0 +1,4 @@
+<?php
+class Webjump_BraspagAntifraud_Helper_Validate extends Webjump_BraspagPagador_Helper_Validate
+{
+}

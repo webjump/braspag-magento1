@@ -1,0 +1,315 @@
+<?xml version="1.0"?>
+<config>
+	<tabs>
+		<webjump_braspag translate="label">
+			<label>Braspag by Webjump</label>
+			<sort_order>0</sort_order>
+		</webjump_braspag>
+	</tabs>
+    
+    <sections>
+		<webjump_braspag_antifraud translate="label" module="webjump_braspag_antifraud">
+			<label>Antifraud</label>
+            <tab>webjump_braspag</tab>
+			<sort_order>500</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<hint translate="label,hint" module="webjump_braspag_antifraud">
+					<frontend_model>webjump_braspag_pagador/adminhtml_system_config_fieldset_hint</frontend_model>
+					<hint><![CDATA[The best fraud prevention solution for your store.<br /><a href="http://www.webjump.com.br/braspag" target="_blank">Click here to know more.</a><br /><br /><br />Developed by <a href="http://www.webjump.com.br?utm_source=magento-module-braspag" target="_blank">Webjump</a>. Oficial Magento Partner]]></hint>
+					<sort_order>0</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+				</hint>
+				<general translate="label" module="webjump_braspag_antifraud">
+					<label>General Configuration</label>
+					<sort_order>100</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+                        <active translate="label">
+                            <label>Active</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <merchant_id_test translate="label,comment">
+                            <label>Merchant Id - Test</label>
+                            <comment>Leave empty to use demo account or contact Braspag to get your own merchant id.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merchant_id_test>
+                        <merchant_id translate="label">
+                            <label>Merchant Id - Production</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merchant_id>
+                        <decision_manager translate="label,comment">
+                            <label>CyberSource Decision Manager</label>
+                            <comment><![CDATA[The orders under review will be analysed by CyberSource Decision Manager or by your own staff.]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </decision_manager>
+                        <sandbox_flag translate="label">
+                            <label>Test Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sandbox_flag>
+                        <debug translate="label">
+                            <label>Debug</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </debug>
+                    </fields>
+				</general>
+				<auto translate="label,comment" module="webjump_braspag_pagador">
+					<label>Automatically send order to antifraud review</label>
+					<sort_order>200</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<comment><![CDATA[This feature automatically sends a placed order to Braspag Antifraud review process.]]></comment>
+					<fields>
+                        <active translate="label">
+                            <label>Active</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <minimum_amount translate="label">
+                            <label>When Order Amount is Above</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-number</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                        </minimum_amount>
+                        <payment_methods translate="label">
+                            <label>When Payment Method is</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allowedmethods</source_model>
+                            <sort_order>30</sort_order>
+                            <can_be_empty>1</can_be_empty>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                        </payment_methods>
+					</fields>
+				</auto>
+				<status_update translate="label,comment" module="webjump_braspag_pagador">
+					<label>Status Update</label>
+					<sort_order>300</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<comment><![CDATA[This feature automatically update order status by Braspag Antifraud review process.]]></comment>
+					<fields>
+                        <active translate="label">
+                            <label>Active</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <status_review translate="label">
+                            <label>When Order Will Be Manually Reviewed</label>
+                            <frontend_type>select</frontend_type>
+							<source_model>webjump_braspag_antifraud/system_config_source_status_review</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<depends>
+                                <active>1</active>
+                            </depends>
+                        </status_review>
+                        <status_approved translate="label,comment">
+                            <label>When Order is Approved</label>
+                            <comment><![CDATA[The unhold action will set the last status before the order was put in hold. If it is not in hold, the status will not change.]]></comment>
+                            <frontend_type>select</frontend_type>
+							<source_model>webjump_braspag_antifraud/system_config_source_status_approved</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<depends>
+                                <active>1</active>
+                            </depends>
+                        </status_approved>
+                        <status_rejected translate="label">
+                            <label>When Order is Rejected</label>
+                            <frontend_type>select</frontend_type>
+							<source_model>webjump_braspag_antifraud/system_config_source_status_rejected</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<depends>
+                                <active>1</active>
+                            </depends>
+                        </status_rejected>
+                        <status_error translate="label">
+                            <label>When Analysis Returns a Error</label>
+                            <frontend_type>select</frontend_type>
+							<source_model>webjump_braspag_antifraud/system_config_source_status_error</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<depends>
+                                <active>1</active>
+                            </depends>
+                        </status_error>
+  					</fields>
+				</status_update>
+                <autoinvoice translate="label,comment" module="webjump_braspag_pagador">
+                    <label>Auto generate invoice when order is approved</label>
+                    <sort_order>350</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[This feature automatically generate a invoice when Braspag Antifraud approves the order.]]></comment>
+                    <fields>
+                        <active translate="label">
+                            <label>Active</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <send_email translate="label">
+                            <label>E-mail invoice to customer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                        </send_email>
+                        <payment_methods translate="label,comment">
+                            <label>When Payment Method is</label>
+                            <comment><![CDATA[We recommend to not enable this feature in payment methods that can not be paid when evaluation is performed. For example: Boleto + Credit Card]]></comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>adminhtml/system_config_source_payment_allowedmethods</source_model>
+                            <sort_order>30</sort_order>
+                            <can_be_empty>1</can_be_empty>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <active>1</active>
+                            </depends>
+                        </payment_methods>
+                    </fields>
+                </autoinvoice>
+				<devicefingerprint translate="label,comment" module="webjump_braspag_pagador">
+					<label>Device Finger Print</label>
+					<sort_order>400</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<comment><![CDATA[Identifier used to cross informations obtained by the browser of the internet user, with the data sent for analysis.]]></comment>
+					<fields>
+                        <merchant_id_test translate="label,comment">
+                            <label>Merchant Id - Test</label>
+                            <comment>Leave empty to use demo account or contact Braspag to get your own merchant id. For example: braspag_webjump.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merchant_id_test>
+                        <merchant_id translate="label">
+                            <label>Merchant Id - Production</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merchant_id>
+                        <domain translate="label,comment">
+                            <label>Device Finger Print Domain</label>
+                            <comment><![CDATA[Used in production environment. You should add a CNAME record in your DNS that redirects to domain "h.online-metrix.net". For example: dfp.webjump.com.br]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </domain>
+					</fields>
+				</devicefingerprint>
+				<configuration translate="label,comment">				
+					<label>Configurations for Antifraud behavior</label>
+					<sort_order>500</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<comment><![CDATA[Choose the appropriate info in follow fields to optimize the antifraud review.]]></comment>
+					<fields>
+						<taxvat_field translate="label,comment">
+							<label>Taxvat Field</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment><![CDATA[Where is saved taxvat document information like CPF or CNPJ. The default value is 'order.customer_taxvat', but if you use some custom checkout module could be possible that it save in some other place. <br />For reference visit: <a href="http://www.magentocommerce.com/wiki/modules_reference/english/mage_adminhtml/system_email_template/index" target="_blank">Wiki email template</a>, <a href="http://www.magentocommerce.com/wiki/3_-_store_setup_and_management/cms/markup_tags" target="_blank">Wiki markup tags</a> and <a href="http://docs.magentocommerce.com/Mage_Cms/_Cms---Model---Template---Filter.php.html" target="_blank">documentation</a>.]]></comment>
+						</taxvat_field>
+   						<shipping_method translate="label,comment">
+                            <label>Shipping Methods Map</label>
+                            <comment><![CDATA[Map the active shipping methods of your store relating it with the appropriate Braspag Antifraud Shipping Method. 'Other' option will be used in review if the order shipping method not related with Braspag Antifraud.]]></comment>
+                            <frontend_model>webjump_braspag_antifraud/adminhtml_system_config_form_field_shippingmethods</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </shipping_method>
+                    </fields>
+				</configuration>				
+			</groups>
+        </webjump_braspag_antifraud>
+    </sections>
+</config>

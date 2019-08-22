@@ -1,0 +1,10 @@
+<?php 
+	$_code = $this->getMethodCode();
+	$_paymentRequestIndex = 0
+?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+	<li>
+		<p><?php echo $this->getPaymentInstructions(); ?></p>
+	    <input type="hidden" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][boleto_type]" value="<?php echo $this->getType();?>">
+	</li>
+</ul>

@@ -1,0 +1,24 @@
+# Codeception Test Suite Configuration
+
+# suite for acceptance tests.
+# perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver
+        - AcceptanceHelper
+        - AcceptancePaymentsJustClickHelper
+        - AcceptancePaymentsWithCreditCardAndBoletoHelper
+        - AcceptancePaymentsTwoCreditCardsHelper
+        - AcceptancePaymentsPostIndexHelper
+    config:
+        WebDriver:
+            url: 'http://test.webjump.com.br/braspag/develop/dev2/src/'
+            # url: http://braspag.dev/
+            browser: chrome
+            reset: true
+            restart: true
+            window_size: 1024x768
+            # wait: 3
