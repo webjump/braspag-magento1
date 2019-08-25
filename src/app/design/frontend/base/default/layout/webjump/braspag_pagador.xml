@@ -1,17 +1,21 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <braspag_post_pay translate="label">
-        <label>Braspag Order Payment Form</label>
-        <remove name="right"/>
-        <remove name="left"/>
 
-        <reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
+    <webjump_braspag_mpi>
+        <reference name="head">
+            <action method="addJs"><script>scriptaculous/scriptaculous.js</script></action>
+            <action method="addJs"><script>varien/product.js</script></action>
+            <action method="addJs"><script>varien/product_options.js</script></action>
+            <action method="unsetChild"><name>head.viewport</name></action>
         </reference>
         <reference name="content">
-            <block type="core/template" name="payment_form" template="webjump/braspag_pagador/post/pay.phtml" />
+            <block type="webjump_braspag_pagador/checkout_bpmpi" name="webjump.braspag_pagador.bpmpi" as="bpmpi" template="webjump/braspag_pagador/checkout/bpmpi.phtml" />
         </reference>
-    </braspag_post_pay>
+    </webjump_braspag_mpi>
+
+    <checkout_onepage_index>
+        <update handle="webjump_braspag_mpi" />
+    </checkout_onepage_index>
 
     <braspag_payment_reorder translate="label">
         <label>Braspag Payment reorder</label>

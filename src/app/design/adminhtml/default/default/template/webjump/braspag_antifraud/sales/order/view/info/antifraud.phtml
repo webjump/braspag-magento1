@@ -1,0 +1,59 @@
+<?php /** @var $this Webjump_BraspagAntifraud_Block_Admin_Sales_Order_View_Info_Antifraud */ ?>
+<?php 
+$_order = $this->getOrder();
+$orderId = $_order->getId();
+$_antifraud = $this->getAntifraud();
+$_helper = Mage::helper('webjump_braspag_antifraud');
+if($_antifraud->getId()):
+	$_statusCode = $_antifraud->getStatusCode();
+	switch ($_statusCode) {
+		case Webjump_BraspagAntifraud_Model_Api::STATUS_ACCEPT: $class = 'success';break;
+		case Webjump_BraspagAntifraud_Model_Api::STATUS_REJECT: $class = 'error';break;
+		default: $class = 'notice'; break;
+	}
+?>
+<div class="box-right wj-braspag-antifraud-box">
+    <!--Webjump Braspag Antifraud Information-->
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+			<h4 class="icon-head head-account"><?php echo $_helper->__('Braspag Antifraud / Webjump'); ?></h4>
+            <div class="tools"><a href="#" onclick="$('sales_order_view_tabs_antifraud_details_info').click();"><?php echo $_helper->__('Details'); ?></a></div>
+        </div>
+        <div class="fieldset">
+			<ul class="messages left"><li class="<?php echo $class; ?>-msg"><ul><li>
+				<span><?php echo $_helper->__('%s with score %s', $_helper->getStatusShortMsg($_statusCode), $_antifraud->getScore()); ?></span>
+			</li></ul></li></ul>
+			<div class="a-right">
+				<?php echo $_helper->getSignatureBlock()->toHtml(); ?>
+			</div>
+			<div class="clear"></div>
+			<?php if ($_statusCode == Webjump_BraspagAntifraud_Model_Api::STATUS_REVIEW && !$_helper->isDecisionManagerActive()) :?>
+			<div class="buttons-set">
+				<div><?php echo $_helper->__('Please, you should analyse this order and approve it or reject it.'); ?></div>
+				<?php
+				$message = $_helper->__('Do you approve this order?');
+				$status_accept = Webjump_BraspagAntifraud_Model_Api::STATUS_ACCEPT;
+				echo $this->getButtonHtml($label = $_helper->__('Approve'), $onclick = "confirmSetLocation('{$message}', '{$this->getUrl('*/webjump_braspag_antifraud/updateStatus')}order_id/{$orderId}/status/{$status_accept}');", $class='save green', $id=null);
+
+				$message = $_helper->__('Do you reject this order?');
+				$status_reject = Webjump_BraspagAntifraud_Model_Api::STATUS_REJECT;
+				echo $this->getButtonHtml($label = $_helper->__('Reject'), $onclick = "confirmSetLocation('{$message}', '{$this->getUrl('*/webjump_braspag_antifraud/updateStatus')}order_id/{$orderId}/status/{$status_reject}')", $class='delete', $id=null);
+				?>
+				<?php if ($_antifraud->getIsUpdateRequired()): ?>
+					<?php echo $this->getButtonHtml($label = $_helper->__('Get status update'), $onclick = "window.location='{$this->getUrl('*/webjump_braspag_antifraud/reviewOrder')}order_id/{$orderId}';", $class =	'go'); ?>
+				<?php endif; ?>
+			</div>
+			<?php elseif ($_statusCode != Webjump_BraspagAntifraud_Model_Api::STATUS_ACCEPT && $_statusCode != Webjump_BraspagAntifraud_Model_Api::STATUS_REJECT): ?>
+				<?php if ($_statusCode == Webjump_BraspagAntifraud_Model_Api::STATUS_REVIEW): ?>
+					<?php echo $_helper->__('Decision Manager Team is analyzing the order. The order status will be update soon.'); ?><br />
+				<?php endif; ?>
+				<?php echo $this->getButtonHtml($label = $_helper->__('Check for a review update at Braspag Antifraud now'), $onclick = "window.location='{$this->getUrl('*/webjump_braspag_antifraud/reviewOrder')}order_id/{$orderId}';", $class =	'go'); ?>
+			<?php endif; ?>
+			<?php if ($_antifraud->getIsManualReview()) :?>
+				<span class="wj-braspag-antifraud-manual-review"><?php echo $this->__('This order was reviewed by the merchant.'); ?></span>
+			<?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<?php endif; ?>

@@ -43,7 +43,7 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_JustClick extends Webjump
         $order = $this->getOrder();
         $storeId = $this->getStoreId();
 
-        $paymentPlan = $method->getConfigData('installments_plan', $storeId);
+//        $paymentPlan = $method->getConfigData('installments_plan', $storeId);
         $paymentAction = $method->getConfigData('payment_action', $storeId);
 
         switch ($paymentAction) {
@@ -74,7 +74,7 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_JustClick extends Webjump
                 'currency' => $currency,
                 'country' => $country,
                 'numberOfPayments' => $value['installments'],
-                'paymentPlan' => $value['installments'] == 1 ? $configModel::PAYMENT_PLAN_CASH : $paymentPlan,
+//                'paymentPlan' => $value['installments'] == 1 ? $configModel::PAYMENT_PLAN_CASH : $paymentPlan,
                 'transactionType' => $transactionType,
                 'cardSecurityCode' => $value['cc_cid'],
             );

@@ -121,7 +121,7 @@
                 <group>braspag</group>
                 <payment_action>authorize</payment_action>
                 <order_status>processing</order_status>
-                <installments_plan>0</installments_plan>
+                <!--<installments_plan>0</installments_plan>-->
                 <justclick_active>1</justclick_active>
 			</webjump_braspag_cc>
             <webjump_braspag_justclick translate="title" module="webjump_braspag_pagador">
@@ -131,7 +131,7 @@
                 <group>braspag</group>
                 <payment_action>authorize</payment_action>
                 <order_status>processing</order_status>
-                <installments_plan>0</installments_plan>
+                <!--<installments_plan>0</installments_plan>-->
                 <cvv_required>1</cvv_required>
             </webjump_braspag_justclick>
             <!--<webjump_braspag_multi_ccboleto>-->
@@ -229,7 +229,7 @@ Não receber após o vencimento]]></boleto_instructions>
     	</payment>
     	<webjump_braspag_pagador>
             <license translate="title" module="webjump_braspag_pagador">
-                <title>Braspag by Webjump</title>
+                <title>Braspag</title>
             </license>
     		<general>
     			<sandbox_flag>1</sandbox_flag>
@@ -258,32 +258,18 @@ Não receber após o vencimento]]></boleto_instructions>
 					</production>
                 </config>
             </transaction>
-			<!--<post>-->
-				<!--<index>-->
-					<!--<config>-->
-						<!--<sandbox>-->
-							<!--<url>https://transactionsandbox.pagador.com.br/pagador/index.asp</url>-->
-						<!--</sandbox>-->
-						<!--<production>-->
-							<!--<url>https://www.pagador.com.br/pagador/index.asp</url>-->
-						<!--</production>-->
-					<!--</config>-->
-				<!--</index>-->
-                <!--<passthru>-->
-                    <!--<config>-->
-                        <!--<sandbox>-->
-                            <!--<url>https://transactionsandbox.pagador.com.br/pagador/passthru.asp</url>-->
-                        <!--</sandbox>-->
-                        <!--<production>-->
-                            <!--<url>https://www.pagador.com.br/pagador/passthru.asp</url>-->
-                        <!--</production>-->
-                    <!--</config>-->
-                <!--</passthru>-->
-				<!--<url_notification>braspag_pagador/post/notification</url_notification>-->
-				<!--<url_payment>braspag_pagador/post/pay</url_payment>-->
-            <!--</post>-->
-            <generalservice>
-            	<config>
+            <mpi>
+                <config>
+                    <sandbox>
+                        <webservice_namespace>https://mpisandbox.braspag.com.br/</webservice_namespace>
+                    </sandbox>
+                    <production>
+                        <webservice_namespace>https://mpi.braspag.com.br/</webservice_namespace>
+                    </production>
+                </config>
+            </mpi>
+            <!--<generalservice>-->
+            	<!--<config>-->
 					<!--<sandbox>-->
 						<!--<webservice_namespace>https://www.pagador.com.br/webservice/BraspagGeneralService</webservice_namespace>-->
 						<!--<webservice_wsdl>https://transactionsandbox.pagador.com.br/braspaggeneralservice/braspaggeneralservice.asmx?wsdl</webservice_wsdl>-->
@@ -294,8 +280,8 @@ Não receber após o vencimento]]></boleto_instructions>
 						<!--<webservice_wsdl>https://www.pagador.com.br/braspaggeneralservice/braspaggeneralservice.asmx?wsdl</webservice_wsdl>-->
 						<!--<webservice_version>1.2</webservice_version>-->
 					<!--</production>-->
-            	</config>
-            </generalservice>
+            	<!--</config>-->
+            <!--</generalservice>-->
             <pagadorquery>
             	<config>
 					<!--<sandbox>-->

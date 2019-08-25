@@ -6,9 +6,9 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc_Installments extends Ma
 	{
 		$return = array();
 		
-		if (!$this->getCreditCardPaymentMethod()->isInstallmentsEnabled()) {
-			return false;
-		}
+//		if (!$this->getCreditCardPaymentMethod()->isInstallmentsEnabled()) {
+//			return false;
+//		}
 
 		if (!$installments) {
 			$installments = $this->getCreditCardPaymentMethod()->getConfigData('installments');

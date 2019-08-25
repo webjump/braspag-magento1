@@ -1,0 +1,75 @@
+<?php 
+$_code = $this->getMethodCode();
+$_paymentRequestIndex = 0;
+
+//Retrieve data submited
+$_additionalInformation = $this->getInfoData('additional_information');
+
+?>
+<ul id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_div">
+        <label for="<?php echo $_code ?>_cc_type"><?php echo $this->__('Credit Card Type') ?> <span class="required">*</span></label><br />
+        <div class="input-box">
+            <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_type]" class="required-entry" title="<?php echo $this->__('Credit Card Type') ?>">
+                <option value=""><?php echo $this->__('--Please Select--')?></option>
+            <?php echo $_ccType = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_type']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_type'] : null; ?>
+            <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+                <option value="<?php echo $_typeCode ?>"<?php if($_typeCode==$_ccType): ?> selected="selected"<?php endif ?>><?php echo $_typeName ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner_div">
+		<label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner"><?php echo $this->__('Name on Card') ?> <span class="required">*</span></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_owner" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_owner]" value="<?php if (isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner'])) { echo $this->escapeHtml($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner']); } ?>" />
+        </div>
+    </li>
+    <li>
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_number"><?php echo $this->__('Credit Card Number') ?> <span class="required">*</span></label>
+        <div class="input-box">
+            <input autocomplete="off" type="text" pattern="\d*" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_number" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text required-entry" value="" />
+        </div>
+    </li>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_exp_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration"><?php echo $this->__('Expiration Date') ?> <span class="required">*</span></label>
+        <div class="input-box">
+			<select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_exp_month]" class="month validate-cc-exp required-entry">
+			<?php $_ccExpMonth = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_exp_month']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_exp_month'] : null; ?>
+			<?php foreach ($this->getCardMonths() as $k=>$v): ?>
+				<option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+			<?php endforeach ?>
+			</select>
+			<?php $_ccExpYear = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_exp_year']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_exp_year'] : null; ?>
+			<select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_expiration_yr" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_exp_year]" class="year required-entry">
+			<?php foreach ($this->getCardYears() as $k=>$v): ?>
+				<option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+			<?php endforeach ?>
+			</select>
+        </div>
+    </li>
+    <?php echo $this->getChildHtml() ?>
+    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_type_cvv_div">
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid"><?php echo $this->__('Card Verification Number') ?> <span class="required">*</span></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <input autocomplete="off" type="text" pattern="\d*" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_cid]" value="" />
+            </div>
+        </div>
+    </li>
+	<?php if($this->isInstallmentsEnabled()): ?>
+		<li>
+			<label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments"><?php echo $this->__('Installments') ?> <span class="required">*</span></label>
+			<div class="input-box">
+				<div class="v-fix">
+					<?php $_installments = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['installments']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['installments'] : null; ?>
+                	<select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
+					<?php foreach ($this->getInstallments() as $k=>$v): ?>
+						<option value="<?php echo $k?$k:'' ?>"<?php if($k==$_installments): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+					<?php endforeach ?>
+					</select>
+				</div>
+			</div>
+		</li>
+	<?php endif;?>
+</ul>

@@ -71,15 +71,7 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize extends Webjump_BrasPag_Paga
 
     protected function prepareResponse($response)
     {
-        $data = $this->getLastResponse();
-
-//        $mockedData = new Varien_Object();
-//        $mockedData->setStatus(200);
-//        $mockedData->setBody('{"MerchantOrderId":"000000035","Customer":{"Name":"jose accept","Identity":"67328470000150","IdentityType":"CNPJ","Email":"joseaccept@webjumpbraspag.com","Phone":"11948937178","Address":{"Street":"Rua Professor Artur Ramos","Number":"123","Complement":"Cj 41","ZipCode":"01454011","City":"São Paulo","State":"SP","Country":"BRA","District":"Jardim Paulistano"},"DeliveryAddress":{"Street":"","Number":"","Complement":"","Country":"","District":""}},"Payment":{"ServiceTaxAmount":0,"Installments":1,"Interest":"ByMerchant","Capture":true,"Authenticate":false,"Recurrent":false,"CreditCard":{"CardNumber":"554581******4411","Holder":"jose accept","ExpirationDate":"04/2020","SaveCard":false,"Brand":"Visa"},"ProofOfSale":"20190813060450377","AcquirerTransactionId":"0813060450377","AuthorizationCode":"680586","FraudAnalysis":{"Sequence":"AnalyseFirst","SequenceCriteria":"OnSuccess","FingerPrintId":"k8ie2od8g5d7vu5u5ekqhmfp4f","Provider":"Cybersource","CaptureOnLowRisk":false,"VoidOnHighRisk":false,"TotalOrderAmount":0,"IsRetryTransaction":false,"Cart":{"Items":[{"Type":"Undefined","Name":"Advanced Pilates & Yoga (Strength)","Risk":"Undefined","Sku":"240-LV08","UnitPrice":1800,"Quantity":1,"HostHedge":"Undefined","NonSensicalHedge":"Undefined","ObscenitiesHedge":"Undefined","PhoneHedge":"Undefined","TimeHedge":"Undefined","VelocityHedge":"Undefined","GiftCategory":"Undefined","Passenger":{"Rating":"Undefined"},"OriginalPrice":0,"Weight":0,"CartType":0}]},"Browser":{"CookiesAccepted":false,"IpAddress":"177.94.213.118"},"Shipping":{"Addressee":"","Phone":"","Method":"Undefined"},"Id":"4813e9fb-0dbe-e911-bcd0-00155dff22e9","Status":1,"StatusDescription":"Accept","FraudAnalysisReasonCode":100,"ReplyData":{"FactorCode":"N","Score":76,"HostSeverity":1,"IpCity":"sao paulo","IpCountry":"br","IpRoutingMethod":"fixed","IpState":"sao paulo","ScoreModelUsed":"default_lac","VelocityInfoCode":"VEL-NAME","CasePriority":3,"ProviderTransactionId":"5657302895226385404012"}},"VelocityAnalysis":{"Id":"0e0ed0f1-3fd5-4205-b082-181e96240b12","ResultMessage":"Accept","Score":0},"PaymentId":"0e0ed0f1-3fd5-4205-b082-181e96240b12","Type":"CreditCard","Amount":1800,"ReceivedDate":"2019-08-13 18:04:48","CapturedAmount":1800,"CapturedDate":"2019-08-13 18:04:50","Currency":"BRL","Country":"BRA","Provider":"Simulado","ReasonCode":0,"ReasonMessage":"Successful","Status":2,"ProviderReturnCode":"6","ProviderReturnMessage":"Operation Successful","Links":[{"Method":"GET","Rel":"self","Href":"https://apiquerysandbox.braspag.com.br/v2/sales/0e0ed0f1-3fd5-4205-b082-181e96240b12"},{"Method":"PUT","Rel":"void","Href":"https://apisandbox.braspag.com.br/v2/sales/0e0ed0f1-3fd5-4205-b082-181e96240b12/void"}]}}');
-        
-        $hydrator = $this->getResponseHydrator();
-
-        $hydrator->hydrate($data, $response);
+        $this->getResponseHydrator()->hydrate($this->getLastResponse(), $response);
     }
 
     protected function getTemplate()

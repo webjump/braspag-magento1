@@ -89,14 +89,14 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
         return false;
     }
 
-    public function isInstallmentsEnabled()
-    {
-        $configData = $this->getConfigData('installments_plan');
-        if (empty($configData)) {
-            return false;
-        }
-        return (bool) $configData;
-    }
+//    public function isInstallmentsEnabled()
+//    {
+//        $configData = $this->getConfigData('installments_plan');
+//        if (empty($configData)) {
+//            return false;
+//        }
+//        return (bool) $configData;
+//    }
 
     public function isJustClickActive()
     {
@@ -106,9 +106,9 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
     public function getInstallments()
     {
 
-        if (!$this->isInstallmentsEnabled()) {
-            return false;
-        }
+//        if (!$this->isInstallmentsEnabled()) {
+//            return false;
+//        }
 
         $installments = $this->getConfigData('installments');
 
@@ -136,12 +136,12 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
                 break;
             }
 
-            if (($this->getConfigData('installments_plan') == Webjump_BraspagPagador_Model_Config::PAYMENT_PLAN_ISSUER) && ($i > $this->getConfigData('installments_max_installments_without_interest'))) {
-                $installmentAmount = Mage::helper('webjump_braspag_pagador/installments')->installmentPriceWithInterest($grandTotal, $this->getConfigData('installments_interest_rate')/100, $i);
-                $return[$i] = $_hlp->__('%1$sx %2$s with interest*', $i, $_hlpCore->currency($installmentAmount, true, false));
-            } else {
+//            if (($this->getConfigData('installments_plan') == Webjump_BraspagPagador_Model_Config::PAYMENT_PLAN_ISSUER) && ($i > $this->getConfigData('installments_max_installments_without_interest'))) {
+//                $installmentAmount = Mage::helper('webjump_braspag_pagador/installments')->installmentPriceWithInterest($grandTotal, $this->getConfigData('installments_interest_rate')/100, $i);
+//                $return[$i] = $_hlp->__('%1$sx %2$s with interest*', $i, $_hlpCore->currency($installmentAmount, true, false));
+//            } else {
                 $return[$i] = $_hlp->__('%1$sx %2$s without interest', $i, $_hlpCore->currency($installmentAmount, true, false));
-            }
+//            }
 
             
         }

@@ -18,15 +18,6 @@ class Webjump_BraspagPagador_Block_Form_Cc extends Webjump_BraspagPagador_Block_
         return $types;
     }
 
-    public function isInstallmentsEnabled()
-    {
-        if ($method = $this->getMethod()) {
-            return $method->isInstallmentsEnabled();
-        } else {
-            return false;
-        }
-    }
-
     public function getInstallments()
     {
         if ($method = $this->getMethod()) {

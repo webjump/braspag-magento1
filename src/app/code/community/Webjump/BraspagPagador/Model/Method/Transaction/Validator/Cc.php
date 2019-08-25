@@ -50,9 +50,9 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Validator_Cc extends Mage_
 
     protected function validateInstallment($paymentRequest)
     {
-        if (!$this->getCreditCardPaymentMethod()->isInstallmentsEnabled()) {
-            return $paymentRequest;
-        }
+//        if (!$this->getCreditCardPaymentMethod()->isInstallmentsEnabled()) {
+//            return $paymentRequest;
+//        }
 
         if (!isset($paymentRequest['installments']) ||
             (!$paymentRequest['installments_label'] = $this->getCcInstallments()->getInstallmentLabel($paymentRequest['installments'], $paymentRequest['amount']))) {
