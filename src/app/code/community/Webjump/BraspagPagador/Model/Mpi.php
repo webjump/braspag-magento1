@@ -40,9 +40,21 @@ class Webjump_BraspagPagador_Model_Mpi extends Mage_Core_Model_Abstract
     public function getAuthToken()
     {
     	try{
-    	    $api = Mage::getSingleton('webjump_braspag_pagador/mpi_auth');
+    	    $api = \Mage::getSingleton('webjump_braspag_pagador/mpi_auth');
 
-    		$result = $api->getToken();
+            $result = unserialize(Mage::getSingleton('core/session')->getMpiTokenResult());
+
+            $dateNow = new \DateTime('now');
+            if (!$result || $dateNow > $result->getExpirationDate()) {
+                $result = $api->getToken();
+
+                $dateToExpire = new \DateTime('now');
+                $dateToExpire->add(new DateInterval('PT'.$result->getExpiresIn().'S'));
+                $result->setExpirationDate($dateToExpire);
+
+                \Mage::getSingleton('core/session')->setMpiTokenResult(serialize($result));
+            }
+
 			if ($errors = $result->getErrorReport()->getErrors()) {
 
 				foreach ($errors AS $error) {

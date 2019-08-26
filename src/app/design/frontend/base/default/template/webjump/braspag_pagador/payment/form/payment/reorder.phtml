@@ -64,18 +64,16 @@
             <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
         </div>
     </li>
-    <?php if($this->isInstallmentsEnabled()): ?>
-        <li>
-            <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
-            <div class="input-box">
-                <div class="v-fix">
-                    <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
-                        <?php echo $this->getInstallmentsSelectOptions(); ?>
-                    </select>
-                </div>
+    <li>
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
+                    <?php echo $this->getInstallmentsSelectOptions(); ?>
+                </select>
             </div>
-        </li>
-    <?php endif;?>
+        </div>
+    </li>
     <?php if ($this->isShowJustclickOption()): ?>
         <li>
             <div class="input-box">

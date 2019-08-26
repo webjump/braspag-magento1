@@ -1,6 +1,7 @@
 <div id="bpmpi_data">
 
     <div id="bpmpi_data_auth">
+        <input type="hidden" name="test_environment" class="test_environment" value="1"/>
         <input type="hidden" name="bpmpi_accesstoken" class="bpmpi_accesstoken"/>
         <input type="hidden" name="bpmpi_auth" class="bpmpi_auth" value="true"/>
         <input type="hidden" name="bpmpi_auth_notifyonly" class="bpmpi_auth_notifyonly" value=""/>
@@ -83,3 +84,32 @@
         <input type="hidden" name="bpmpi_mdd5" class="bpmpi_mdd5" value=""/>
     </div>
 </div>
+
+<script type="text/javascript">
+
+
+  jQuery(document).on("click", ".btn-checkout", function(event) {
+    event.preventDefault();
+    console.log('dsffsdf');
+  });
+
+  var bpMpi3ds20Conf = new BpmpiConf();
+  bpMpi3ds20Conf.Environment = 'SDB';
+  bpMpi3ds20Conf.Debug = true;
+</script>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('webjump/braspag_pagador/js/bpmpi/lib/BP.Mpi.3ds20.lib.js') ?>"></script>
+
+<script type="text/javascript">
+  var bpmpi = new Bpmpi();
+  bpmpi.isBpmpiEnabledCC = true;
+  bpmpi.isBpmpiEnabledDC = true;
+  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledCC = true;
+  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledDC = true;
+  bpmpi.mddsCC = {};
+  bpmpi.mddsDC = {};
+  bpmpi.cartProducts = {};
+  bpmpi.userAccount = {};
+  bpmpi.device = {};
+  bpmpi.startTransaction();
+</script>

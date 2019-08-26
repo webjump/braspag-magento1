@@ -8,6 +8,9 @@
 
 var BpmpiRenderer = Class.create();
 BpmpiRenderer.prototype = {
+  initialize: function() {
+
+  },
 
   renderBpmpiData: function (item, element, value) {
 
@@ -16,14 +19,14 @@ BpmpiRenderer.prototype = {
       }
 
       if (item) {
-          $('.'+item).val(value);
+          jQuery('.'+item).val(value);
       }
   },
 
   createInputHiddenElement: function(appendToElement, elementName, elementClass, value) {
       if (appendToElement.find("input[value='"+elementName+"']").length == 0) {
           appendToElement.append(
-              $('<input>')
+              jQuery('<input>')
                   .attr('type', 'hidden')
                   .attr('name', elementName)
                   .addClass(elementClass)

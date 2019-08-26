@@ -64,22 +64,20 @@ $numPayments = 0;
             <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
         </div>
     </li>
-	<?php if($this->isInstallmentsEnabled()): ?>
-		<li>
-			<label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
-			<div class="input-box">
-				<div class="v-fix">
-					<?php $_installments = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['installments']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['installments'] : null; ?>
-                	<select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
-					<?php foreach ($this->getInstallments() as $k=>$v): ?>
-						<option value="<?php echo $k?$k:'' ?>"<?php if($k==$_installments): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-					<?php endforeach ?>
-					</select>
-                    <p class="help-block"><?php echo $this->__('Installments set up by card issuer') ?></p>
-				</div>
-			</div>
-		</li>
-	<?php endif;?>
+    <li>
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <?php $_installments = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['installments']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['installments'] : null; ?>
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
+                <?php foreach ($this->getInstallments() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_installments): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+                <p class="help-block"><?php echo $this->__('Installments set up by card issuer') ?></p>
+            </div>
+        </div>
+    </li>
     <?php if ($this->isShowJustclickOption()): ?>
         <li>
             <div class="input-box">

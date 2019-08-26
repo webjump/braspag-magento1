@@ -5,10 +5,6 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc_Installments extends Ma
 	public function caculate($total, $installments = false, $installmentsMinAmount = false)
 	{
 		$return = array();
-		
-//		if (!$this->getCreditCardPaymentMethod()->isInstallmentsEnabled()) {
-//			return false;
-//		}
 
 		if (!$installments) {
 			$installments = $this->getCreditCardPaymentMethod()->getConfigData('installments');

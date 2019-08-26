@@ -89,15 +89,6 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
         return false;
     }
 
-//    public function isInstallmentsEnabled()
-//    {
-//        $configData = $this->getConfigData('installments_plan');
-//        if (empty($configData)) {
-//            return false;
-//        }
-//        return (bool) $configData;
-//    }
-
     public function isJustClickActive()
     {
         return (boolean) $this->getConfigData('justclick_active');
@@ -105,11 +96,6 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
 
     public function getInstallments()
     {
-
-//        if (!$this->isInstallmentsEnabled()) {
-//            return false;
-//        }
-
         $installments = $this->getConfigData('installments');
 
         if (empty($installments)) {

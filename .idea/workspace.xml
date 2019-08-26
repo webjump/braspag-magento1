@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e8b94794-6a95-403d-8209-5375384806b7" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/checkout/bpmpi/review/button.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagAntifraud/Block/Adminhtml/Sales/Antifraud/Detail.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagAntifraud/Block/Adminhtml/Sales/Antifraud/Detail/Tree.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagAntifraud/Block/Adminhtml/Sales/Order/View/Info/Antifraud.php" beforeDir="false" />
@@ -46,6 +48,7 @@
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagAntifraud/sql/webjump_braspag_antifraud_setup/install-0.0.1.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Adminhtml/Sales/Order.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Adminhtml/System/Config/Fieldset/Hint.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Checkout/Bpmpi.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Checkout/Success.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Form.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Form/Boleto.php" beforeDir="false" />
@@ -60,8 +63,10 @@
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Block/Pay/Info.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Helper/Data.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Helper/Installments.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Helper/Mpi.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Helper/Validate.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Config.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Config/Mpi.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Generalservice.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Justclick/Card.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Abstract.php" beforeDir="false" />
@@ -74,6 +79,8 @@
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Validator.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Validator/Boleto.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Validator/Cc.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Mpi.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Mpi/Auth.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Notification.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Notification/Response.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Observer/Antifraud.php" beforeDir="false" />
@@ -82,8 +89,6 @@
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Abstract.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Authorize/Request.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Authorize/Response.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Post.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Post/Index.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction/Abstract.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction/Boleto.php" beforeDir="false" />
@@ -123,8 +128,7 @@
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Source/PostTransactionType.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Source/TransactionLanguage.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Status/Update.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/controllers/CcboletoController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/controllers/CcccController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/controllers/MpiController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/controllers/PaymentController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/controllers/PostController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/controllers/StatusController.php" beforeDir="false" />
@@ -132,25 +136,17 @@
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/etc/config.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/etc/system.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/sql/webjump_braspag_pagador_setup/install-1.0.0.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/layout/webjump/braspag_antifraud.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/layout/webjump/braspag_pagador.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_antifraud/devicefingerprint.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/checkout/success.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/boleto.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/cc.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/dc.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/justclick.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/multi/ccboleto.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/multi/cccc.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/multi/cccc.phtml.bk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/payment/reorder.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/postindex.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/info/default.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/info/pay.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/post/passthru/form/boleto.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/post/passthru/form/cc.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/post/passthru/form/dc.phtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/post/pay.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/design/adminhtml/default/default/template/webjump/braspag_pagador/payment/form/cc.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/design/adminhtml/default/default/template/webjump/braspag_pagador/payment/form/cc.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/layout/webjump/braspag_pagador.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/design/frontend/base/default/layout/webjump/braspag_pagador.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/checkout/bpmpi.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/checkout/bpmpi.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/cc.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/cc.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/justclick.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/justclick.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/payment/reorder.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/design/frontend/base/default/template/webjump/braspag_pagador/payment/form/payment/reorder.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Mpi/Auth/GetToken/Response.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Mpi/Auth/GetToken/Response.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/bpmpi-renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/bpmpi-renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/bpmpi.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/bpmpi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/lib/BP.Mpi.3ds20.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/lib/BP.Mpi.3ds20.conf.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/lib/BP.Mpi.3ds20.lib.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/skin/frontend/base/default/webjump/braspag_pagador/js/bpmpi/lib/BP.Mpi.3ds20.lib.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -204,21 +200,6 @@
               <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="community" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="design" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -247,6 +228,28 @@
               <item name="adminhtml" type="462c0819:PsiDirectoryNode" />
               <item name="default" type="462c0819:PsiDirectoryNode" />
               <item name="default" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="adminhtml" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="adminhtml" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+              <item name="template" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
@@ -274,12 +277,88 @@
               <item name="frontend" type="462c0819:PsiDirectoryNode" />
               <item name="base" type="462c0819:PsiDirectoryNode" />
               <item name="default" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+              <item name="layout" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="design" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+              <item name="template" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
               <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+              <item name="adminhtml" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+              <item name="adminhtml" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+              <item name="adminhtml" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="skin" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="default" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -298,11 +377,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/skin/frontend/base/default" />
+      <recent name="$PROJECT_DIR$/src/skin/adminhtml/base/default" />
+      <recent name="$PROJECT_DIR$/src/lib" />
       <recent name="$PROJECT_DIR$/src/app/design/frontend/base/default/template" />
       <recent name="$PROJECT_DIR$/src/app/design/frontend/base/default/layout" />
-      <recent name="$PROJECT_DIR$/src/app/design/adminhtml/default/default/template" />
-      <recent name="$PROJECT_DIR$/src/app/design/adminhtml/default/default/layout" />
-      <recent name="$PROJECT_DIR$/src/app/code/community" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -327,12 +406,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1566759193483</updated>
-      <workItem from="1566759195704" duration="305000" />
+      <workItem from="1566759195704" duration="2522000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="305000" />
+    <option name="totallyTimeSpent" value="2522000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1366" height="741" extended-state="6" />

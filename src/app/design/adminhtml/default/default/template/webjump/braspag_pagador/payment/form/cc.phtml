@@ -57,19 +57,17 @@ $_additionalInformation = $this->getInfoData('additional_information');
             </div>
         </div>
     </li>
-	<?php if($this->isInstallmentsEnabled()): ?>
-		<li>
-			<label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments"><?php echo $this->__('Installments') ?> <span class="required">*</span></label>
-			<div class="input-box">
-				<div class="v-fix">
-					<?php $_installments = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['installments']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['installments'] : null; ?>
-                	<select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
-					<?php foreach ($this->getInstallments() as $k=>$v): ?>
-						<option value="<?php echo $k?$k:'' ?>"<?php if($k==$_installments): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-					<?php endforeach ?>
-					</select>
-				</div>
-			</div>
-		</li>
-	<?php endif;?>
+    <li>
+        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments"><?php echo $this->__('Installments') ?> <span class="required">*</span></label>
+        <div class="input-box">
+            <div class="v-fix">
+                <?php $_installments = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['installments']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['installments'] : null; ?>
+                <select autocomplete="off" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
+                <?php foreach ($this->getInstallments() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_installments): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+    </li>
 </ul>

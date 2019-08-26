@@ -18,6 +18,7 @@ class Webjump_BrasPag_Mpi_Auth_GetToken_Response
     protected $accessToken;
     protected $tokenType;
     protected $expiresIn;
+    protected $expirationDate;
 
     /**
      * @return mixed
@@ -97,5 +98,21 @@ class Webjump_BrasPag_Mpi_Auth_GetToken_Response
     public function setExpiresIn($expiresIn)
     {
         $this->expiresIn = $expiresIn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpirationDate()
+    {
+        return $this->expirationDate;
+    }
+
+    /**
+     * @param mixed $expirationDate
+     */
+    public function setExpirationDate($expirationDate)
+    {
+        $this->expirationDate = $expirationDate;
     }
 }

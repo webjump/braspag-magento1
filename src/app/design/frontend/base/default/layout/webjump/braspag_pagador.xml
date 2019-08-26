@@ -3,10 +3,18 @@
 
     <webjump_braspag_mpi>
         <reference name="head">
-            <action method="addJs"><script>scriptaculous/scriptaculous.js</script></action>
-            <action method="addJs"><script>varien/product.js</script></action>
-            <action method="addJs"><script>varien/product_options.js</script></action>
-            <action method="unsetChild"><name>head.viewport</name></action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>webjump/braspag_pagador/js/bpmpi/lib/BP.Mpi.3ds20.conf.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>webjump/braspag_pagador/js/bpmpi/bpmpi.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>webjump/braspag_pagador/js/bpmpi/bpmpi-renderer.js</name>
+            </action>
         </reference>
         <reference name="content">
             <block type="webjump_braspag_pagador/checkout_bpmpi" name="webjump.braspag_pagador.bpmpi" as="bpmpi" template="webjump/braspag_pagador/checkout/bpmpi.phtml" />
@@ -16,6 +24,14 @@
     <checkout_onepage_index>
         <update handle="webjump_braspag_mpi" />
     </checkout_onepage_index>
+
+    <checkout_onepage_review>
+        <reference name="checkout.onepage.review.button">
+            <action method="setTemplate">
+                <template>webjump/braspag_pagador/checkout/bpmpi/review/button.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_review>
 
     <braspag_payment_reorder translate="label">
         <label>Braspag Payment reorder</label>

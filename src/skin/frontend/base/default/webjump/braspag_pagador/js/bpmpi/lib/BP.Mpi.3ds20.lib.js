@@ -8,13 +8,13 @@
 
 var BP = function() {
   function e(e) {
-    return $('.'+e).length > 0
+    return jQuery('.'+e).length > 0
   }
 
   function r(r) {
     // console.log("Class: "+r);
-    // console.log("Value: "+$('.'+r).val());
-    return e(r) ? $('.'+r).val() : null
+    // console.log("Value: "+jQuery('.'+r).val());
+    return e(r) ? jQuery('.'+r).val() : null
   }
 
   function n(r, n) {
@@ -402,7 +402,8 @@ var BP = function() {
 
 var BpmpiLib = Class.create();
 BpmpiLib.prototype = {
-
+  initialize: function() {
+  },
   bpmpi_authentication: function () {
     return new Promise(function (resolve, reject){
       resolve(BP.Mpi.authenticate());

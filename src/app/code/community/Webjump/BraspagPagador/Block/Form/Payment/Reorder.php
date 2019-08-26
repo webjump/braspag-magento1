@@ -24,11 +24,6 @@ class Webjump_BraspagPagador_Block_Form_Payment_Reorder extends Webjump_BraspagP
         return Mage::getSingleton('webjump_braspag_pagador/method_transaction_multi_cccc')->getCode();
     }
 
-//	public function isInstallmentsEnabled()
-//	{
-//        return (!empty(Mage::getStoreConfig('payment/webjump_braspag_cc/installments_plan')));
-//	}
-
     public function getAmount()
     {
         return Mage::registry('paymentTotalDue');
