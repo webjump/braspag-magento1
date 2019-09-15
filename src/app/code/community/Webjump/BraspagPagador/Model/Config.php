@@ -21,6 +21,15 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     const POST_AUTHORIZE_CAPTURE_AUTH = 4;
 
     /**
+     * @param null $storeId
+     * @return bool
+     */
+    public function isTestEnvironmentEnabled($storeId = null)
+    {
+        return (bool) Mage::getStoreConfig('webjump_braspag_pagador/general/sandbox_flag', $storeId);
+    }
+
+    /**
      * @return array
      */
     public function getPaymentActions()
@@ -34,22 +43,6 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
 
         return $return;
     }
-
-//    public function getPostTransactionTypes()
-//    {
-//        $return = array(
-//            self::POST_AUTHORIZE => Mage::helper('webjump_braspag_pagador')
-//                ->__('Authorize Only'),
-//            self::POST_AUTHORIZE_CAPTURE => Mage::helper('webjump_braspag_pagador')
-//                ->__('Authorize and Capture'),
-//            self::POST_AUTHORIZE_AUTH => Mage::helper('webjump_braspag_pagador')
-//                ->__('Authorize Only with Authentication'),
-//            self::POST_AUTHORIZE_CAPTURE_AUTH => Mage::helper('webjump_braspag_pagador')
-//                ->__('Authorize and Capture with Authentication'),
-//        );
-//
-//        return $return;
-//    }
 
     /**
      * @return array
@@ -179,12 +172,6 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
         return $return;
     }
 
-//    public function getDcTypesTransaction()
-//    {
-//        return $this->getDcTypes();
-//    }
-
-
     /**
      * @return array
      */
@@ -202,10 +189,9 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     /**
      * @return mixed
      */
-    public function getConfig()
+    public function getConfig($storeId = null)
     {
-        $storeId = Mage::app()->getStore()->getId();
-        $sandboxFlag = Mage::getStoreConfig('webjump_braspag_pagador/general/sandbox_flag', $storeId);
+        $sandboxFlag = $this->isTestEnvironmentEnabled($storeId);
 
         if ($sandboxFlag) {
             $wsConfig = Mage::getStoreConfig('webjump_braspag_pagador/transaction/config/sandbox', $storeId);
@@ -308,7 +294,7 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
         $mcc = Mage::getStoreConfig('webjump_braspag_pagador/general/mcc', $storeId);
         if (empty($mcc)) {
             throw new Exception(Mage::helper('webjump_braspag_pagador')
-                ->__('Invalid MCC in production environment. Please check configuration.'));
+                ->__('Invalid MCC in production environment. Plean getTokense check configuration.'));
         }
 
         return $mcc;

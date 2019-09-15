@@ -18,4 +18,31 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Boleto
     {
         return $this->getConfigData('boleto_type');
     }
+
+    /**
+     * @param $result
+     * @param $payment
+     * @param $resultPayment
+     */
+    protected function _importAuthorizeResultToPayment($result, $payment, $resultPayment)
+    {
+        $resultData = $result->getDataAsArray();
+
+        if (empty($resultPayment->getUrl())) {
+            if (!empty($resultPayment->getMessage())) {
+                $this->errorMsg[] = $this->getHelper()->__($resultPayment->getMessage());
+            } else {
+                $this->errorMsg[] = $this->getHelper()->__('An error occurs while generating the boleto.');
+            }
+        }
+
+        $this->processAuthorizeRawDetails($resultData['payment'], $payment);
+        $this->processAuthorizeInfoData($resultData['payment']);
+
+        $payment
+            ->setTransactionId($resultData['order']['braspagOrderId'])
+            ->setIsTransactionClosed(0);
+
+        $this->processAuthorizeErrors($payment);
+    }
 }

@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * Validate Helper
+ *
+ * @category  Helper
+ * @package   Helper
+ * @author    Webjump Core Team <desenvolvedores@webjump.com>
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
+ * @license   http://www.webjump.com.br  Copyright
+ * @link      http://www.webjump.com.br
+ **/
 class Webjump_BraspagPagador_Helper_Validate extends Mage_Core_Helper_Abstract
 {
 	const CPF = 'CPF';

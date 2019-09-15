@@ -1,4 +1,15 @@
 <?php
+
+/**
+ * Data Helper
+ *
+ * @category  Helper
+ * @package   Helper
+ * @author    Webjump Core Team <desenvolvedores@webjump.com>
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
+ * @license   http://www.webjump.com.br  Copyright
+ * @link      http://www.webjump.com.br
+ **/
 class Webjump_BraspagPagador_Helper_Data extends Mage_Core_Helper_Abstract
 {
 	const DEBUG_FILE = 'webjump_braspag.log';
@@ -54,7 +65,7 @@ class Webjump_BraspagPagador_Helper_Data extends Mage_Core_Helper_Abstract
 	
 	public function getMerchantId($storeId = null)
 	{
-        $merchantId = Mage::getStoreConfig('webjump_braspag_pagador/general/merchant_id', $storeId);
+        $merchantId = trim(Mage::getStoreConfig('webjump_braspag_pagador/general/merchant_id', $storeId));
         if (empty($merchantId)) {
             throw new Exception($this->__('Invalid merchant id in production environment. Please check configuration.'));
         }
@@ -64,7 +75,7 @@ class Webjump_BraspagPagador_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function getMerchantKey($storeId = null)
 	{
-        $merchantKey = Mage::getStoreConfig('webjump_braspag_pagador/general/merchant_key', $storeId);
+        $merchantKey = trim(Mage::getStoreConfig('webjump_braspag_pagador/general/merchant_key', $storeId));
         if (empty($merchantKey)) {
             throw new Exception($this->__('Invalid merchant key in production environment. Please check configuration.'));
         }

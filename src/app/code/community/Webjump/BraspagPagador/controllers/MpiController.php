@@ -74,15 +74,11 @@ class Webjump_BraspagPagador_MpiController extends Mage_Core_Controller_Front_Ac
 
         if ($this->getRequest()->isAjax()) {
 
-            $quote = Mage::getSingleton('checkout/session')->getQuote();
-            $mpiHelper = Mage::helper('webjump_braspag_pagador/mpi');
+            $paymentType = $this->getRequest()->getParam('payment_type');
 
             try {
-                $grandTotal = $mpiHelper->convertReaisToCentavos($quote->getGrandTotal());
-
-                $responseAjax->setCartTotalAmount($grandTotal);
-                $responseAjax->setCartCurrency($quote->getQuoteCurrencyCode());
-                $responseAjax->setCartOrderNumber($quote->getId());
+                $mpiData = Mage::getModel('webjump_braspag_pagador/mpi_data');
+                $responseAjax->setData($mpiData->getDataContent($paymentType));
                 $responseAjax->setSuccess(true);
             } catch (Exception $e) {
                 $responseAjax->setError($e->getMessage());

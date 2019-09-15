@@ -5,7 +5,7 @@
  * @category  Data
  * @package   Webjump_BrasPag_Pagador_Data_Response_Payment
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
@@ -14,129 +14,36 @@ class Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCard
     implements Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCardInterface
 {
 	protected $integrationType = 'TRANSACTION_DC';
-    protected $authenticationUrl;
-    protected $acquirerTransactionId;
-    protected $paymentId;
-    protected $receivedDate;
-    protected $currency;
-    protected $country;
-    protected $provider;
+    protected $authenticate;
     protected $returnUrl;
-    protected $reasonCode;
-    protected $reasonMessage;
-    protected $status;
-    protected $providerReturnCode;
+    protected $acquirerTransactionId;
+    protected $softDescriptor;
+    protected $velocityAnalysis;
+    protected $externalAuthentication;
+    protected $debitCard;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAuthenticationUrl()
+    public function getIntegrationType()
     {
-        return $this->authenticationUrl;
-    }
-
-    /**
-     * @param mixed $authenticationUrl
-     */
-    public function setAuthenticationUrl($authenticationUrl)
-    {
-        $this->authenticationUrl = $authenticationUrl;
+        return $this->integrationType;
     }
 
     /**
      * @return mixed
      */
-    public function getAcquirerTransactionId()
+    public function getAuthenticate()
     {
-        return $this->acquirerTransactionId;
+        return $this->authenticate;
     }
 
     /**
-     * @param mixed $acquirerTransactionId
+     * @param mixed $authenticate
      */
-    public function setAcquirerTransactionId($acquirerTransactionId)
+    public function setAuthenticate($authenticate)
     {
-        $this->acquirerTransactionId = $acquirerTransactionId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPaymentId()
-    {
-        return $this->paymentId;
-    }
-
-    /**
-     * @param mixed $paymentId
-     */
-    public function setPaymentId($paymentId)
-    {
-        $this->paymentId = $paymentId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getReceivedDate()
-    {
-        return $this->receivedDate;
-    }
-
-    /**
-     * @param mixed $receivedDate
-     */
-    public function setReceivedDate($receivedDate)
-    {
-        $this->receivedDate = $receivedDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * @param mixed $currency
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param mixed $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProvider()
-    {
-        return $this->provider;
-    }
-
-    /**
-     * @param mixed $provider
-     */
-    public function setProvider($provider)
-    {
-        $this->provider = $provider;
+        $this->authenticate = $authenticate;
     }
 
     /**
@@ -158,64 +65,80 @@ class Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCard
     /**
      * @return mixed
      */
-    public function getReasonCode()
+    public function getAcquirerTransactionId()
     {
-        return $this->reasonCode;
+        return $this->acquirerTransactionId;
     }
 
     /**
-     * @param mixed $reasonCode
+     * @param mixed $acquirerTransactionId
      */
-    public function setReasonCode($reasonCode)
+    public function setAcquirerTransactionId($acquirerTransactionId)
     {
-        $this->reasonCode = $reasonCode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getReasonMessage()
-    {
-        return $this->reasonMessage;
-    }
-
-    /**
-     * @param mixed $reasonMessage
-     */
-    public function setReasonMessage($reasonMessage)
-    {
-        $this->reasonMessage = $reasonMessage;
+        $this->acquirerTransactionId = $acquirerTransactionId;
     }
 
     /**
      * @return mixed
      */
-    public function getStatus()
+    public function getSoftDescriptor()
     {
-        return $this->status;
+        return $this->softDescriptor;
     }
 
     /**
-     * @param mixed $status
+     * @param mixed $softDescriptor
      */
-    public function setStatus($status)
+    public function setSoftDescriptor($softDescriptor)
     {
-        $this->status = $status;
+        $this->softDescriptor = $softDescriptor;
     }
 
     /**
      * @return mixed
      */
-    public function getProviderReturnCode()
+    public function getVelocityAnalysis()
     {
-        return $this->providerReturnCode;
+        return $this->velocityAnalysis;
     }
 
     /**
-     * @param mixed $providerReturnCode
+     * @param mixed $velocityAnalysis
      */
-    public function setProviderReturnCode($providerReturnCode)
+    public function setVelocityAnalysis($velocityAnalysis)
     {
-        $this->providerReturnCode = $providerReturnCode;
+        $this->velocityAnalysis = $velocityAnalysis;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExternalAuthentication()
+    {
+        return $this->externalAuthentication;
+    }
+
+    /**
+     * @param mixed $externalAuthentication
+     */
+    public function setExternalAuthentication($externalAuthentication)
+    {
+        $this->externalAuthentication = $externalAuthentication;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDebitCard()
+    {
+        return $this->debitCard;
+    }
+
+    /**
+     * @param mixed $debitCard
+     */
+    public function setDebitCard($debitCard)
+    {
+        $this->debitCard = $debitCard;
     }
 }

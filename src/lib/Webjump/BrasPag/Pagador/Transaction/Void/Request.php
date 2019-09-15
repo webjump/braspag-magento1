@@ -1,24 +1,49 @@
 <?php
 /**
- * Pagador Transaction Void Request
+ * Pagador Transaction Void request
  *
  * @category  Method
- * @package   Webjump_BrasPag_Pagador_Transaction_Void_Request
+ * @package   Webjump_BrasPag_Pagador_Transaction_Void
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
 class Webjump_BrasPag_Pagador_Transaction_Void_Request extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface
 {
-    protected $requestId;
-    protected $version;
     protected $merchantId;
-    protected $transactionDataCollection;
+    protected $merchantKey;
+    protected $requestId;
+    protected $order;
+    protected $payment;
+    protected $customer;
 
-    public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
+    public function getMerchantId()
     {
-        $this->setTransactionDataCollection($serviceManager->get('Pagador\Data\Request\Transaction\List'));
+        return $this->merchantId;
+    }
+
+    public function setMerchantId($merchantId)
+    {
+        $this->merchantId = $merchantId;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMerchantKey()
+    {
+        return $this->merchantKey;
+    }
+
+    /**
+     * @param mixed $merchantKey
+     */
+    public function setMerchantKey($merchantKey)
+    {
+        $this->merchantKey = $merchantKey;
     }
 
     public function getRequestId()
@@ -33,38 +58,38 @@ class Webjump_BrasPag_Pagador_Transaction_Void_Request extends Webjump_BrasPag_P
         return $this;
     }
 
-    public function getVersion()
+    public function getOrder()
     {
-        return $this->version;
+        return $this->order;
     }
 
-    public function setVersion($version)
+    public function setOrder(Webjump_BrasPag_Pagador_Data_Request_OrderInterface $order = null)
     {
-        $this->version = $version;
+        $this->order = $order;
 
         return $this;
     }
 
-    public function getMerchantId()
+    public function getPayment()
     {
-        return $this->merchantId;
+        return $this->payment;
     }
 
-    public function setMerchantId($merchantId)
+    public function setPayment(Webjump_BrasPag_Pagador_Data_Request_Payment_CurrentInterface $payment = null)
     {
-        $this->merchantId = $merchantId;
+        $this->payment = $payment;
 
         return $this;
     }
 
-    public function getTransactionDataCollection()
+    public function getCustomer()
     {
-        return $this->transactionDataCollection;
+        return $this->customer;
     }
 
-    public function setTransactionDataCollection(Webjump_BrasPag_Pagador_Data_Request_Transaction_ListInterface $transactionDataCollection = null)
+    public function setCustomer(Webjump_BrasPag_Pagador_Data_Request_CustomerInterface $customer = null)
     {
-        $this->transactionDataCollection = $transactionDataCollection;
+        $this->customer = $customer;
 
         return $this;
     }

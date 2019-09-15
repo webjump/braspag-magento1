@@ -1,50 +1,35 @@
 <?php
-class Webjump_BrasPag_Pagadorquery
+class Webjump_BrasPag_Pagadorquery extends \Zend_Http_Client
 {
 	protected $lastRequest;
 	protected $lastResponse;
 	protected $url;
 	protected $data;
-	protected $config;
+	protected $queryConfig;
 	
-	public function __construct($config)
+	public function __construct($queryConfig)
 	{
-		$this->setConfig($config);
-	}
-	
-	public function getConfig()
-	{
-		return $this->config;
-	}
-	
-	public function setConfig($config)
-	{
-		$this->config = $config;
-		return $this;
-	}
-	
-	public function getLastRequest()
-	{
-		return $this->lastRequest;
-	}
-	
-	protected function setLastRequest($xml)
-	{
-		$this->lastRequest = $xml;
-		return $this;
+		$this->setQueryConfig($queryConfig);
+
+		parent::__construct();
 	}
 
-	public function getLastResponse()
-	{
-		return $this->lastResponse;
-	}
-	
-	protected function setLastResponse($xml)
-	{
-		$this->lastResponse = $xml;
-		return $this;
-	}
-		
+    /**
+     * @return mixed
+     */
+    public function getQueryConfig()
+    {
+        return $this->queryConfig;
+    }
+
+    /**
+     * @param mixed $queryConfig
+     */
+    public function setQueryConfig($queryConfig)
+    {
+        $this->queryConfig = $queryConfig;
+    }
+
 	public function setData(array $data)
 	{
 		$this->data = $data;
@@ -59,131 +44,86 @@ class Webjump_BrasPag_Pagadorquery
 	public function getOrderIdData()
 	{
 		try {
-			$data = $this->getData();
-			$config = $this->getConfig();
-	
-			$xml = '
-				<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
-					<Body>
-						<GetOrderIdData xmlns="' . $config['webservice_namespace']. '">
-							<orderIdDataRequest>
-								<RequestId>' . $data['request_id'] . '</RequestId>
-								<Version>' . $config['webservice_version'] . '</Version>
-								<MerchantId>' . $data['merchant_id'] . '</MerchantId>
-								<OrderId>' . $data['order_increment_id'] . '</OrderId>
-							</orderIdDataRequest>
-						</GetOrderIdData>
-					</Body>
-				</Envelope>'
-			;
-			
-			$response = $this->doRequest('GetOrderIdData', $xml);
-			return $this->getOrderIdDataProcessResult($response);
+            $data = $this->getData();
+            $config = $this->getQueryConfig();
+
+            $dataRequest = [
+                "Header" => [
+                    "MerchantId" => $data['merchant_id'],
+                    "MerchantKey" => $data['merchant_key'],
+                    "RequestId" => $data['request_id']
+                ],
+                "OrderIncrementId" => $data['OrderIncrementId']
+            ];
+
+            $this->setUri($config['webservice_wsdl']."v2/sales/");
+            $this->setMethod("GET");
+            $this->setParameterGet("merchantOrderId", $dataRequest['OrderIncrementId']);
+
+            $this->setHeaders('Content-Type', 'application/json');
+            $this->setHeaders($dataRequest['Header']);
+
+            $this->request();
+
+			return $this->getProcessResult();
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
-	
-	function getOrderIdDataProcessResult($response)
-	{
-		try {
-			$error = $response->getElementsByTagName('ErrorReportDataResponse');
-			if ($error->length) {
-				throw new Exception($error->item(0)->getElementsByTagName('ErrorMessage')->item(0)->nodeValue, $error->item(0)->getElementsByTagName('ErrorCode')->item(0)->nodeValue);
-			}
-	
-			$result = $response->getElementsByTagName('OrderIdTransactionResponse');
-			
-			$return = array();
-			foreach ($result AS $key => $r) {
-				if (!$r->hasChildNodes()) {
-					$return[$r->nodeName] = $r->nodeValue;
-				}
-				else {
-					foreach ($r->childNodes AS $child) {
-						$data = array();
-						foreach ($child->childNodes AS $child_child) {
-							$data[] = $child_child->nodeValue;
-						}
-						if (count($data) == 1) {
-							$return[$key][$child->nodeName] = $data[0];
-						} else {
-							$return[$key][$child->nodeName] = $data;
-						}
-					}
-				}
-			}
-			
-			return $return;
-		} catch (Exception $e) {
-			throw new Exception($e->getMessage(), $e->getCode());
-		}
-	}
-	
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
 	public function getTransactionData()
 	{
 		try {
 			$data = $this->getData();
-			$config = $this->getConfig();
-	
-			$xml = '
-				<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
-					<Body>
-						<GetTransactionData xmlns="' . $config['webservice_namespace']. '">
-							<transactionDataRequest>
-								<RequestId>' . $data['request_id'] . '</RequestId>
-								<Version>' . $config['webservice_version'] . '</Version>
-								<MerchantId>' . $data['merchant_id'] . '</MerchantId>
-				               <BraspagTransactionId>' . $data['braspag_transaction_id'] . '</BraspagTransactionId>
-							</transactionDataRequest>
-						</GetTransactionData>
-					</Body>
-				</Envelope>'
-			;
-			
-			$response = $this->doRequest('GetTransactionData', $xml);
-			return $this->getTransactionDataProcessResult($response);
+			$config = $this->getQueryConfig();
+
+            $dataRequest = [
+			    "Header" => [
+                    "MerchantId" => $data['merchant_id'],
+                    "MerchantKey" => $data['merchant_key'],
+                    "RequestId" => $data['request_id']
+                ],
+                "PaymentId" => $data['braspag_transaction_id']
+            ];
+
+            $this->setUri($config['webservice_wsdl']."v2/sales/".$dataRequest['PaymentId']);
+            $this->setMethod("GET");
+
+            $this->setHeaders('Content-Type', 'application/json');
+            $this->setHeaders($dataRequest['Header']);
+
+            $this->request();
+
+			return $this->getProcessResult();
+
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
-	
-	function getTransactionDataProcessResult($response)
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+	protected function getProcessResult()
 	{
 		try {
-			$error = $response->getElementsByTagName('ErrorReportDataResponse');
-			if ($error->length) {
-				throw new Exception($error->item(0)->getElementsByTagName('ErrorMessage')->item(0)->nodeValue, $error->item(0)->getElementsByTagName('ErrorCode')->item(0)->nodeValue);
-			}
-	
-			$result = $response->getElementsByTagName('GetTransactionDataResponse')->item(0)->getElementsByTagName('GetTransactionDataResult');
-			
-			$return = array();
-			foreach ($result->item(0)->childNodes AS $key => $r) {
-				$return[$r->nodeName] = $r->nodeValue;
-			}
+		    $response = $this->getLastResponse();
+
+		    $responseBody = $response->getRawBody();
+
+		    if(!$response || $response->getStatus() != 200) {
+                throw new Exception($responseBody);
+            }
+
+            $return = json_decode($responseBody, true);
 			return $return;
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
-	}
-	
-	public function doRequest($method, $xml)
-	{
-		$config = $this->getConfig();
-
-		$client = new SoapClient($config['webservice_wsdl']);
-		$this->setLastRequest($xml);
-		$response = $client->__doRequest($xml, $config['webservice_wsdl'], preg_replace('/\/$/', '', $config['webservice_namespace']) . '/' . $method, SOAP_1_1);
-
-		$this->setLastResponse($response);
-		$doc = new DOMDocument('1.0', 'utf-8');
-		$doc->loadXML( $response );
-
-		$error = $doc->getElementsByTagName('Fault');
-		if ($error->length) {
-			throw new Exception($error->item(0)->nodeValue );
-		}
-		return $doc;
 	}
 }

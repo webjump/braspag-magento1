@@ -87,7 +87,6 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
     protected function getMerchantOrderId()
     {
         $this->data["Body"]["MerchantOrderId"] = $this->getRequest()->getOrder()->getOrderId();
-
         return $this->data;
     }
 
@@ -112,8 +111,6 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
                 'DeliveryAddress' => [],
             ];
 
-
-            
             if ($address = $customer->getAddress()) {
                 $customerAddress = [
                     "Street" => $address->getStreet(),
@@ -204,11 +201,16 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
             "Interest" => $payment->getInterest(),
             "Capture" => $payment->getCapture(),
             "Authenticate" => $payment->getAuthenticate(),
+            "ExternalAuthentication" => $payment->getExternalAuthentication(),
             "Recurrent" => $payment->getRecurrent(),
             "SoftDescriptor" => $payment->getSoftDescriptor(),
             "DoSplit" => $payment->getDoSplit(),
             "CreditCard" => $creditCardData
         ];
+
+        if ($payment->getFraudAnalysis()->getIsActive() && !$payment->getAuthenticate()) {
+            $paymentData['FraudAnalysis'] = $this->getAntifraudData($payment->getFraudAnalysis());
+        }
 
         return $paymentData;
     }
@@ -227,7 +229,7 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
             "Brand" => $payment->getCardBrand()
         ];
 
-        $paymentData = [
+        return [
             "Provider" => $payment->getProvider(),
             "Type" => $payment->getType(),
             "Amount" => $payment->getAmount(),
@@ -236,13 +238,12 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
             "Interest" => $payment->getInterest(),
             "Capture" => $payment->getCapture(),
             "Authenticate" => $payment->getAuthenticate(),
+            "ExternalAuthentication" => $payment->getExternalAuthentication(),
             "Recurrent" => $payment->getRecurrent(),
             "SoftDescriptor" => $payment->getSoftDescriptor(),
             "DebitCard" => $debitCardData,
             "ReturnUrl" => $payment->getReturnUrl(),
         ];
-
-        return $paymentData;
     }
 
     /**
@@ -251,7 +252,7 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
      */
     protected function getBoletoData($payment)
     {
-        $paymentData = [
+        return [
             "Provider" => $payment->getProvider(),
             "Type" => $payment->getType(),
             "Amount" => $payment->getAmount(),
@@ -268,7 +269,33 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
             "InterestRate" => $payment->getInterestRate(),
             "InterestAmount" => $payment->getInterestAmount()
         ];
+    }
 
-        return $paymentData;
+    /**
+     * @param $antiFraud
+     * @return array
+     */
+    protected function getAntifraudData($antiFraud)
+    {
+        $merchantDefinedFields = $antiFraud->getMerchantDefinedFields()->__toArray();
+
+        $data = [
+            "Sequence" => $antiFraud->getSequence(),
+            "SequenceCriteria" => $antiFraud->getSequenceCriteria(),
+            "Provider" => $antiFraud->getProvider(),
+            "CaptureOnLowRisk" => $antiFraud->getCaptureOnLowRisk(),
+            "VoidOnHighRisk" => $antiFraud->getVoidOnHighRisk(),
+            "TotalOrderAmount" => $antiFraud->getTotalOrderAmount(),
+            "FingerPrintId" => $antiFraud->getFingerPrintId(),
+            "Browser" => $antiFraud->getBrowser()->__toArray(),
+            "Cart" => $antiFraud->getCart()->__toArray(),
+            "Shipping" => $antiFraud->getShipping()->__toArray()
+        ];
+
+        if (!empty($merchantDefinedFields)) {
+            $data['MerchantDefinedFields'] = $merchantDefinedFields;
+        }
+
+        return $data;
     }
 }

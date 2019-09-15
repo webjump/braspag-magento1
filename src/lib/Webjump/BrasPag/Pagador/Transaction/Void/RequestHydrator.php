@@ -1,76 +1,87 @@
 <?php
-/**
- * Pagador Transaction Void Request hydrator
- *
- * @category  Method
- * @package   Webjump_BrasPag_Pagador_Transaction_Void_Request_Hydrator
- * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
- * @license   http://www.webjump.com.br  Copyright
- * @link      http://www.webjump.com.br
- **/
+
 class Webjump_BrasPag_Pagador_Transaction_Void_RequestHydrator implements Webjump_BrasPag_Pagador_Data_HydratorInterface
 {
-    protected $transactionsList;
-    protected $transactionItem;
+    private $serviceManager;
 
     public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
     {
-        $this->setTransactionsList($serviceManager->get('Pagador\Data\Request\Transaction\List'));
-        $this->setTransactionItem($serviceManager->get('Pagador\Data\Request\Transaction\Item'));
+        $this->serviceManager = $serviceManager;
     }
 
-    public function hydrate(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-    {
-        $data = $this->convertTransactionDataToTransactionList($data, $request);
-        $this->hydrateDefault($data, $request);
+	public function hydrate(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+	{
+		$this->hydrateDefault($data, $request);
+		$this->hydrateOrder($data, $request);
+		$this->hydratePayment($data, $request);
+		$this->hydrateCustomer($data, $request);
 
-        return $request;
-    }
+		return $request;
+	}
 
-    protected function hydrateDefault($data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-    {
-        $request->populate($data);
-    }
+	protected function hydrateDefault(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+	{
+       $request->setRequestId((isset($data['requestId'])) ? $data['requestId'] : null);
+       return $request->setVersion((isset($data['version'])) ? $data['version'] : null);
+	}
 
-    protected function convertTransactionDataToTransactionList($transactionsData, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-    {
-        if (isset($transactionsData['transactionDataCollection'])) {
-            $transactionList = $this->getTransactionsList();
+	protected function hydrateOrder(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+	{
+        $order = $this->getServiceManager()->get('Pagador\Data\Request\Order');
+        $order->populate((isset($data['order'])) ? $data['order'] : array());
+        
+        return $request->setOrder($order);
+	}
 
-            foreach ($transactionsData['transactionDataCollection'] as $transactionData) {
-                $transaction = clone $this->getTransactionItem();
-                $transaction->populate($transactionData);
-                $transactionList->add($transaction);
-            }
+	protected function hydratePayment(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+	{
+        $paymentCurrent = $this->getServiceManager()->get('Pagador\Data\Request\Payment\Current');
 
-            $transactionsData['transactionDataCollection'] = $transactionList;
+        $paymentData = (isset($data['payment'])) ? $data['payment'] : array();
+
+        if ($payment = $this->getPaymentByType($paymentData)) {
+            $paymentCurrent->populate($payment);
+            $paymentCurrent->add($payment);
         }
 
-        return $transactionsData;
-    }
+        return $request->setPayment($paymentCurrent);
+	}
 
-    public function getTransactionsList()
+	protected function getPaymentByType($paymentData)
+	{
+        if (isset($paymentData['type'])) {
+            switch ($paymentData['type']) {
+                case Webjump_BrasPag_Pagador_Data_Request_Payment_CreditCard::METHOD:
+                    return $this->getServiceManager()->get('Pagador\Data\Request\Payment\CreditCard');
+                    break;
+                case Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCard::METHOD:
+                    return $this->getServiceManager()->get('Pagador\Data\Request\Payment\DebitCard');
+                    break;
+                case Webjump_BrasPag_Pagador_Data_Request_Payment_Boleto::METHOD:
+                    return $this->getServiceManager()->get('Pagador\Data\Request\Payment\Boleto');
+                    break;
+            }
+        }
+
+        return false;
+	}
+
+	protected function hydrateCustomer(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+	{
+        if (isset($data['customer']['address'])) {
+            $address = $this->getServiceManager()->get('Pagador\Data\Request\Address');
+            $address->populate($data['customer']['address']);
+            $data['customer']['address'] = $address;
+        }
+
+        $customer = $this->getServiceManager()->get('Pagador\Data\Request\Customer');
+        $customer->populate((isset($data['customer'])) ? $data['customer'] : array());
+
+        return $request->setCustomer($customer);
+	}
+
+    private function getServiceManager()
     {
-        return $this->transactionsList;
-    }
-
-    protected function setTransactionsList($transactionsList)
-    {
-        $this->transactionsList = $transactionsList;
-
-        return $this;
-    }
-
-    public function getTransactionItem()
-    {
-        return $this->transactionItem;
-    }
-
-    protected function setTransactionItem($transactionItem)
-    {
-        $this->transactionItem = $transactionItem;
-
-        return $this;
+        return $this->serviceManager;
     }
 }

@@ -15,7 +15,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -39,7 +39,6 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Debitcard extends Webjump
 		$payment = $this->getPayment();
 		$amount = $this->getAmount();
 		$configModel = $this->getConfigModel();
-		$method = $this->getMethod();
 		$order = $this->getOrder();
 		$storeId = $this->getStoreId();
 		
@@ -72,6 +71,17 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Debitcard extends Webjump
                 "softDescriptor" => '',
                 "returnUrl" => $configModel->getDcReturnUrl()
 			);
+
+            if (isset($payment['authentication_failure_type'])) {
+                $dataCard['authenticate'] = true;
+                $dataCard['ExternalAuthentication'] = [
+                    "Cavv" => $payment['authentication_cavv'],
+                    "Xid" => $payment['authentication_xid'],
+                    "Eci" => $payment['authentication_eci'],
+                    "Version" => $payment['authentication_version'],
+                    "ReferenceID" => $payment['authentication_reference_id']
+                ];
+            }
 
 	        $card->populate($dataCard);
             $dataPayment->set($card);

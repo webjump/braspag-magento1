@@ -1,90 +1,28 @@
 <?php
-
-/* Pagador Transaction Void
+/**
+ * Pagador Transaction Void
  *
  * @category  Transaction
  * @package   Webjump_BrasPag_Pagador_Transaction_Void
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Transaction_Void implements Webjump_BrasPag_Pagador_Transaction_VoidInterface
+class Webjump_BrasPag_Pagador_Transaction_Void extends Webjump_BrasPag_Pagador_Transaction_Abstract
+    implements Webjump_BrasPag_Pagador_Transaction_VoidInterface
 {
-    protected $client;
     protected $request;
     protected $response;
-    protected $responseHydrator;
+    protected $template;
+    protected $hydrator;
+    protected $serviceManager;
 
     public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
     {
-        $this->setClient($serviceManager->get('Pagador\Transaction\Client'));
-        $this->setRequest($serviceManager->get('Pagador\Transaction\Void\Request'));
-        $this->setResponse($serviceManager->get('Pagador\Transaction\Void\Response'));
-        $this->setResponseHydrator($serviceManager->get('Pagador\Transaction\Void\Response\Hydrator'));
-    }
+        $this->serviceManager = $serviceManager;
 
-    public function execute()
-    {
-        $soapRequest = $this->prepareSoapRequest($this->getRequest()->getDataAsArray());
-
-        $soapResponse = $this->getClient()->VoidCreditCardTransaction(
-            array('request' => $soapRequest)
-        );
-
-        return $this->prepareResponse($soapResponse);
-    }
-
-    protected function prepareSoapRequest($data)
-    {
-        return $this->applyUcFirstToAllKeys($data);
-    }
-
-    protected function applyUcFirstToAllKeys($data)
-    {
-        $return = array();
-
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->applyUcFirstToAllKeys($value);
-            }
-
-            $return[ucfirst($key)] = $value;
-        }
-
-        return $return;
-    }
-
-    protected function prepareResponse($data)
-    {
-        $data = $this->convertObjectToArray($data);
-        $data = $this->hydrateResponse($data['VoidCreditCardTransactionResult']);
-
-        return $data;
-    }
-
-    protected function convertObjectToArray($object)
-    {
-        return json_decode(json_encode($object), true);
-    }
-
-    public function hydrateResponse($data)
-    {
-        $this->getResponseHydrator()->hydrate($data, $this->getResponse());
-
-        return $this->getResponse();
-    }
-
-    public function getClient()
-    {
-        return $this->client;
-    }
-
-    public function setClient(Webjump_BrasPag_Pagador_Service_ClientInterface $client)
-    {
-        $this->client = $client;
-
-        return $this;
+        return parent::__construct($this->serviceManager);
     }
 
     public function getRequest()
@@ -111,15 +49,54 @@ class Webjump_BrasPag_Pagador_Transaction_Void implements Webjump_BrasPag_Pagado
         return $this;
     }
 
-    public function getResponseHydrator()
+    public function execute()
     {
-        return $this->responseHydrator;
+        $paymentId = $this->getRequest()->getOrder()->getBraspagOrderId();
+        $amount = $this->getRequest()->getOrder()->getOrderAmount();
+
+        try {
+            $this->__doRequest($this->getRequest(), 'v2/sales/'.$paymentId."/void?amount=".$amount, 'PUT');
+            $this->prepareResponse($this->getResponse());
+        } catch (Exception $e) {
+            $this->getResponse()->getErrorReport()
+                ->setErrors(array('ErrorCode' => 'LIB', 'ErrorMessage' => $e->getMessage()));
+        }
+
+        return $this->getResponse();
     }
 
-    public function setResponseHydrator($responseHydrator)
+    protected function prepareRequest($request, $location, $action)
     {
-        $this->responseHydrator = $responseHydrator;
+        $template = $this->getTemplate();
+        $template->setRequest($this->getRequest());
+        return $template->getData();
+    }
 
-        return $this;
+    protected function prepareResponse($response)
+    {
+        $this->getResponseHydrator()->hydrate($this->getLastResponse(), $response);
+    }
+
+    protected function getTemplate()
+    {
+        if (!$this->template) {
+            $this->template = $this->getServiceManager()->get('Pagador\Transaction\Void\Template\Default');
+        }
+
+        return $this->template;
+    }
+
+    protected function getResponseHydrator()
+    {
+        if (!$this->hydrator) {
+            $this->hydrator = $this->getServiceManager()->get('Pagador\Transaction\Void\ResponseHydrator');
+        }
+
+        return $this->hydrator;
+    }
+
+    protected function getServiceManager()
+    {
+        return $this->serviceManager;
     }
 }

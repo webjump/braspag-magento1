@@ -1,127 +1,164 @@
 <?php
 
-/* Pagador Transaction Void Response Hydrator
- *
- * @category  Transaction
- * @package   Webjump_BrasPag_Pagador_Transaction_Void_Response_Hydrator
- * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
- * @license   http://www.webjump.com.br  Copyright
- * @link      http://www.webjump.com.br
- **/
-class Webjump_BrasPag_Pagador_Transaction_Void_ResponseHydrator implements Webjump_BrasPag_Pagador_Data_HydratorInterface
+class Webjump_BrasPag_Pagador_Transaction_Void_ResponseHydrator
+    implements Webjump_BrasPag_Pagador_Data_HydratorInterface
 {
-    protected $transactionsList;
-    protected $transactionItem;
-    protected $errorsList;
+    protected $serviceManager;
+    protected $responseData;
+    protected $responseClass;
+    protected $responseStatus;
+    protected $dataBodyObject;
+    protected $dataCustomerObject;
+    protected $dataOrderObject;
+    protected $dataPaymentObject;
+    protected $errorMessages = [];
 
+    /**
+     * Webjump_BrasPag_Pagador_Transaction_Void_ResponseHydrator constructor.
+     * @param Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager
+     */
     public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
     {
-        $this->setTransactionsList($serviceManager->get('Pagador\Data\Response\Transaction\List'));
-        $this->setTransactionItem($serviceManager->get('Pagador\Data\Response\Transaction\Item'));
-        $this->setErrorsList($serviceManager->get('Pagador\Data\Response\ErrorReport'));
+        $this->serviceManager = $serviceManager;
+        $this->responseStatus = false;
+        $this->dataBodyObject = $this->dataCustomerObject = $this->dataOrderObject = $this->dataPaymentObject= new Varien_Object();
     }
 
-    public function hydrate(array $data, Webjump_BrasPag_Pagador_Transaction_Void_ResponseInterface $response)
+    /**
+     * @param Zend_Http_Response $data
+     * @param Webjump_BrasPag_Pagador_Transaction_Void_ResponseInterface $response
+     * @return $this
+     * @throws Exception
+     */
+	public function hydrate(
+	    \Zend_Http_Response $data,
+        Webjump_BrasPag_Pagador_Transaction_Void_ResponseInterface $response
+    )
     {
-        $data = $this->applyLcFirstToAllKeys($data);
-        $data = $this->convertTransactions($data);
-        $data = $this->convertErrors($data);
+        $this->responseData = $data;
+        $this->responseClass = $response;
 
-        $response->populate($data);
+        if (!$this->responseData || !$this->prepareBody()) {
+            $this->errorMessages[] = json_encode([['Code' => 500, 'Message' => "Invalid Data Response"]]);
+            $this->hydrateErrors();
+            return $this;
+        }
 
-        return $response;
-    }
+        if ($this->responseData->getStatus() != 200 && $this->responseData->getStatus() != 200) {
 
-    protected function convertTransactions($transactionsData)
-    {
-        if (isset($transactionsData['transactionDataCollection'])) {
-            $transactionList = $this->getTransactionsList();
+            $this->errorMessages[] = json_encode([[
+                'Code' => $this->responseData->getStatus(),
+                'Message' => $this->responseData->getMessage()]
+            ]);
 
-            foreach ($this->extractTransactionsData($transactionsData) as $transactionData) {
-                $transaction = clone $this->getTransactionItem();
-                $transaction->populate($transactionData);
-                $transactionList->add($transaction);
+            foreach ($this->dataBodyObject->getData() as $data) {
+
+                if (isset($data['Message'])) {
+                    $this->errorMessages[] = json_encode([[
+                        'Code' => $data['Code'],
+                        'Message' => $data['Message']
+                    ]]);
+                }
             }
 
-            $transactionsData['transactions'] = $transactionList;
-            unset($transactionsData['transactionDataCollection']);
+            $this->hydrateErrors();
+            return $this;
         }
 
-        return $transactionsData;
-    }
+        if (in_array($this->dataPaymentObject->getData('Status'), [
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_NOT_FINISHED,
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED,
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED,
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
+        ])
+        ) {
 
-    protected function extractTransactionsData($transactionsData)
-    {
-        if ((isset($transactionsData['transactionDataCollection']['transactionDataResponse'])) &&
-            (is_array(reset($transactionsData['transactionDataCollection']['transactionDataResponse'])))) {
-            return $transactionsData['transactionDataCollection']['transactionDataResponse'];
+            $this->errorMessages[] = json_encode([
+                [
+                    'Code' => $this->dataPaymentObject->getData("ProviderReturnCode"),
+                    'Message' => $this->dataPaymentObject->getData("ProviderReturnMessage")
+                ]
+            ]);
+
+            $this->hydrateErrors();
+            return $this;
         }
 
-        return $transactionsData['transactionDataCollection'];
-    }
-
-    protected function applyLcFirstToAllKeys($data)
-    {
-        $return = array();
-
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $return[lcfirst($key)] = $this->applyLcFirstToAllKeys($value);
-                continue;
-            }
-
-            $return[lcfirst($key)] = $value;
+        if ($this->dataPaymentObject->getData('Status') == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED) {
+            $this->responseStatus = true;
         }
 
-        return $return;
-    }
+        $this->hydrateDefault();
 
-    protected function convertErrors($data)
+		return $this;
+	}
+
+    /**
+     * @return bool
+     */
+	protected function prepareBody()
     {
-        if (isset($data['errorReportDataCollection'])) {
-            $errorsList = $this->getErrorsList();
-            $errorsList->setErrors($this->applyLcFirstToAllKeys($data['errorReportDataCollection']));
-            $data['errorReport'] = $errorsList;
-            unset($data['errorReportDataCollection']);
+        if (!$dataBody = json_decode($this->responseData->getBody(), HTTP_RAW_POST_DATA)) {
+            return false;
         }
 
-        return $data;
+        $this->dataBodyObject->addData($dataBody);
+
+        return true;
     }
 
-    protected function getTransactionsList()
+    /**
+     * @return $this
+     */
+	protected function hydrateDefault()
     {
-        return $this->transactionsList;
-    }
-
-    protected function setTransactionsList($transactionsList)
-    {
-        $this->transactionsList = $transactionsList;
+        $this->responseClass->setSuccess($this->responseStatus);
 
         return $this;
-    }
+	}
 
-    protected function getTransactionItem()
+	/**
+     * @return $this
+     */
+	protected function hydrateOrder()
     {
-        return $this->transactionItem;
-    }
-
-    protected function setTransactionItem($transactionItem)
-    {
-        $this->transactionItem = $transactionItem;
+        $this->responseClass->getOrder()->populate($this->dataOrderObject->getData());
 
         return $this;
-    }
+	}
 
-    protected function getErrorsList()
+    /**
+     * @return $this
+     * @throws Exception
+     */
+	protected function hydratePayment()
     {
-        return $this->errorsList;
-    }
+		if ($paymentDataResponse = $this->dataPaymentObject) {
 
-    protected function setErrorsList($errorsList)
-    {
-        $this->errorsList = $errorsList;
+			$payment = $this->getServiceManager()->get('Pagador\Data\Response\Payment\CreditCard');
+            $payment->populate($paymentDataResponse->getData());
+
+            $this->responseClass->getPayment()->set($payment);
+		}
 
         return $this;
+	}
+
+    /**
+     * @param null $error
+     * @return $this
+     */
+	protected function hydrateErrors()
+    {
+        $this->responseClass->getErrorReport()->setErrors($this->errorMessages);
+        return $this;
+	}
+
+    /**
+     * @return Webjump_BrasPag_Pagador_Service_ServiceManagerInterface
+     */
+    protected function getServiceManager()
+    {
+        return $this->serviceManager;
     }
 }

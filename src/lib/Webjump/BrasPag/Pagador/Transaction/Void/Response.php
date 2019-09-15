@@ -1,35 +1,32 @@
 <?php
-
-/* Pagador Transaction Void Response
+/**
+ * Pagador Method Void response
  *
- * @category  Transaction
- * @package   Webjump_BrasPag_Pagador_Transaction_Void_Response
+ * @category  Method
+ * @package   Webjump_BrasPag_Pagador_Method
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Transaction_Void_Response extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Transaction_Void_ResponseInterface
+class Webjump_BrasPag_Pagador_Transaction_Void_Response extends Webjump_BrasPag_Pagador_Data_Abstract
+    implements Webjump_BrasPag_Pagador_Transaction_Void_ResponseInterface
 {
-    protected $correlationId;
+    protected $paymentId;
     protected $success;
     protected $errorReport;
-    protected $transactions;
+    protected $order;
+    protected $customer;
+    protected $payment;
 
-    public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
+    public function getPaymentId()
     {
-        $this->setErrorReport($serviceManager->get('Pagador\Data\Response\ErrorReport'));
-        $this->setTransactions($serviceManager->get('Pagador\Data\Response\Transaction\List'));
+        return $this->paymentId;
     }
 
-    public function getCorrelationId()
+    public function setPaymentId($paymentId)
     {
-        return $this->correlationId;
-    }
-
-    public function setCorrelationId($correlationId)
-    {
-        $this->correlationId = $correlationId;
+        $this->paymentId = $paymentId;
 
         return $this;
     }
@@ -41,7 +38,7 @@ class Webjump_BrasPag_Pagador_Transaction_Void_Response extends Webjump_BrasPag_
 
     public function setSuccess($success)
     {
-        $this->success = (boolean) $success;
+        $this->success = (filter_var($success, FILTER_VALIDATE_BOOLEAN));
 
         return $this;
     }
@@ -51,22 +48,78 @@ class Webjump_BrasPag_Pagador_Transaction_Void_Response extends Webjump_BrasPag_
         return $this->errorReport;
     }
 
-    public function setErrorReport(Webjump_BrasPag_Pagador_Data_Response_ErrorReportInterface $errorReport = null)
+    public function setErrorReport($errorReport)
     {
         $this->errorReport = $errorReport;
 
         return $this;
     }
 
-    public function getTransactions()
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
     {
-        return $this->transactions;
+        return $this->customer;
     }
 
-    public function setTransactions(Webjump_BrasPag_Pagador_Data_Response_Transaction_ListInterface $transactions = null)
+    /**
+     * @param $customer
+     * @return $this
+     */
+    public function setCustomer($customer)
     {
-        $this->transactions = $transactions;
+        $this->customer = $customer;
 
         return $this;
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(Webjump_BrasPag_Pagador_Data_Response_Payment_Current $payment = null)
+    {
+        $this->payment = $payment;
+
+        return $this;
+    }
+
+	public function getDataAsArray()
+    {
+    	$data = parent::getDataAsArray();
+    	
+    	if (!empty($data['payment']['payment'])) {
+    		$data['payment'] = $data['payment']['payment'];
+    	}
+        
+    	return $data;
+    }
+
+    public function getData($field = '')
+    {
+        $data = parent::getDataAsArray();
+
+        $dataObject = new Varien_Object();
+        $dataObject->addData($data);
+
+        if (!empty($field)) {
+            return $dataObject->getData($field);
+        }
+
+        return $dataObject;
     }
 }

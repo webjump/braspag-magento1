@@ -33,6 +33,11 @@ class Webjump_BrasPag_Mpi_Auth_GetToken_ResponseHydrator
         $this->responseData = $data;
         $this->responseClass = $response;
 
+        if (!$this->responseData) {
+            $this->responseStatus = false;
+            return $this;
+        }
+
         if ($this->responseData->getStatus() != 200 && $this->responseData->getStatus() != 201) {
             $this->responseStatus = false;
             $this->hydrateErrors();

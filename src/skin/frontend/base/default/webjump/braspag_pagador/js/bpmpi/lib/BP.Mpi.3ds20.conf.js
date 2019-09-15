@@ -18,51 +18,49 @@ BpmpiConf.prototype = {
   onSuccess: function (e) {
       // Cartão elegível para autenticação, e portador autenticou com sucesso.
 
-      jQuery('.bpmpi_auth_cavv').val(e.Cavv);
-      jQuery('.bpmpi_auth_xid').val(e.Xid);
-      jQuery('.bpmpi_auth_eci').val(e.Eci);
-      jQuery('.bpmpi_auth_version').val(e.Version);
-      jQuery('.bpmpi_auth_reference_id').val(e.ReferenceId);
-      jQuery('.bpmpi_auth_failure_type').val(0)
+      $j('.bpmpi_auth_cavv').val(e.Cavv);
+      $j('.bpmpi_auth_xid').val(e.Xid);
+      $j('.bpmpi_auth_eci').val(e.Eci);
+      $j('.bpmpi_auth_version').val(e.Version);
+      $j('.bpmpi_auth_reference_id').val(e.ReferenceId);
+      $j('.bpmpi_auth_failure_type').val(0)
           .trigger('change');
   },
   onFailure: function (e) {
       // Cartão elegível para autenticação, porém o portador finalizou com falha.
 
-      jQuery('.bpmpi_auth_xid').val(e.Xid);
-      jQuery('.bpmpi_auth_eci').val(e.Eci);
-      jQuery('.bpmpi_auth_version').val(e.Version);
-      jQuery('.bpmpi_auth_reference_id').val(e.ReferenceId);
-      jQuery('.bpmpi_auth_failure_type').val(1)
+      $j('.bpmpi_auth_xid').val(e.Xid);
+      $j('.bpmpi_auth_eci').val(e.Eci);
+      $j('.bpmpi_auth_version').val(e.Version);
+      $j('.bpmpi_auth_reference_id').val(e.ReferenceId);
+      $j('.bpmpi_auth_failure_type').val(1)
           .trigger('change');
   },
   onUnenrolled: function (e) {
       // Cartão não elegível para autenticação (não autenticável).
-      jQuery('.bpmpi_auth_xid').val(e.Xid);
-      jQuery('.bpmpi_auth_eci').val(e.Eci);
-      jQuery('.bpmpi_auth_version').val(e.Version);
-      jQuery('.bpmpi_auth_reference_id').val(e.ReferenceId);
-      jQuery('.bpmpi_auth_failure_type').val(2)
+      $j('.bpmpi_auth_xid').val(e.Xid);
+      $j('.bpmpi_auth_eci').val(e.Eci);
+      $j('.bpmpi_auth_version').val(e.Version);
+      $j('.bpmpi_auth_reference_id').val(e.ReferenceId);
+      $j('.bpmpi_auth_failure_type').val(2)
           .trigger('change');
   },
   onDisabled: function () {
       // Loja não requer autenticação do portador (classe "bpmpi_auth" false -> autenticação desabilitada).
-      jQuery('.bpmpi_auth_failure_type').val(3)
+      $j('.bpmpi_auth_failure_type').val(3)
           .trigger('change');
   },
   onError: function (e) {
       // Erro no processo de autenticação.
       var returnCode = e.ReturnCode;
 
-      jQuery('.bpmpi_auth_xid').val(e.Xid);
-      jQuery('.bpmpi_auth_eci').val(e.Eci);
-      jQuery('.bpmpi_auth_version').val(e.Version);
-      jQuery('.bpmpi_auth_reference_id');
-      jQuery('.bpmpi_auth_failure_type').val(4)
+      $j('.bpmpi_auth_xid').val(e.Xid);
+      $j('.bpmpi_auth_eci').val(e.Eci);
+      $j('.bpmpi_auth_version').val(e.Version);
+      $j('.bpmpi_auth_reference_id');
+      $j('.bpmpi_auth_failure_type').val(4)
           .trigger('change');
   },
-  Environment: jQuery('.test_environment').val() == '1' ? 'SDB' : 'PRD',
-  // Environment: 'SDB',
-  Debug: jQuery('.test_environment').val() == '1' ? true : false
-  // Debug: true
+  Environment: 'PRD',
+  Debug: false
 }

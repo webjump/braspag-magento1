@@ -26,7 +26,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
@@ -44,13 +44,13 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
         $helper = $this->getHelper();
         $payment = $this->getPayment();
         $amount = $this->getAmount();
-//        $configModel = $this->getConfigModel();
         $method = $this->getMethod();
         $order = $this->getOrder();
         $storeId = $this->getStoreId();
 
-//        $paymentPlan = $method->getConfigData('installments_plan', $storeId);
         $paymentAction = $method->getConfigData('payment_action', $storeId);
+
+        $antiFraudModel = Mage::getSingleton('webjump_braspag_pagador/antifraud');
 
         switch ($paymentAction) {
             case $method::ACTION_AUTHORIZE:$transactionType = 1;
@@ -67,13 +67,19 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
         $currentPayment = $this->getServiceManager()->get('Pagador\Data\Request\Payment\Current');
 
         if ($dataPayment = $payment->getPaymentRequest()) {
+
             $card = $this->getServiceManager()->get('Pagador\Data\Request\Payment\CreditCard');
+
+            $providerBrand = explode("-", $dataPayment['cc_type_label']);
+
+            if (isset($dataPayment[0])) {
+                $dataPayment = reset($dataPayment);
+                $providerBrand = explode("-", $dataPayment['cc_type']);
+            }
 
             if (!isset($dataPayment['installments'])) {
                 $dataPayment['installments'] = 1;
             }
-
-            $providerBrand = explode("-", $dataPayment['cc_type_label']);
 
             $dataCard = array(
                 'type' => self::PAYMENT_TYPE,
@@ -82,8 +88,6 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
                 'currency' => $currency,
                 'country' => $country,
                 'installments' => $dataPayment['installments'],
-//                'paymentPlan' => $dataPayment['installments'] == 1 ? $configModel::PAYMENT_PLAN_CASH : $paymentPlan,
-//                'transactionType' => $transactionType,
                 'cardHolder' => $dataPayment['cc_owner'],
                 'cardNumber' => str_replace(array('.', ' '), '', $dataPayment['cc_number']),
                 'cardSecurityCode' => (isset($dataPayment['cc_cid'])) ? $dataPayment['cc_cid'] : null,
@@ -93,12 +97,49 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
                 'saveCard' => true,
                 "interest" => 'ByMerchant',
                 "capture" => $transactionType == 2 ? true : false,
-                "authenticate" => false,
+                "authenticate" => isset($dataPayment['authentication_failure_type']) ? true : false,
                 "recurrent" => false,
                 "softDescriptor" => '',
                 "doSplit" => false
-
             );
+
+            if (isset($dataPayment['authentication_failure_type'])) {
+                $dataCard['authenticate'] = true;
+                $dataCard['ExternalAuthentication'] = [
+                    "Cavv" => $dataPayment['authentication_cavv'],
+                    "Xid" => $dataPayment['authentication_xid'],
+                    "Eci" => $dataPayment['authentication_eci'],
+                    "Version" => $dataPayment['authentication_version'],
+                    "ReferenceID" => $dataPayment['authentication_reference_id']
+                ];
+            }
+
+            $antiFraudConfigModel = Mage::getSingleton('webjump_braspag_pagador/config_antifraud')
+                ->setPaymentRequest($payment->getPaymentRequest());
+
+            $dataFraudAnalysis = new Varien_Object();
+            $dataFraudAnalysis->setIsActive(false);
+
+            if ($antiFraudConfigModel->isAntifraudActive() && !$dataCard['authenticate']) {
+
+                $dataFraudAnalysis->addData([
+                    "sequence" => $antiFraudConfigModel->getOptionsSequence(),
+                    "sequence_criteria" => $antiFraudConfigModel->getOptionsSequenceCriteria(),
+                    "provider" => "Cybersource",
+                    "capture_on_low_risk" => $antiFraudConfigModel->getOptionsCaptureOnLowRisk(),
+                    "void_on_high_risk" => $antiFraudConfigModel->getOptionsVoidOnHighRisk(),
+                    "total_order_amount" => $dataCard['amount'],
+                    "finger_print_id" => $antiFraudModel->getFingerPrintId(),
+                    "browser" => $antiFraudModel->getBrowserData(),
+                    "cart" => $antiFraudModel->getCartData(),
+                    "merchant_defined_fields" => $antiFraudModel->getMerchantDefinedFieldsData(),
+                    "shipping" => $antiFraudModel->getShippingData(),
+                    "travel" => $antiFraudModel->getTravelData(),
+                ]);
+                $dataFraudAnalysis->setIsActive(true);
+            }
+
+            $dataCard['FraudAnalysis'] = $dataFraudAnalysis;
 
             $card->populate($dataCard);
             $currentPayment->set($card);

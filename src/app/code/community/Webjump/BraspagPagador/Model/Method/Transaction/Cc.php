@@ -15,7 +15,7 @@
  * @category  Model
  * @package   Webjump_BraspagPagador_Model_Method
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -26,7 +26,7 @@
  * @category  Model
  * @package   Webjump_BraspagPagador_Model_Method
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
@@ -36,6 +36,7 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
     protected $_code = Webjump_BraspagPagador_Model_Config::METHOD_CC;
 
     protected $_apiType = 'webjump_braspag_pagador/pagador_transaction_creditcard';
+    protected $_validator = 'webjump_braspag_pagador/method_transaction_validator_cc';
 
     protected $_formBlockType = 'webjump_braspag_pagador/form_cc';
     protected $_infoBlockType = 'webjump_braspag_pagador/info_cc';
@@ -73,11 +74,18 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
         return $ccTypes;
     }
 
+    /**
+     * @return array
+     */
     public function getCcAvailableTypesCodes()
     {
         return array_keys($this->getCcAvailableTypes());
     }
 
+    /**
+     * @param $code
+     * @return bool|mixed
+     */
     public function getCcAvailableTypesLabelByCode($code)
     {
         $ccAvaliabletypes = $this->getCcAvailableTypes();
@@ -89,11 +97,17 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function isJustClickActive()
     {
         return (boolean) $this->getConfigData('justclick_active');
     }
 
+    /**
+     * @return array|bool
+     */
     public function getInstallments()
     {
         $installments = $this->getConfigData('installments');
@@ -122,19 +136,86 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
                 break;
             }
 
-//            if (($this->getConfigData('installments_plan') == Webjump_BraspagPagador_Model_Config::PAYMENT_PLAN_ISSUER) && ($i > $this->getConfigData('installments_max_installments_without_interest'))) {
-//                $installmentAmount = Mage::helper('webjump_braspag_pagador/installments')->installmentPriceWithInterest($grandTotal, $this->getConfigData('installments_interest_rate')/100, $i);
-//                $return[$i] = $_hlp->__('%1$sx %2$s with interest*', $i, $_hlpCore->currency($installmentAmount, true, false));
-//            } else {
-                $return[$i] = $_hlp->__('%1$sx %2$s without interest', $i, $_hlpCore->currency($installmentAmount, true, false));
-//            }
-
-            
+            $return[$i] = $_hlp->__('%1$sx %2$s without interest', $i, $_hlpCore->currency($installmentAmount, true, false));
         }
 
         return $return;
     }
 
+    /**
+     * @param $result
+     * @param $payment
+     * @param $amount
+     * @return $this
+     */
+    protected function _importAuthorizeResultToPayment($result, $payment, $resultPayment)
+    {
+        $antiFraudConfig = Mage::getModel('webjump_braspag_pagador/config_antifraud');
+
+        $resultData = $result->getDataAsArray();
+
+        $status = $resultPayment->getStatus();
+
+        if ($status == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_AUTHORIZED
+            || $status = Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED) {
+
+            $this->totalPaid += $resultPayment->getAmount() / 100;
+
+            $this->processAuthorizeInfoData($resultData['payment']);
+
+            if ($antiFraudConfig->isAntifraudActive()
+                && $fraudAnalysisStatus = $resultPayment->getFraudAnalysis()['Status']
+            ) {
+                $payment = $this->getAuthorizeFraudAnalysis($fraudAnalysisStatus, $payment);
+            }
+        }
+
+        if ($status == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PENDING) {
+
+            $payment->setIsTransactionPending(true);
+            $this->processAuthorizeInfoData($resultData['payment']);
+        }
+
+        if ((!$this->totalPaid) && $resultData['payment']) {
+            $this->errorMsg[] = $this->getHelper()->__('The payment was unauthorized.');
+        }
+
+        $payment
+            ->setTransactionId($resultData['order']['braspagOrderId'])
+            ->setIsTransactionClosed(0);
+
+        $this->processAuthorizeRawDetails($resultData['payment'], $payment);
+        $this->processAuthorizeErrors($payment);
+
+        return $this;
+    }
+
+    /**
+     * @param $fraudAnalysisStatus
+     * @param $payment
+     * @return mixed
+     */
+    protected function getAuthorizeFraudAnalysis($fraudAnalysisStatus, $payment)
+    {
+        if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
+            || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED
+            || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_UNKNOWN
+        ) {
+            $payment->setIsFraudDetected(true);
+        }
+
+        if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REVIEW) {
+            $payment->setIsTransactionPending(true);
+        }
+
+        return $payment;
+    }
+
+    /**
+     * @param Varien_Object $payment
+     * @param float $amount
+     * @return $this|Mage_Payment_Model_Abstract
+     */
     public function capture(Varien_Object $payment, $amount)
     {
         parent::capture($payment, $amount);
@@ -168,61 +249,26 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
         return $this;
     }
 
+    /**
+     * @param $result
+     * @param $payment
+     * @param $amount
+     * @return $this
+     */
     protected function _importCaptureResultToPayment($result, $payment, $amount)
     {
         $order = $payment->getOrder();
         $resultData = $result->getDataAsArray();
 
-        if (empty($resultData['transactions'])) {
-            $errorMsg = $this->getHelper()->__('No transaction response was received');
-            Mage::throwException($errorMsg);
-        }
-
-        $api = $this->getPagador()->getApi($payment);
-
         $capturedAmount = 0;
-        $raw_details = array(
-            'correlationId' => $resultData['correlationId'],
-        );
-
         $errorMsg = array();
 
-        $transactionCount = count($resultData['transactions']);
-        foreach ($resultData['transactions'] as $key => $resultTransaction) {
-            $status = $resultTransaction['status'];
+        $this->errorMsg = $resultData['errorReport']['errors'];
 
-            //Waiting response
-            switch ($status) {
-                case Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED:
-                    $capturedAmount += $resultTransaction['amount'] / 100;
-                    break;
-
-                case Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED:
-                    switch ((int) $resultTransaction['returnCode']) {
-                    default:
-                            $errorMsgTmp = $this->getHelper()->__('%1$s (code %2$s) - Braspag transaction id (%3$s).', $resultTransaction['returnMessage'], $resultTransaction['returnCode'], $resultTransaction['braspagTransactionId']);
-                            break;
-                    }
-
-                    if ($transactionCount > 1) {
-                        $formatedAmount = $order->getBaseCurrency()->formatTxt($resultTransaction['amount'] / 100);
-                        $errorMsg[] = $this->getHelper()->__('Transaction %1$s (%2$s): %3$s', ($key + 1), $formatedAmount, $errorMsgTmp);
-                    } else {
-                        $errorMsg[] = $errorMsgTmp;
-                    }
-                    break;
-
-                default:
-                    $errorMsg[] = $this->_wrapGatewayError($this->getHelper()->__('An error occurs before the request was sent to the Acquirer.'));
-                    break;
-            }
-
-            foreach ($resultTransaction as $r_key => $r_value) {
-                $raw_details['transaction_' . $key . '_' . $r_key] = $r_value;
-            }
+        if ($success = (bool) $resultData['success']) {
+            $capturedAmount += $payment->getOrder()->getGrandTotal();
         }
 
-        //If has error and nothing was authorized and payment transaction is not pending
         if (!empty($errorMsg)) {
             $errorMsg = $this->getHelper()->__(implode(PHP_EOL, $errorMsg));
             Mage::throwException($errorMsg);
@@ -232,11 +278,80 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
             Mage::throwException($this->getHelper()->__('The captured amount (%1$s) differs from requested (%2$s).', $formatedCapturedAmount, $formatedAmount));
         }
 
+        $raw_details['transaction_success'] = true;
+
         $payment
-            ->setTransactionId($resultData['correlationId'])
+            ->setTransactionId($payment->getTransactionId())
             ->setIsTransactionClosed(0)
-            ->setTransactionAdditionalInfo(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details)
-        ;
+            ->setTransactionAdditionalInfo(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
+
+        return $this;
+    }
+
+    /**
+     * @param Varien_Object $payment
+     * @param float $amount
+     * @return $this|Mage_Payment_Model_Abstract
+     */
+    public function refund(Varien_Object $payment, $amount)
+    {
+        try {
+            $result = $this->getPagadorTransaction()->void($payment, $amount);
+            if ($result === false) {
+                $errorMsg = $this->getHelper()->__('Error processing the request.');
+                throw new Exception($errorMsg);
+            }
+        } catch (Exception $e) {
+            Mage::throwException($e->getMessage());
+        }
+
+        if (!$result->isSuccess()) {
+            $errorMsg = $this->getHelper()->__(implode(PHP_EOL, $result->getErrorReport()->getErrors()));
+            Mage::throwException($errorMsg);
+        } else {
+            $this->_importRefundResultToPayment($result, $payment, $amount);
+        }
+
+        return $this;
+
+        return $this;
+    }
+
+    /**
+     * @param $result
+     * @param $payment
+     * @param $amount
+     * @return $this
+     */
+    protected function _importRefundResultToPayment($result, $payment, $amount)
+    {
+        $order = $payment->getOrder();
+        $resultData = $result->getDataAsArray();
+
+        $refundedAmount = 0;
+        $errorMsg = array();
+
+        $this->errorMsg = $resultData['errorReport']['errors'];
+
+        if ($success = (bool) $resultData['success']) {
+            $refundedAmount += $payment->getOrder()->getTotalRefunded();
+        }
+
+        if (!empty($errorMsg)) {
+            $errorMsg = $this->getHelper()->__(implode(PHP_EOL, $errorMsg));
+            Mage::throwException($errorMsg);
+        } elseif ($refundedAmount != $amount) {
+            $formatedVoidedAmount = $order->getBaseCurrency()->formatTxt($refundedAmount);
+            $formatedAmount = $order->getBaseCurrency()->formatTxt($amount);
+            Mage::throwException($this->getHelper()->__('The voided amount (%1$s) differs from requested (%2$s).', $formatedVoidedAmount, $formatedAmount));
+        }
+
+        $raw_details['transaction_success'] = true;
+
+        $payment
+            ->setTransactionId($payment->getTransactionId())
+            ->setIsTransactionClosed(1)
+            ->setTransactionAdditionalInfo(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
 
         return $this;
     }

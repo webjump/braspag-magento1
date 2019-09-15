@@ -59,7 +59,7 @@ class Webjump_BrasPag_Mpi_Auth_GetToken_Template_Default
     public function prepareHeader()
     {
         $this->data["Header"] = [
-            'Authorization' => "Basic ".$this->getRequest()->getAuthorization()
+            'Authorization' => "Bearer ".$this->getRequest()->getAuthorization()
         ];
 
         return $this->data;

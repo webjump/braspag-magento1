@@ -5,31 +5,28 @@
  * @category  Method
  * @package   Webjump_BrasPag_Pagador_Method
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Transaction_Capture_Response extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Transaction_Capture_ResponseInterface
+class Webjump_BrasPag_Pagador_Transaction_Capture_Response extends Webjump_BrasPag_Pagador_Data_Abstract
+    implements Webjump_BrasPag_Pagador_Transaction_Capture_ResponseInterface
 {
-    protected $correlationId;
+    protected $paymentId;
     protected $success;
     protected $errorReport;
-    protected $transactions;
-    private $serviceManager;
+    protected $order;
+    protected $customer;
+    protected $payment;
 
-    public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
+    public function getPaymentId()
     {
-        $this->serviceManager = $serviceManager;
+        return $this->paymentId;
     }
 
-    public function getCorrelationId()
+    public function setPaymentId($paymentId)
     {
-        return $this->correlationId;
-    }
-
-    public function setCorrelationId($correlationId)
-    {
-        $this->correlationId = $correlationId;
+        $this->paymentId = $paymentId;
 
         return $this;
     }
@@ -41,7 +38,7 @@ class Webjump_BrasPag_Pagador_Transaction_Capture_Response extends Webjump_BrasP
 
     public function setSuccess($success)
     {
-        $this->success = (boolean) $success;
+        $this->success = (filter_var($success, FILTER_VALIDATE_BOOLEAN));
 
         return $this;
     }
@@ -58,65 +55,71 @@ class Webjump_BrasPag_Pagador_Transaction_Capture_Response extends Webjump_BrasP
         return $this;
     }
 
-    public function getTransactions()
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
     {
-        return $this->transactions;
+        return $this->customer;
     }
 
-    public function setTransactions(Webjump_BrasPag_Pagador_Data_Response_Transaction_List $transactions = null)
+    /**
+     * @param $customer
+     * @return $this
+     */
+    public function setCustomer($customer)
     {
-        $this->transactions = $transactions;
+        $this->customer = $customer;
 
         return $this;
     }
 
-    public function importBySoapClientResult($data, $xml)
+    public function getOrder()
     {
-        $data = $this->objToArray($data);
-
-        $result = $data['CaptureCreditCardTransactionResult'];
-
-        $this->setCorrelationId($result['CorrelationId']);
-        $this->setSuccess($result['Success']);
-        $this->getErrorReport()->setErrors($result['ErrorReportDataCollection']);
-
-		//Normalize Braspag return for one or multiples Transactions request
-		if (!array_key_exists(0, $result['TransactionDataCollection']['TransactionDataResponse'])) {
-			$result['TransactionDataCollection']['TransactionDataResponse'] = array($result['TransactionDataCollection']['TransactionDataResponse']);
-		}
-
-        foreach ($result['TransactionDataCollection']['TransactionDataResponse'] as $r) {
-            $transaction = $this->getServiceManager()->get('Pagador\Data\Response\Transaction\Item');
-            $transaction->populate($r);
-            $this->getTransactions()->add($transaction);
-        }
+        return $this->order;
     }
 
-    protected function objToArray($obj)
+    public function setOrder($order)
     {
-        if (!is_array($obj) && !is_object($obj)) {
-            return $obj;
-        }
+        $this->order = $order;
 
-        if (is_object($obj)) {
-             $obj = get_object_vars($obj);
-        }
+        return $this;
+    }
 
-        return array_map(array($this, __FUNCTION__),  $obj);
+    public function getPayment()
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(Webjump_BrasPag_Pagador_Data_Response_Payment_Current $payment = null)
+    {
+        $this->payment = $payment;
+
+        return $this;
     }
 
 	public function getDataAsArray()
     {
     	$data = parent::getDataAsArray();
     	
-    	if (!empty($data['transactions']['transactions'])) {
-    		$data['transactions'] = $data['transactions']['transactions'];
+    	if (!empty($data['payment']['payment'])) {
+    		$data['payment'] = $data['payment']['payment'];
     	}
+        
     	return $data;
     }
 
-    protected function getServiceManager()
+    public function getData($field = '')
     {
-        return $this->serviceManager;
+        $data = parent::getDataAsArray();
+
+        $dataObject = new Varien_Object();
+        $dataObject->addData($data);
+
+        if (!empty($field)) {
+            return $dataObject->getData($field);
+        }
+
+        return $dataObject;
     }
 }

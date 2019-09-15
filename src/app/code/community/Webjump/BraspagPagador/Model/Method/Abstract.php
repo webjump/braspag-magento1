@@ -2,6 +2,7 @@
 abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment_Model_Method_Abstract {
 
 	protected $_apiType;
+	protected $_validator;
 
     protected $_canSaveCc     = false;
 
@@ -52,6 +53,11 @@ abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment
         return $this->_apiType;
     }
 
+    public function getValidator()
+    {
+        return Mage::getModel($this->_validator);
+    }
+
 	/**
 	* Gateway response wrapper
 	*
@@ -70,7 +76,7 @@ abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment
      */
     public function getPagador()
     {
-        return Mage::getModel('webjump_braspag_pagador/pagadorold');
+        return Mage::getModel('webjump_braspag_pagador/pagador');
     }
 
   

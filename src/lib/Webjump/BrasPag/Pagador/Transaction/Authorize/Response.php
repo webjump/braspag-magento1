@@ -5,7 +5,7 @@
  * @category  Method
  * @package   Webjump_BrasPag_Pagador_Method
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
@@ -16,6 +16,7 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Response extends Webjump_Bra
     protected $success;
     protected $errorReport;
     protected $order;
+    protected $customer;
     protected $payment;
 
     public function getPaymentId()
@@ -50,6 +51,25 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Response extends Webjump_Bra
     public function setErrorReport($errorReport)
     {
         $this->errorReport = $errorReport;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param $customer
+     * @return $this
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
 
         return $this;
     }

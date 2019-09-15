@@ -15,7 +15,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -26,27 +26,40 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador_Transaction
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
 abstract class Webjump_BraspagPagador_Model_Pagador_Transaction_Abstract
 {
+    /**
+     * @param $increment
+     * @return mixed
+     */
     protected function getRequestId($increment)
     {
         return $this->getConfig()->generateGuid($increment);
     }
 
+    /**
+     * @return mixed
+     */
     protected function getMerchantId()
     {
         return $this->getConfig()->getMerchantId();
     }
 
+    /**
+     * @return mixed
+     */
     protected function getMerchantKey()
     {
         return $this->getConfig()->getMerchantKey();
     }
-    
+
+    /**
+     * @return Mage_Core_Model_Abstract
+     */
     protected function getConfig()
     {
         return Mage::getSingleton('webjump_braspag_pagador/config');

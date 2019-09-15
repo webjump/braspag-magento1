@@ -1,15 +1,20 @@
 <?php
 class Webjump_BraspagPagador_StatusController extends Mage_Core_Controller_Front_Action
 {
-    
     public function updateAction()
     {
         $_hlp = Mage::helper('webjump_braspag_pagador');
 
         try {
-            $orderIncrementId = $this->getRequest()->getPost('NumPedido');
+
+            $data = json_decode($this->getRequest()->getRawBody());
+
+            $paymentId = $data->PaymentId;
+            $changeType = $data->ChangeType;
+            $recurrentPaymentId = $data->RecurrentPaymentId;
+
             $model = Mage::getModel('webjump_braspag_pagador/status_update');
-            $model->process($orderIncrementId);
+            $model->process($paymentId, $changeType, $recurrentPaymentId);
         } catch (Exception $e) {
             $_hlp->debug($e->getMessage());
             $_hlp->debug($this->getRequest()->getPost());
@@ -20,10 +25,9 @@ class Webjump_BraspagPagador_StatusController extends Mage_Core_Controller_Front
                 $order->save();
             }
 
-            echo '<status>ERROR</status>';
-            exit;
+            $this->getResponse()->setHttpResponseCode(500);
         }
-        echo '<status>OK</status>';
-        exit;
+
+        $this->getResponse()->setHttpResponseCode(200);
     }
 }

@@ -15,7 +15,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -26,23 +26,20 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
 class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPagador_Model_Pagador_Abstract
 {
-//    const STATUS_CAPTURADO = 0;
-//    const STATUS_AUTORIZADO = 1;
-//    const STATUS_NAO_AUTORIZADO = 2;
-//    const STATUS_ERRO_DESQUALIFICANTE = 3;
-//    const STATUS_AGUARDANDO_RESPOSTA = 4;
-//    const CAPTURA_STATUS_CAPTURADO = 0;
-//    const CAPTURA_STATUS_NEGADO = 2;
-//    const CAPTURA_STATUS_ERRO = null;
-
     protected $_serviceManager;
 
+    /**
+     * @param Varien_Object $payment
+     * @param $amount
+     * @return mixed
+     * @throws Exception
+     */
     public function authorize(Varien_Object $payment, $amount)
     {
         $request = $this->convertPaymentToAuthorizeRequest($payment, $amount);
@@ -59,6 +56,12 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
         return $response;
     }
 
+    /**
+     * @param Varien_Object $payment
+     * @param $amount
+     * @return bool|mixed
+     * @throws Exception
+     */
     protected function convertPaymentToAuthorizeRequest(Varien_Object $payment,$amount)
     {
         $this->initPaymentRequest($payment, $amount);
@@ -81,11 +84,18 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
 
     }
 
+    /**
+     * @param $response
+     * @return mixed
+     */
     protected function convertResponseToArray($response)
     {
         return $response;
     }
 
+    /**
+     * @return Webjump_BrasPag_Pagador_Service_ServiceManager
+     */
     protected function getServiceManager()
     {
         if (!$this->_serviceManager) {
@@ -95,6 +105,9 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
         return $this->_serviceManager;
     }
 
+    /**
+     * @return mixed
+     */
     protected function getConfig()
     {
         $storeId = $this->getStoreId();
@@ -109,6 +122,12 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
         return $wsConfig;
     }
 
+    /**
+     * @param Varien_Object $payment
+     * @param $amount
+     * @return mixed
+     * @throws Exception
+     */
     public function capture(Varien_Object $payment, $amount)
     {
         $request = $this->convertPaymentToCaptureRequest($payment, $amount);
@@ -125,6 +144,34 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
         return $response;
     }
 
+    /**
+     * @param Varien_Object $payment
+     * @param $amount
+     * @return mixed
+     * @throws Exception
+     */
+    public function void(Varien_Object $payment, $amount = 0)
+    {
+        $request = $this->convertPaymentToVoidRequest($payment, $amount);
+
+        $transaction = $this->getServiceManager()->get('Pagador\Transaction\Void');
+        $transaction->setRequest($request);
+        $response = $this->convertResponseToArray($transaction->execute());
+
+        $payment->getMethodInstance()->debugData(array(
+            'request' => $transaction->debug(),
+            'response' => $response->debug(),
+        ));
+
+        return $response;
+    }
+
+    /**
+     * @param Varien_Object $payment
+     * @param $amount
+     * @return bool|mixed
+     * @throws Exception
+     */
     protected function convertPaymentToCaptureRequest(Varien_Object $payment,$amount)
     {
         $this->initPaymentRequest($payment, $amount);
@@ -133,8 +180,9 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
 
         $data = array(
             'requestId' => $helper->generateGuid($this->getOrder()->getIncrementId()),
-            'merchantId'=> $this->getMerchantId(),
-            'transactions' => $this->getTransactionsDataToCapture(),
+            'merchantId' => $this->getMerchantId(),
+            'merchantKey' => $this->getMerchantKey(),
+            'order' 	=> $this->getOrderData(),
         );
 
         $request = $this->getServiceManager()->get('Pagador\Transaction\Capture\Request');
@@ -144,17 +192,52 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
 
     }
 
-    protected function getOrderData()
+    /**
+     * @param Varien_Object $payment
+     * @param $amount
+     * @return bool|mixed
+     * @throws Exception
+     */
+    protected function convertPaymentToVoidRequest(Varien_Object $payment, $amount = 0)
+    {
+        $this->initPaymentRequest($payment, $payment->getOrder()->getGrandTotal());
+
+        $helper = $this->getHelper();
+
+        $data = array(
+            'requestId' => $helper->generateGuid($this->getOrder()->getIncrementId()),
+            'merchantId' => $this->getMerchantId(),
+            'merchantKey' => $this->getMerchantKey(),
+            'order' 	=> $this->getOrderData($amount),
+        );
+
+        $request = $this->getServiceManager()->get('Pagador\Transaction\Void\Request');
+        $request->populate($data);
+
+        return $request;
+
+    }
+
+    /**
+     * @param int $amount
+     * @return mixed
+     * @throws Exception
+     */
+    protected function getOrderData($amount = 0)
     {
         $order	= $this->getOrder();
-
         $dataOrder = $this->getServiceManager()->get('Pagador\Data\Request\Order')
             ->setOrderId($order->getIncrementId())
-        ;
+            ->setBraspagOrderId($this->getPaymentTransactionId())
+            ->setOrderAmount(($amount == 0 ? $order->getGrandTotal() : $amount));
 
         return $dataOrder;
     }
 
+    /**
+     * @return bool|mixed
+     * @throws Exception
+     */
     protected function getCustomerData()
     {
         $helper = $this->getHelper();
@@ -203,66 +286,56 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction extends Webjump_BraspagPa
         return $dataCustomer;
     }
 
-    protected function getTransactionsDataToCapture()
+    /**
+     * @param bool $isCapture
+     * @return bool|mixed|string
+     * @throws Exception
+     */
+    protected function getPaymentTransactionId()
     {
         $payment = $this->getPayment();
-        $amount = $this->getAmount();
-        $helper = $this->getHelper();
 
-        $api = Mage::getModel('webjump_braspag_pagador/pagadorold')->getApi($payment);
-
-        $authorizationTransaction = $payment->getAuthorizationTransaction();
-
-        if (!$authorizationTransaction) {
-            throw new Exception($helper->__('Transaction not found'));
+        if (!$authorizationTransaction = $payment->getAdditionalInformation('payment_response')) {
+            return '';
         }
 
-        $transactionInfo = $authorizationTransaction->getAdditionalInformation(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS);
-
-        //Popular data request
-        $dataTransactions = $this->getServiceManager()->get('Pagador\Data\Request\Transaction\List');
-
-        foreach ($transactionInfo AS $key => $value) {
-            if(preg_match('/^payment_([0-9]+)_braspagTransactionId$/', $key, $match)){
-
-                $status = $transactionInfo['payment_'.$match[1].'_status'];
-
-                if ($status == $api::STATUS_AUTORIZADO) {
-
-                    $data = array(
-                        'braspagTransactionId' => $value,
-                        'amount' => $transactionInfo['payment_'.$match[1].'_amount'],
-                        //        			'serviceTaxAmount' => '',
-                    );
-
-                    $transaction = $this->getServiceManager()->get('Pagador\Data\Request\Transaction\Item');
-                    $transaction->populate($data);
-                    $dataTransactions->add($transaction);
-                }
-            }
+        if(!$braspagTransactionId = $authorizationTransaction['paymentId']) {
+            return '';
         }
 
-        return $dataTransactions;
+        $status = $authorizationTransaction['status'];
+
+        if ($status == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_AUTHORIZED) {
+
+            return $braspagTransactionId;
+        }
+
+        return '';
     }
 
+    /**
+     * @param $addressService
+     * @param $address
+     * @param $paymentMethod
+     * @return mixed
+     */
     protected function formatAddress($addressService, $address, $paymentMethod)
     {
         $helper = $this->getHelper();
 
         if ($paymentMethod == 'webjump_braspag_boleto') {
-            require_once("lib/Webjump/Abbreviation.php");
 
-            $abb = new Webjump_Abbreviation();
+            $abbreviationHelper = Mage::helper('webjump_braspag_pagador/addressAbbreviation');
 
-            $abb->setStreet($address->getStreet1());
-            $abb->setNumber($address->getStreet2());
-            $abb->setComplement($address->getStreet3());
+            $abbreviationHelper->setStreet($address->getStreet1());
+            $abbreviationHelper->setNumber($address->getStreet2());
+            $abbreviationHelper->setComplement($address->getStreet3());
 
-            $abb->abbreviation();
+            $abbreviationHelper->abbreviation();
 
-            $addressService->setStreet($abb->getStreet());
-            $addressService->setNumber($abb->getNumber());
-            $addressService->setComplement($abb->getComplement());
+            $addressService->setStreet($abbreviationHelper->getStreet());
+            $addressService->setNumber($abbreviationHelper->getNumber());
+            $addressService->setComplement($abbreviationHelper->getComplement());
 
         } else {
             $addressService->setStreet($address->getStreet1());

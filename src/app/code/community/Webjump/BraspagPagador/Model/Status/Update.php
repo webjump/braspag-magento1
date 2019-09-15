@@ -3,7 +3,13 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
 {
     protected $helper;
 
-    public function process($orderIncrementId)
+    /**
+     * @param $paymentId
+     * @param $changeType
+     * @param $recurrentPaymentId
+     * @return bool
+     */
+    public function process($paymentId, $changeType, $recurrentPaymentId)
     {
         $helper = $this->getHelper();
         $helper->debug($helper->getCurrentRequestInfo());
@@ -11,88 +17,173 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         $merchantId = $helper->getMerchantId();
         $this->setMerchantId($merchantId);
 
-        if ($orderIncrementId instanceof Mage_Sales_Model_Order) {
-            $order = $orderIncrementId;
-        } else {
-            $order = $this->loadOrderByIncrementId($orderIncrementId);
+        $merchantKey = $helper->getMerchantKey();
+        $this->setMerchantKey($merchantKey);
+
+        $orderPayment = $this->loadOrderByPaymentId($paymentId);
+
+        if (!$orderPayment || !$orderPayment->getParentId()) {
+            Mage::throwException($helper->__('Order %s not found', $this->getParentId()));
         }
 
-        if (!$order || !$order->getId()) {
-            Mage::throwException($helper->__('Order %s not found', $this->getIncrementId()));
-        }
+        $this->setOrderPayment($orderPayment);
 
-        $this->setOrder($order);
+        $transactions = $this->getBraspagTransactionIds($orderPayment);
 
-        $transactions = $this->getBraspagTransactionIds($order);
+        $paymentResponse = $orderPayment->getAdditionalInformation('payment_response');
 
-        $amountPaid = 0;
-
-        $payment = $order->getPayment();
-        $method = $payment->getMethodInstance();
-        $paymentResponse = $payment->getAdditionalInformation('payment_response');
+        $order = Mage::getModel('sales/order')->load($orderPayment->getParentId());
+        $orderPayment->setOrder($order);
 
         foreach($transactions AS $transaction) {
+
             $this->setRequestId($helper->generateGuid($order->getIncrementId()));
             $transactionData = $this->getBraspagTransactionData($this->getData() + $transaction->getData());
 
-            if (!$transactionData['Success']) {
+            if (!$transactionDataPayment = $transactionData['Payment']) {
                 $errorMsg = 'Error: While retrieving transaction data ' . $transaction->getData('braspag_transaction_id');
                 Mage::throwException($helper->__($errorMsg));
             }
 
-            if ($transactionData['Status'] == Webjump_BraspagPagador_Model_Config::STATUS_AUTORIZADO) {
-                $amountPaid+= $transactionData['Amount'];
+            // 2 = capture
+            if ($transactionDataPayment['Type'] == 'Boleto'
+                && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
+            ) {
+                return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
             }
 
-            if (!empty($transactionData['ProofOfSale'])) {
-                foreach ($paymentResponse AS $key => $value) {
-                    if ($value['braspagTransactionId'] == $transactionData['BraspagTransactionId']) {
-                        $paymentResponseUpdated = true;
-                        $paymentResponse[$key]['proofOfSale'] = $transactionData['ProofOfSale'];
-                        break;
-                    }
-                }
+            // 2 = capture
+            if (($transactionDataPayment['Type'] == 'CreditCard' || $transactionDataPayment['Type'] == 'DebitCard')
+                && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
+            ) {
+                return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+            }
+
+            // 3 = Denied/10 = Voided/13 = Aborted
+            if (in_array($transactionDataPayment['Status'], [
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED,
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED,
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
+            ])) {
+                return $this->cancelOrder($paymentResponse, $transactionData, $orderPayment);
+            }
+
+            // 11 = Refunded
+            if ($transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED) {
+                return $this->createCreditMemo($paymentResponse, $transactionData, $orderPayment);
             }
         }
 
-        $amountPaid = $amountPaid/100;
+        return false;
+    }
 
-        if (!empty($paymentResponseUpdated)) {
-            $payment->setAdditionalInformation('payment_response', $paymentResponse);
+    /**
+     * @param $paymentResponse
+     * @param $transactionData
+     * @param $orderPayment
+     * @return bool
+     */
+    protected function createInvoice($paymentResponse, $transactionData, $orderPayment)
+    {
+        $transactionDataPayment = $transactionData['Payment'];
+
+        $amountPaid = $transactionDataPayment['Amount']/100;
+
+        if ($paymentResponse['paymentId'] == $transactionDataPayment['PaymentId']) {
+            $paymentResponse['proofOfSale'] = $transactionDataPayment['ProofOfSale'];
         }
 
-        $payment
+        $orderPayment->setAdditionalInformation('payment_response', $paymentResponse)
             ->setAdditionalInformation('authorized_total_paid', $amountPaid)
-            ->save()
-        ;
+            ->save();
+
+        $order = $orderPayment->getOrder();
 
         if ($amountPaid >= $order->getGrandTotal()) {
             if ($order->canUnhold()) {
-                
+
                 //If order is holded by antifraud...
-                if ($order->getStatus() == Webjump_BraspagAntifraud_Model_Config::STATUS_REJECTED || 
-                    $order->getStatus() == Webjump_BraspagAntifraud_Model_Config::STATUS_ERROR ||
-                    $order->getStatus() == Webjump_BraspagAntifraud_Model_Config::STATUS_REVIEW
+                if ($order->getStatus() == Webjump_BrasPag_Pagador_TransactionInterface::STATUS_PAYMENT_REVIEW
+                    ||$order->getStatus() == Webjump_BrasPag_Pagador_TransactionInterface::STATUS_FRAUD
                 ) {
-                    $errorMsg = 'Order updating aborted - order was holded by antifraud';
-                    $helper->debug($errorMsg);
+                    $errorMsg = $this->getHelper()->__('Order updating aborted - order was holded by antifraud');
                     Mage::throwException($errorMsg);
                 }
                 $order->unhold()->save();
             }
 
-            $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, Mage::getStoreConfig('webjump_braspag_pagador/status_update/order_status_paid'), $helper->__('Order status updated (2º Post). Total paid %s', Mage::helper('core')->currency($amountPaid, true, false)));
-            $order->save();
+            if (Mage::getStoreConfig('webjump_braspag_pagador/status_update/autoinvoice') && !$order->hasInvoices()) {
 
-            if (Mage::getStoreConfig('webjump_braspag_pagador/status_update/autoinvoice')) {
+                $orderStatusPaid = Mage::getStoreConfig('webjump_braspag_pagador/status_update/order_status_paid');
                 $sendEmail = Mage::getStoreConfig('webjump_braspag_pagador/status_update/send_email');
-                $helper->invoiceOrder($order, $sendEmail);
+
+                $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
+
+                $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
+                $invoice->register();
+
+                $invoice->getOrder()->setCustomerNoteNotify($sendEmail);
+                $invoice->getOrder()->setIsInProcess(true);
+
+
+                $message = $this->getHelper()->__('Payment Confirmed. Amount of R$'.$amountPaid.'. Transaction ID: "'.$paymentResponse['paymentId'].'".');
+                $state = Mage_Sales_Model_Order::STATE_PROCESSING;
+
+                $order->setState($state, $orderStatusPaid, $message);
+
+                $transactionSave = Mage::getModel('core/resource_transaction')
+                    ->addObject($invoice)
+                    ->addObject($invoice->getOrder());
+
+                $transactionSave->save();
+
+                return true;
             }
         }
 
         return true;
     }
 
+    /**
+     * @param $orderPayment
+     * @return bool
+     */
+    protected function cancelOrder($orderPayment)
+    {
+        $order = $orderPayment->getOrder();
+        $order->cancel();
+
+        return true;
+    }
+
+    /**
+     * @param $orderPayment
+     * @return bool
+     */
+    protected function createCreditMemo($orderPayment)
+    {
+        $order = $orderPayment->getOrder();
+
+        $invoices = array();
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if ($invoice->canRefund()) {
+                $invoices[] = $invoice;
+            }
+        }
+
+        $service = Mage::getModel('sales/service_order', $order);
+        foreach ($invoices as $invoice) {
+            $creditmemo = $service->prepareInvoiceCreditmemo($invoice);
+            $creditmemo->refund();
+        }
+
+        return true;
+    }
+
+    /**                    ->debug($errorMsg);
+
+     * @return Mage_Core_Helper_Abstract
+     */
     protected function getHelper()
     {
         if (!$this->helper) {
@@ -102,11 +193,9 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         return $this->helper;
     }
 
-    protected function getGeneralservice()
-    {
-        return Mage::getModel('webjump_braspag_pagador/generalservice');
-    }
-
+    /**
+     * @return false|Mage_Core_Model_Abstract
+     */
     protected function getPagadorquery()
     {
         return Mage::getModel('webjump_braspag_pagador/pagadorquery');
@@ -114,29 +203,37 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
 
     protected function getBraspagOrderIdData(array $data)
     {
-        $helper = $this->getHelper();
         $pagadorquery = $this->getPagadorquery();
         $pagadorquery->setData($data);
+
         $return = $pagadorquery->getOrderIdData();
 
         return $return;
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     protected function getBraspagTransactionData(array $data)
     {
-        $helper = $this->getHelper();
         $pagadorquery = $this->getPagadorquery();
         $pagadorquery->setData($data);
+
         $return = $pagadorquery->getTransactionData();
 
         return $return;
     }
 
-    protected function loadOrderByIncrementId($incrementId)
+    /**
+     * @param $paymentId
+     * @return mixed
+     */
+    protected function loadOrderByPaymentId($paymentId)
     {
         $helper = $this->getHelper();
 
-        if (empty($incrementId)) {
+        if (empty($paymentId)) {
             $errorMsg = 'Error: Order not specified';
             $helper->debug($errorMsg);
             Mage::logException(new Exception(
@@ -148,8 +245,11 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
             );
         }
 
-        $order = Mage::getModel('sales/order')->loadByIncrementId($incrementId);
-        if (!$order->getId()) {
+        $order = Mage::getModel('sales/order_payment')->getCollection()
+            ->addAttributeToFilter('last_trans_id', ['eq' => $paymentId])
+            ->getFirstItem();
+
+        if (!$order->getParentId()) {
             $errorMsg = 'Error: Order not found';
             $helper->debug($errorMsg);
             Mage::logException(new Exception(
@@ -164,54 +264,53 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         return $order;
     }
 
-    protected function getBraspagTransactionIds(Mage_Sales_Model_Order $order)
+    /**
+     * @param Mage_Sales_Model_Order_Payment $orderPayment
+     * @return array
+     */
+    protected function getBraspagTransactionIds(Mage_Sales_Model_Order_Payment $orderPayment)
     {
         $helper = $this->getHelper();
+        $braspagTransactionIds = [];
 
-        $transactions = Mage::getModel('sales/order_payment_transaction')->getCollection()
-                                                                         ->addAttributeToFilter('order_id', array('eq' => $order->getId()))
-                                                                         ->addAttributeToFilter('txn_type', array('in' => array(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER, Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH)))
-        ;
+        $transaction = Mage::getModel('sales/order_payment_transaction')
+            ->getCollection()
+            ->addAttributeToFilter('order_id', array('eq' => $orderPayment->getParentId()))
+            ->addAttributeToFilter('txn_type', array('in' => array(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER, Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH)))
+            ->getFirstItem();
 
-        $braspagTransactionIds = array();
-        foreach ($transactions as $transaction) {
-            $transactionData = $transaction->getData();
+        $transactionData = $transaction->getData();
 
-            foreach ($transactionData['additional_information']['raw_details_info'] as $key => $value) {
-                if (preg_match('/_braspagTransactionId$/', $key)) {
-                    $data = new Varien_Object();
-                    $data->setData(array(
-                        'braspag_transaction_id' => $value,
-                        'type' => $transactionData['txn_type'],
-                        'transaction_id' => $transactionData['transaction_id'],
-                        'is_closed' => $transactionData['is_closed'],
-                        'braspag_order_id' => $transactionData['additional_information']['raw_details_info']['braspagOrderId'],
-                    ));
-                    $braspagTransactionIds[] = $data;
-                }
-            }
+        if ($transactionId = $transactionData['additional_information']['raw_details_info']['braspagOrderId']) {
+            $data = new Varien_Object();
+            $data->setData(array(
+                'braspag_transaction_id' => $transactionId,
+                'type' => $transactionData['txn_type'],
+                'transaction_id' => $transactionData['transaction_id'],
+                'is_closed' => $transactionData['is_closed'],
+                'braspag_order_id' => $transactionData['additional_information']['raw_details_info']['braspagOrderId'],
+            ));
+            $braspagTransactionIds[] = $data;
         }
 
         //If order payment transactions didn't return any transaction...
-        if (empty($braspagTransactionIds)) {
+        if (empty($braspagTransactionId)) {
+
+            $order = Mage::getModel('sales/order')->load($orderPayment->getParentId());
+
+            $data = array_merge($this->getData(), ["OrderIncrementId" => $order->getIncrementId()]);
+
             $this->setOrderIncrementId($order->getIncrementId());
             $this->setRequestId($helper->generateGuid($order->getIncrementId()));
-            $braspagOrderIdData = $this->getBraspagOrderIdData($this->getData());
+            $braspagOrderIdData = $this->getBraspagOrderIdData($data);
 
-            foreach ($braspagOrderIdData as $data) {
-                if (is_array($data['BraspagTransactionId'])) {
-                    foreach ($data['BraspagTransactionId'] as $r) {
-                        $dataObject = new Varien_Object();
-                        $dataObject->setData(array(
-                            'braspag_transaction_id' => $r,
-                        ));
-                        $braspagTransactionIds[] = $dataObject;
-                    }
-                } else {
+            if ($payments = $braspagOrderIdData['Payments']) {
+
+                foreach ($payments as $payment) {
                     $dataObject = new Varien_Object();
                     $dataObject->setData(array(
-                        'braspag_transaction_id' => $data['BraspagTransactionId'],
-                        'braspag_order_id' => $data['BraspagOrderId'],
+                        'braspag_transaction_id' => $payment['PaymentId'],
+                        'braspag_order_id' => $order->getIncrementId(),
                     ));
                     $braspagTransactionIds[] = $dataObject;
                 }

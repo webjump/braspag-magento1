@@ -38,7 +38,7 @@ class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
 
             if (!isset($paymentRequest['type'])) {
                 $paymentTotalDue = 0;
-            } elseif (($paymentRequest['type'] == 'webjump_braspag_boleto') || ($order->getPayment()->getMethodInstance()->getCode() != 'webjump_braspag_cccc') || (
+            } elseif (($paymentRequest['type'] == 'webjump_braspag_boleto') || (
                 $this->getLayout() &&
                 (in_array('braspag_payment_reorder', $this->getLayout()->getUpdate()->getHandles())))) {
                 $paymentTotalDue = 0;
@@ -126,15 +126,7 @@ class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
                 $tmp[] = '<a href="' . $this->getUrl('braspag/payment/reorder') . '?order=' . $order->getIncrementId() . '"class="button webjump-braspagpagador payment-button payment-code-' . $this->getInfo()->getMethodInstance()->getCode() . '">' . $_hlp->__('Pay Now') . '</a>';
             }
 
-            if (!$this->getIsSecureMode()) {
-                //Add Secure information available only in backend
-            }
-//            if ($paymentCount > 1) {
-//                $data[$_hlp->__('Payment %s', ($key + 1))] = $tmp;
-//            } else {
-                $data += $tmp;
-//            }
-
+            $data += $tmp;
         }
 
         return $transport->setData(array_merge($data, $transport->getData()));

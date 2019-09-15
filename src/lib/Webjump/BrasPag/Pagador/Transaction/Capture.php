@@ -5,17 +5,18 @@
  * @category  Transaction
  * @package   Webjump_BrasPag_Pagador_Transaction_Capture
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Transaction_Capture extends Webjump_BrasPag_Pagador_Transaction_Abstract implements Webjump_BrasPag_Pagador_Transaction_CaptureInterface
+class Webjump_BrasPag_Pagador_Transaction_Capture extends Webjump_BrasPag_Pagador_Transaction_Abstract
+    implements Webjump_BrasPag_Pagador_Transaction_CaptureInterface
 {
     protected $request;
     protected $response;
-    protected $xml;
-    protected $serviceManager;
     protected $template;
+    protected $hydrator;
+    protected $serviceManager;
 
     public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
     {
@@ -50,22 +51,30 @@ class Webjump_BrasPag_Pagador_Transaction_Capture extends Webjump_BrasPag_Pagado
 
     public function execute()
     {
+        $paymentId = $this->getRequest()->getOrder()->getBraspagOrderId();
+        $amount = $this->getRequest()->getOrder()->getOrderAmount();
+
         try {
-            $response = $this->CaptureCreditCardTransaction();
-            $this->getResponse()->importBySoapClientResult($response, $this->__getLastResponse());
+            $this->__doRequest($this->getRequest(), 'v2/sales/'.$paymentId."/capture?amount=".$amount, 'PUT');
+            $this->prepareResponse($this->getResponse());
         } catch (Exception $e) {
-            $this->getResponse()->getErrorReport()->setErrors(array('ErrorCode' => 'LIB', 'ErrorMessage' => $e->getMessage()));
+            $this->getResponse()->getErrorReport()
+                ->setErrors(array('ErrorCode' => 'LIB', 'ErrorMessage' => $e->getMessage()));
         }
 
         return $this->getResponse();
     }
 
-    protected function prepareRequest($request, $location, $action, $version)
+    protected function prepareRequest($request, $location, $action)
     {
         $template = $this->getTemplate();
         $template->setRequest($this->getRequest());
+        return $template->getData();
+    }
 
-        return $template->toXml();
+    protected function prepareResponse($response)
+    {
+        $this->getResponseHydrator()->hydrate($this->getLastResponse(), $response);
     }
 
     protected function getTemplate()
@@ -75,6 +84,15 @@ class Webjump_BrasPag_Pagador_Transaction_Capture extends Webjump_BrasPag_Pagado
         }
 
         return $this->template;
+    }
+
+    protected function getResponseHydrator()
+    {
+        if (!$this->hydrator) {
+            $this->hydrator = $this->getServiceManager()->get('Pagador\Transaction\Capture\ResponseHydrator');
+        }
+
+        return $this->hydrator;
     }
 
     protected function getServiceManager()

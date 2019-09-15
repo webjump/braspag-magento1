@@ -16,6 +16,7 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCard
     public $interest;
     public $capture;
     public $authenticate;
+    public $externalAuthentication;
     public $recurrent;
     public $softDescriptor;
     public $cardHolder;
@@ -74,6 +75,22 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCard
     public function setAuthenticate($authenticate)
     {
         $this->authenticate = $authenticate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExternalAuthentication()
+    {
+        return $this->externalAuthentication;
+    }
+
+    /**
+     * @param mixed $externalAuthentication
+     */
+    public function setExternalAuthentication($externalAuthentication)
+    {
+        $this->externalAuthentication = $externalAuthentication;
     }
 
     /**

@@ -15,7 +15,7 @@
  * @category  Model
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -47,6 +47,10 @@ class Webjump_BraspagPagador_Model_Mpi extends Mage_Core_Model_Abstract
             $dateNow = new \DateTime('now');
             if (!$result || $dateNow > $result->getExpirationDate()) {
                 $result = $api->getToken();
+
+                if ($result->getExpiresIn() === null) {
+                    throw new \Exception("Invalid Mpi Token");
+                }
 
                 $dateToExpire = new \DateTime('now');
                 $dateToExpire->add(new DateInterval('PT'.$result->getExpiresIn().'S'));

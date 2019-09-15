@@ -15,7 +15,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -59,6 +59,7 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Boleto
         $country = Mage::getStoreConfig('webjump_braspag_pagador/general/country', $storeId);
 
         $configBoletoExpirationDate = $method->getConfigData('boleto_expiration_date');
+
         if (trim($configBoletoExpirationDate) == '') {
             $boletoExpirationDate = '';
         } else {

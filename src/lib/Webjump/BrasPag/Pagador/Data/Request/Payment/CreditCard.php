@@ -5,7 +5,7 @@
  * @category  Data
  * @package   Webjump_BrasPag_Pagador_Data_Payment
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
@@ -17,6 +17,7 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_CreditCard
     public $interest;
     public $capture;
     public $authenticate;
+    public $externalAuthentication;
     public $recurrent;
     public $softDescriptor;
     public $doSplit;
@@ -28,6 +29,7 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_CreditCard
     public $cardBrand;
     public $saveCard;
     public $cardAlias;
+    public $fraudAnalysis;
 
     const METHOD = 'webjump_braspag_cc';
     const MINIMUM_NUMBER_OF_INSTALLMENTS = 1;
@@ -94,6 +96,22 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_CreditCard
     public function setAuthenticate($authenticate)
     {
         $this->authenticate = $authenticate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExternalAuthentication()
+    {
+        return $this->externalAuthentication;
+    }
+
+    /**
+     * @param mixed $externalAuthentication
+     */
+    public function setExternalAuthentication($externalAuthentication)
+    {
+        $this->externalAuthentication = $externalAuthentication;
     }
 
     /**
@@ -270,6 +288,22 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_CreditCard
     public function setCardAlias($cardAlias)
     {
         $this->cardAlias = $cardAlias;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFraudAnalysis()
+    {
+        return $this->fraudAnalysis;
+    }
+
+    /**
+     * @param Varien_Object $fraudAnalysis
+     */
+    public function setFraudAnalysis(Varien_Object $fraudAnalysis)
+    {
+        $this->fraudAnalysis = $fraudAnalysis;
     }
 
     public function getArrayCopy()

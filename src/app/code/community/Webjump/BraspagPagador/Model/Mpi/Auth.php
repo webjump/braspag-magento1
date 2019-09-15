@@ -15,7 +15,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -32,7 +32,7 @@
  **/
 class Webjump_BraspagPagador_Model_Mpi_Auth extends Mage_Core_Model_Abstract
 {
-    protected $_serviceManager;
+    protected $serviceManager;
 
     /**
      * @var Webjump_BraspagPagador_Helper_Mpi
@@ -56,6 +56,10 @@ class Webjump_BraspagPagador_Model_Mpi_Auth extends Mage_Core_Model_Abstract
         $this->mpiHelper = Mage::helper('webjump_braspag_pagador/mpi');
     }
 
+    /**
+     * @return mixed
+     * @throws Exception
+     */
     public function getToken()
     {
         $transaction = $this->getServiceManager()->get('Mpi\Auth\GetToken');
@@ -64,6 +68,10 @@ class Webjump_BraspagPagador_Model_Mpi_Auth extends Mage_Core_Model_Abstract
         return $transaction->execute();
     }
 
+    /**
+     * @return bool|mixed
+     * @throws Exception
+     */
     protected function getAuthRequest()
     {
         $data = array(
@@ -84,7 +92,7 @@ class Webjump_BraspagPagador_Model_Mpi_Auth extends Mage_Core_Model_Abstract
      */
     protected function getServiceManager()
     {
-        $this->_serviceManager = new Webjump_BrasPag_Mpi_Service_ServiceManager($this->mpiConfig->getEndPoint());
-        return $this->_serviceManager;
+        $this->serviceManager = new Webjump_BrasPag_Mpi_Service_ServiceManager($this->mpiConfig->getEndPoint());
+        return $this->serviceManager;
     }
 }

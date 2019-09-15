@@ -26,9 +26,12 @@ abstract class Webjump_BrasPag_HttpClientAbstract extends \Zend_Http_Client
         $config = $serviceManager->getConfig()->toArray();
         $this->setNamespace($config[self::CONFIG_NAMESPACE_KEY]);
 
-        return parent::__construct($config[self::CONFIG_NAMESPACE_KEY]);
+        return parent::__construct();
     }
 
+    /**
+     * @return string
+     */
     public function debug()
     {
         return $this->getLastRequest();
@@ -50,11 +53,17 @@ abstract class Webjump_BrasPag_HttpClientAbstract extends \Zend_Http_Client
         $this->namespace = $namespace;
     }
 
+    /**
+     * @return string
+     */
     public function getLastRequest()
     {
         return $this->_lastRequest;
     }
 
+    /**
+     * @param $request
+     */
     public function setLastRequest($request)
     {
         $this->_lastRequest = $request;
@@ -72,7 +81,7 @@ abstract class Webjump_BrasPag_HttpClientAbstract extends \Zend_Http_Client
         $dataRequest = $this->prepareRequest($request, $path, $action);
         $this->setLastRequest($dataRequest);
 
-        $this->setUri($this->getUri().$path);
+        $this->setUri($this->getNamespace().$path);
 
         $this->setHeaders('Content-Type', 'application/json');
         $this->setHeaders($dataRequest['Header']);
@@ -107,6 +116,10 @@ abstract class Webjump_BrasPag_HttpClientAbstract extends \Zend_Http_Client
         return $this;
     }
 
+    /**
+     * @param array $config
+     * @return array
+     */
     public function getDefaultOptions(array $config)
     {
         if (isset($config[self::CONFIG_OPTIONS_KEY])) {
@@ -116,7 +129,16 @@ abstract class Webjump_BrasPag_HttpClientAbstract extends \Zend_Http_Client
         return $this->defaultOptions;
     }
 
+    /**
+     * @param $request
+     * @param $path
+     * @param $action
+     * @return mixed
+     */
     abstract protected function prepareRequest($request, $path, $action);
 
+    /**
+     * @return mixed
+     */
     abstract public function execute();
 }

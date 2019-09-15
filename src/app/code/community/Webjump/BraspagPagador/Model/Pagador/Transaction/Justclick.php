@@ -15,7 +15,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  */
@@ -26,7 +26,7 @@
  * @category  Api
  * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
- * @copyright 2014 Webjump (http://www.webjump.com.br)
+ * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
@@ -43,7 +43,6 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_JustClick extends Webjump
         $order = $this->getOrder();
         $storeId = $this->getStoreId();
 
-//        $paymentPlan = $method->getConfigData('installments_plan', $storeId);
         $paymentAction = $method->getConfigData('payment_action', $storeId);
 
         switch ($paymentAction) {

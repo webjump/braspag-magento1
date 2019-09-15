@@ -8,8 +8,10 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
     protected $responseClass;
     protected $responseStatus;
     protected $dataBodyObject;
+    protected $dataCustomerObject;
     protected $dataOrderObject;
     protected $dataPaymentObject;
+    protected $errorMessages = [];
 
     /**
      * Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator constructor.
@@ -18,8 +20,8 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
     public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
     {
         $this->serviceManager = $serviceManager;
-        $this->responseStatus = true;
-        $this->dataBodyObject = $this->dataOrderObject = $this->dataPaymentObject= new Varien_Object();
+        $this->responseStatus = false;
+        $this->dataBodyObject = $this->dataCustomerObject = $this->dataOrderObject = $this->dataPaymentObject= new Varien_Object();
     }
 
     /**
@@ -35,20 +37,68 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
         $this->responseData = $data;
         $this->responseClass = $response;
 
+        if (!$this->responseData || !$this->prepareBody()) {
+            $this->errorMessages[] = json_encode([['Code' => 500, 'Message' => "Invalid Data Response"]]);
+            $this->hydrateErrors();
+            return $this;
+        }
+
         if ($this->responseData->getStatus() != 200 && $this->responseData->getStatus() != 201) {
-            $this->responseStatus = false;
+
+            $this->errorMessages[] = json_encode([[
+                'Code' => $this->responseData->getStatus(),
+                'Message' => $this->responseData->getMessage()]
+            ]);
+
+            foreach ($this->dataBodyObject->getData() as $data) {
+
+                if (isset($data['Message'])) {
+                    $this->errorMessages[] = json_encode([[
+                        'Code' => $data['Code'],
+                        'Message' => $data['Message']
+                    ]]);
+                }
+            }
+
             $this->hydrateErrors();
             return $this;
         }
 
         if (!$this->prepare()) {
-            $this->hydrateErrors(['Code' => 500, 'Message' => "Invalid Data Response"]);
+            $this->errorMessages[] = json_encode([['Code' => 500, 'Message' => "Invalid Data Response"]]);
+
+            $this->hydrateErrors();
             return $this;
         }
 
-		$this->hydrateDefault();
-		$this->hydrateOrder();
-		$this->hydratePayment();
+
+        $this->hydrateCustomer();
+        $this->hydrateOrder();
+        $this->hydratePayment();
+
+        if (in_array($this->dataPaymentObject->getData('Status'), [
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_NOT_FINISHED,
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED,
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED,
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED,
+                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
+            ])
+        ) {
+
+            $this->errorMessages[] = json_encode([
+                [
+                    'Code' => $this->dataPaymentObject->getData("ProviderReturnCode"),
+                    'Message' => $this->dataPaymentObject->getData("ProviderReturnMessage")
+                ]
+            ]);
+
+            $this->hydrateErrors();
+            return $this;
+        }
+
+        $this->responseStatus = true;
+
+        $this->hydrateDefault();
 
 		return $this;
 	}
@@ -56,9 +106,22 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
     /**
      * @return bool
      */
+	protected function prepareBody()
+    {
+        if (!$dataBody = json_decode($this->responseData->getBody(), HTTP_RAW_POST_DATA)) {
+            return false;
+        }
+
+        $this->dataBodyObject->addData($dataBody);
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
 	protected function prepare()
     {
-        $this->dataBodyObject->addData(json_decode($this->responseData->getBody(), HTTP_RAW_POST_DATA));
 
         if (!$paymentData = $this->dataBodyObject->getData('Payment')) {
             return false;
@@ -88,6 +151,16 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
 	}
 
     /**
+     * @return $this
+     */
+	protected function hydrateCustomer()
+    {
+        $this->responseClass->getCustomer()->populate($this->dataCustomerObject->getData('Customer'));
+
+        return $this;
+	}
+
+	/**
      * @return $this
      */
 	protected function hydrateOrder()
@@ -150,22 +223,9 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
      * @param null $error
      * @return $this
      */
-	protected function hydrateErrors($error = null)
+	protected function hydrateErrors()
     {
-		$errorMessages = array();
-
-		if (!empty($error)) {
-            $errorMessages[] = json_encode([$error]);
-        }
-
-        if (empty($this->responseData->getBody())) {
-            $errorMessages[] = json_encode([['Code' => $this->responseData->getStatus(), 'Message' => $this->responseData->getMessage()]]);
-        }
-
-        $errorMessages[] = $this->responseData->getBody();
-
-        $this->responseClass->getErrorReport()->setErrors($errorMessages);
-
+        $this->responseClass->getErrorReport()->setErrors($this->errorMessages);
         return $this;
 	}
 

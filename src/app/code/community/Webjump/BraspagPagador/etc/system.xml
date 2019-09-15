@@ -215,7 +215,7 @@
 							<config_path>payment/webjump_braspag_cc/order_status</config_path>
                             <frontend_type>select</frontend_type>
                             <validate>required-entry</validate>
-                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                            <source_model>webjump_braspag_pagador/source_status_newPending</source_model>
                             <sort_order>31</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -550,22 +550,12 @@
 							<config_path>payment/webjump_braspag_justclick/order_status</config_path>
                             <frontend_type>select</frontend_type>
                             <validate>required-entry</validate>
-                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                            <source_model>webjump_braspag_pagador/source_status_newPending</source_model>
                             <sort_order>31</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </order_status>
-						<!--<installments_plan translate="label">-->
-                            <!--<label>Installments Plan</label>-->
-							<!--<config_path>payment/webjump_braspag_justclick/installments_plan</config_path>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<source_model>webjump_braspag_pagador/source_paymentPlan</source_model>-->
-                            <!--<sort_order>32</sort_order>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                        <!--</installments_plan>-->
 						<installments_min_amount translate="label">
                             <label>Minimum Amount of Installment</label>
 							<config_path>payment/webjump_braspag_justclick/installments_min_amount</config_path>
@@ -575,9 +565,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-							<!--<depends>-->
-								<!--<installments_plan separator=",">1,2,3,4,5</installments_plan>-->
-							<!--</depends>-->
                         </installments_min_amount>
 						<installments translate="label">
                             <label>Maximum Installments</label>
@@ -588,9 +575,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-							<!--<depends>-->
-								<!--<installments_plan separator=",">1,2,3,4,5</installments_plan>-->
-							<!--</depends>-->
                         </installments>
                         <cvv_required translate="label">
                             <label>Card Verification Number</label>
@@ -676,8 +660,8 @@
                     </fields>
 				</access_token_generation>
                 <creditcard_transation translate="label comment" module="webjump_braspag_pagador">
-                    <label>Credit Cart Transactions</label>
-                    <comment><![CDATA[Credit Cart Transactions with Authentication 3DS 2.0]]></comment>
+                    <label>Credit Card Transactions</label>
+                    <comment><![CDATA[Credit Card Transactions with Authentication 3DS 2.0]]></comment>
                     <sort_order>40</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
@@ -686,7 +670,7 @@
                         <mpi_is_active translate="label">
                             <label>Enabled</label>
                             <comment><![CDATA[Indicates whether Credit Card Transactions with Authentication 3DS 2.0 are Enabled.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_is_active</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_is_active</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>52</sort_order>
@@ -697,7 +681,7 @@
                         <mpi_mastercard_notify_only translate="label">
                             <label>Master Card - Notify Only</label>
                             <comment><![CDATA[Indicates whether the card transaction will be submitted in “notification only” mode. In this mode, the authentication process will not be triggered, however, the data will be sent to Brand.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_mastercard_notify_only</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_mastercard_notify_only</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>54</sort_order>
@@ -711,7 +695,7 @@
                         <mpi_authorize_on_error translate="label">
                             <label>Authorize On Error</label>
                             <comment><![CDATA[Indicates whether on Authentication Error case the authorization will be transactionated.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_authorize_on_error</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_authorize_on_error</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>56</sort_order>
@@ -725,7 +709,7 @@
                         <mpi_authorize_on_failure translate="label">
                             <label>Authorize On Failure</label>
                             <comment><![CDATA[Indicates whether on Authentication Failure case the authorization will be transactionated.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_authorize_on_failure</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_authorize_on_failure</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>58</sort_order>
@@ -739,7 +723,7 @@
                         <mpi_authorize_on_unenrolled translate="label">
                             <label>Authorize On Unenrolled</label>
                             <comment><![CDATA[Indicates whether on Authentication Unenrolled case the authorization will be transactioneted.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_authorize_on_unenrolled</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_authorize_on_unenrolled</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>60</sort_order>
@@ -753,7 +737,7 @@
                         <mpi_mdd1 translate="label">
                             <label>Extra data 1</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_mdd1</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_mdd1</config_path>
                             <frontend_type>text</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>62</sort_order>
@@ -767,7 +751,7 @@
                         <mpi_mdd2 translate="label">
                             <label>Extra data 2</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_mdd2</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_mdd2</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>64</sort_order>
                             <show_in_default>1</show_in_default>
@@ -780,7 +764,7 @@
                         <mpi_mdd3 translate="label">
                             <label>Extra data 3</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_mdd3</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_mdd3</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>66</sort_order>
                             <show_in_default>1</show_in_default>
@@ -793,7 +777,7 @@
                         <mpi_mdd4 translate="label">
                             <label>Extra data 4</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_mdd4</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_mdd4</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>68</sort_order>
                             <show_in_default>1</show_in_default>
@@ -806,7 +790,7 @@
                         <mpi_mdd5 translate="label">
                             <label>Extra data 5</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_cc/mpi_mdd5</config_path>
+                            <config_path>mpi/creditcard_transation/mpi_mdd5</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>70</sort_order>
                             <show_in_default>1</show_in_default>
@@ -819,8 +803,8 @@
                     </fields>
                 </creditcard_transation>
                 <debitcard_transation translate="label comment" module="webjump_braspag_pagador">
-                    <label>Debit Cart Transactions</label>
-                    <comment><![CDATA[Debit Cart Transactions with Authentication 3DS 2.0]]></comment>
+                    <label>Debit Card Transactions</label>
+                    <comment><![CDATA[Debit Card Transactions with Authentication 3DS 2.0]]></comment>
                     <sort_order>60</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
@@ -829,7 +813,7 @@
                         <mpi_is_active translate="label">
                             <label>Enabled</label>
                             <comment><![CDATA[Indicates whether Debit Card Transactions with Authentication 3DS 2.0 are Enabled.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_is_active</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_is_active</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>52</sort_order>
@@ -840,7 +824,7 @@
                         <mpi_mastercard_notify_only translate="label">
                             <label>Master Card - Notify Only</label>
                             <comment><![CDATA[Indicates whether the card transaction will be submitted in “notification only” mode. In this mode, the authentication process will not be triggered, however, the data will be sent to Brand.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_mastercard_notify_only</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_mastercard_notify_only</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>54</sort_order>
@@ -854,7 +838,7 @@
                         <mpi_authorize_on_error translate="label">
                             <label>Authorize On Error</label>
                             <comment><![CDATA[Indicates whether on Authentication Error case the authorization will be transactionated.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_authorize_on_error</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_authorize_on_error</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>56</sort_order>
@@ -868,7 +852,7 @@
                         <mpi_authorize_on_failure translate="label">
                             <label>Authorize On Failure</label>
                             <comment><![CDATA[Indicates whether on Authentication Failure case the authorization will be transactionated.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_authorize_on_failure</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_authorize_on_failure</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>58</sort_order>
@@ -882,7 +866,7 @@
                         <mpi_authorize_on_unenrolled translate="label">
                             <label>Authorize On Unenrolled</label>
                             <comment><![CDATA[Indicates whether on Authentication Unenrolled case the authorization will be transactioneted.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_authorize_on_unenrolled</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_authorize_on_unenrolled</config_path>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>60</sort_order>
@@ -896,7 +880,7 @@
                         <mpi_mdd1 translate="label">
                             <label>Extra data 1</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_mdd1</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_mdd1</config_path>
                             <frontend_type>text</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>62</sort_order>
@@ -910,7 +894,7 @@
                         <mpi_mdd2 translate="label">
                             <label>Extra data 2</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_mdd2</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_mdd2</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>64</sort_order>
                             <show_in_default>1</show_in_default>
@@ -923,7 +907,7 @@
                         <mpi_mdd3 translate="label">
                             <label>Extra data 3</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_mdd3</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_mdd3</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>66</sort_order>
                             <show_in_default>1</show_in_default>
@@ -936,7 +920,7 @@
                         <mpi_mdd4 translate="label">
                             <label>Extra data 4</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_mdd4</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_mdd4</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>68</sort_order>
                             <show_in_default>1</show_in_default>
@@ -949,7 +933,7 @@
                         <mpi_mdd5 translate="label">
                             <label>Extra data 5</label>
                             <comment><![CDATA[Extra data defined by Store.]]></comment>
-                            <config_path>pagador/webjump_braspag_dc/mpi_mdd5</config_path>
+                            <config_path>mpi/debitcard_transation/mpi_mdd5</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>70</sort_order>
                             <show_in_default>1</show_in_default>
@@ -963,5 +947,262 @@
                 </debitcard_transation>
 			</groups>
         </webjump_braspag_mpi>
+        <webjump_braspag_antifraud translate="label" module="webjump_braspag_pagador">
+            <label>Anti Fraud</label>
+            <tab>webjump_braspag</tab>
+            <sort_order>500</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <hint translate="label,hint" module="webjump_braspag_pagador">
+                    <frontend_model>webjump_braspag_pagador/adminhtml_system_config_fieldset_hint</frontend_model>
+                    <hint><![CDATA[The best fraud prevention solution for your store.<br /><a href="http://www.webjump.com.br/braspag" target="_blank">Click here to know more.</a>]]></hint>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </hint>
+                <general translate="label" module="webjump_braspag_pagador">
+                    <label>General Configuration</label>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Active</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <config_path>antifraud/general/active</config_path>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                    </fields>
+                </general>
+                <creditcard_transation translate="label comment" module="webjump_braspag_pagador">
+                    <label>Credit Card Transactions</label>
+                    <comment><![CDATA[Payment status to be applied after anti fraud analysis when payment type is Credit Card.]]></comment>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <reject_order_status translate="label">
+                            <label>Reject Order Status</label>
+                            <config_path>antifraud/creditcard_transation/reject_order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>webjump_braspag_pagador/source_status_review</source_model>
+                            <sort_order>32</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </reject_order_status>
+                        <review_order_status translate="label">
+                            <label>Review Order Status</label>
+                            <config_path>antifraud/creditcard_transation/review_order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>webjump_braspag_pagador/source_status_review</source_model>
+                            <sort_order>33</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </review_order_status>
+                    </fields>
+                </creditcard_transation>
+                <creditcard_justclick_transation translate="label comment" module="webjump_braspag_pagador">
+                    <label>Credit Card Just Click Transactions</label>
+                    <comment><![CDATA[Payment status to be applied after anti fraud analysis when payment type is Credit Card JustClick.]]></comment>
+                    <sort_order>350</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <reject_order_status translate="label">
+                            <label>Reject Order Status</label>
+                            <config_path>antifraud/creditcard_justclick_transation/reject_order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>webjump_braspag_pagador/source_status_review</source_model>
+                            <sort_order>32</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </reject_order_status>
+                        <review_order_status translate="label">
+                            <label>Review Order Status</label>
+                            <config_path>antifraud/creditcard_justclick_transation/review_order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>webjump_braspag_pagador/source_status_review</source_model>
+                            <sort_order>33</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </review_order_status>
+                    </fields>
+                </creditcard_justclick_transation>
+                <fingerprint translate="label,comment" module="webjump_braspag_pagador">
+                    <label>Finger Print</label>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[Identifier used to cross informations obtained by the browser of the internet user, with the data sent for analysis.]]></comment>
+                    <fields>
+                        <org_id translate="label,comment">
+                            <label>Org Id</label>
+                            <comment></comment>
+                            <frontend_type>text</frontend_type>
+                            <config_path>antifraud/fingerprint/org_id</config_path>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </org_id>
+                        <merchant_id translate="label">
+                            <label>Merchant Id</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>antifraud/fingerprint/merchant_id</config_path>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </merchant_id>
+                        <use_order_id_to_figerprint translate="label,comment">
+                            <label>Use Order ID to Fingerprint</label>
+                            <comment></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <config_path>antifraud/fingerprint/use_order_id_to_figerprint</config_path>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_order_id_to_figerprint>
+                    </fields>
+                </fingerprint>
+                <options translate="label,comment">
+                    <label>Options</label>
+                    <sort_order>500</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment></comment>
+                    <fields>
+                        <sequence translate="label,comment">
+                            <label>Sequence</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>webjump_braspag_pagador/source_sequence</source_model>
+                            <config_path>antifraud/options/sequence</config_path>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Tipo de Fluxo para realização da análise de fraude.</br>Primeiro Analise (Analyse First) </br>Primeiro Autorização (Authorize First)]]></comment>
+                        </sequence>
+                        <sequence_criteria translate="label,comment">
+                            <label>Sequence Criteria</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>webjump_braspag_pagador/source_sequenceCriteria</source_model>
+                            <config_path>antifraud/options/sequence_criteria</config_path>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Critério do fluxo</br>On Success - Só realiza a analise se tiver sucesso na transação.</br>Always - Sempre realiza a analise ]]></comment>
+                        </sequence_criteria>
+                        <capture_on_low_risk translate="label,comment">
+                            <label>Capture On Low Risk</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <config_path>antifraud/options/capture_on_low_risk</config_path>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Identifica se a autorização deve ser com captura automática quando o risco de fraude for considerado baixo (Accept). Em casos de Reject ou Review, o fluxo permanece o mesmo, ou seja, a captura acontecerá conforme o valor especificado no parâmetro "Capture". Para a utilização deste parâmetro, a sequência do fluxo de análise de risco deve ser obrigatoriamente "AuthorizeFirst". Por depender do resutlado de análise de risco, este parâmetro só terá efeito quando o serviço de Antifraude for contratado.]]></comment>
+                        </capture_on_low_risk>
+                        <void_on_high_risk translate="label,comment">
+                            <label>Void On High Risk</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <config_path>antifraud/options/void_on_high_risk</config_path>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Identifica se o estorno deve acontecer automaticamente quando o risco de fraude for considerado alto (Reject). Em casos de Accept ou Review, o fluxo permanece o mesmo, ou seja, o estorno deve ser feito manualmente. Para a utilização deste parâmetro, a sequência do fluxo de análise de risco deve ser obrigatoriamente "AuthorizeFirst". Por depender do resutlado de análise de risco, este parâmetro só terá efeito quando o serviço de Antifraude for contratado.]]></comment>
+                        </void_on_high_risk>
+                    </fields>
+                </options>
+                <mdd translate="label,comment">
+                    <label>MDD's</label>
+                    <sort_order>600</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment></comment>
+                    <fields>
+                        <fetch_self_shipping_method translate="label,comment">
+                            <label>Customer fetch self Shipping Method</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_allmethods</source_model>
+                            <config_path>antifraud/mdd/fetch_self_shipping_method</config_path>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </fetch_self_shipping_method>
+                        <store_code_to_fetch_self translate="label,comment">
+                            <label>Store Code From Customer Fetch Self</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>antifraud/mdd/store_code_to_fetch_self</config_path>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </store_code_to_fetch_self>
+                        <vertical_segment translate="label,comment">
+                            <label>Vertical Segment</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>webjump_braspag_pagador/source_verticalSegment</source_model>
+                            <config_path>antifraud/mdd/vertical_segment</config_path>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </vertical_segment>
+                        <store_identity translate="label,comment">
+                            <label>Store Identity (CNPJ)</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>antifraud/mdd/store_identity</config_path>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </store_identity>
+                        <category_attribute_code translate="label,comment">
+                            <label>Category Attribute Code</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>antifraud/mdd/category_attribute_code</config_path>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </category_attribute_code>
+                    </fields>
+                </mdd>
+            </groups>
+        </webjump_braspag_antifraud>
     </sections>
 </config>
