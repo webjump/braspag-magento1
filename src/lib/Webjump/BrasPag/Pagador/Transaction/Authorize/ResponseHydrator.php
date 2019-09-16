@@ -71,16 +71,13 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_ResponseHydrator
             return $this;
         }
 
-
         $this->hydrateCustomer();
         $this->hydrateOrder();
         $this->hydratePayment();
 
         if (in_array($this->dataPaymentObject->getData('Status'), [
-                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_NOT_FINISHED,
                 Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED,
                 Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED,
-                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED,
                 Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
             ])
         ) {

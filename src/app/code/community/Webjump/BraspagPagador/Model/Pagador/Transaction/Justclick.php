@@ -33,12 +33,15 @@
 class Webjump_BraspagPagador_Model_Pagador_Transaction_JustClick extends Webjump_BraspagPagador_Model_Pagador_Transaction
 {
 
+    /**
+     * @return bool|mixed
+     * @throws Exception
+     */
     protected function getPaymentsData()
     {
         $helper = $this->getHelper();
         $payment = $this->getPayment();
         $amount = $this->getAmount();
-        $configModel = $this->getConfigModel();
         $method = $this->getMethod();
         $order = $this->getOrder();
         $storeId = $this->getStoreId();
@@ -73,7 +76,6 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_JustClick extends Webjump
                 'currency' => $currency,
                 'country' => $country,
                 'numberOfPayments' => $value['installments'],
-//                'paymentPlan' => $value['installments'] == 1 ? $configModel::PAYMENT_PLAN_CASH : $paymentPlan,
                 'transactionType' => $transactionType,
                 'cardSecurityCode' => $value['cc_cid'],
             );
@@ -83,6 +85,5 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_JustClick extends Webjump
         }
 
         return $dataPayments;
-
     }
 }

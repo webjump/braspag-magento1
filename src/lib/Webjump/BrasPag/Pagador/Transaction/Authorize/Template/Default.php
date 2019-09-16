@@ -87,6 +87,7 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Template_Default
     protected function getMerchantOrderId()
     {
         $this->data["Body"]["MerchantOrderId"] = $this->getRequest()->getOrder()->getOrderId();
+
         return $this->data;
     }
 

@@ -15,6 +15,7 @@ class Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCard
 {
 	protected $integrationType = 'TRANSACTION_DC';
     protected $authenticate;
+    protected $authenticationUrl;
     protected $returnUrl;
     protected $acquirerTransactionId;
     protected $softDescriptor;
@@ -140,5 +141,21 @@ class Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCard
     public function setDebitCard($debitCard)
     {
         $this->debitCard = $debitCard;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAuthenticationUrl()
+    {
+        return $this->authenticationUrl;
+    }
+
+    /**
+     * @param mixed $authenticationUrl
+     */
+    public function setAuthenticationUrl($authenticationUrl)
+    {
+        $this->authenticationUrl = $authenticationUrl;
     }
 }

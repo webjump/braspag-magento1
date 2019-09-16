@@ -185,6 +185,14 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Abstract extends Webjump_B
 
         $paymentRequest = $this->getInfoInstance()->getPaymentRequest();
 
+        if (!$paymentRequest['amount'] && $this->getInfoInstance()->getQuote()) {
+            $paymentRequest['amount'] = $this->getInfoInstance()->getQuote()->getGrandTotal();
+        }
+
+        if (!$paymentRequest['amount'] && $this->getInfoInstance()->getOrder()) {
+            $paymentRequest['amount'] = $this->getInfoInstance()->getOrder()->getGrandTotal();
+        }
+
         if ($this->getValidator()
             && preg_match("#saveOrder#is", Mage::app()->getRequest()->getOriginalPathInfo())
         ) {

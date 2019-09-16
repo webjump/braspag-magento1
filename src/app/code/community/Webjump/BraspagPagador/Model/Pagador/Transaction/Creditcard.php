@@ -41,25 +41,12 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
      */
     protected function getPaymentData()
     {
-        $helper = $this->getHelper();
         $payment = $this->getPayment();
         $amount = $this->getAmount();
-        $method = $this->getMethod();
         $order = $this->getOrder();
         $storeId = $this->getStoreId();
 
-        $paymentAction = $method->getConfigData('payment_action', $storeId);
-
         $antiFraudModel = Mage::getSingleton('webjump_braspag_pagador/antifraud');
-
-        switch ($paymentAction) {
-            case $method::ACTION_AUTHORIZE:$transactionType = 1;
-                break;
-            case $method::ACTION_AUTHORIZE_CAPTURE:$transactionType = 2;
-                break;
-            default:
-                throw new Exception($helper->__('Invalid transaction type'));
-        }
 
         $currency = $order->getOrderCurrencyCode();
         $country = Mage::getStoreConfig('webjump_braspag_pagador/general/country', $storeId);
@@ -96,7 +83,7 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
                 'cardAlias' => '',
                 'saveCard' => true,
                 "interest" => 'ByMerchant',
-                "capture" => $transactionType == 2 ? true : false,
+                "capture" => false,
                 "authenticate" => isset($dataPayment['authentication_failure_type']) ? true : false,
                 "recurrent" => false,
                 "softDescriptor" => '',
@@ -126,8 +113,8 @@ class Webjump_BraspagPagador_Model_Pagador_Transaction_Creditcard
                     "sequence" => $antiFraudConfigModel->getOptionsSequence(),
                     "sequence_criteria" => $antiFraudConfigModel->getOptionsSequenceCriteria(),
                     "provider" => "Cybersource",
-                    "capture_on_low_risk" => $antiFraudConfigModel->getOptionsCaptureOnLowRisk(),
-                    "void_on_high_risk" => $antiFraudConfigModel->getOptionsVoidOnHighRisk(),
+                    "capture_on_low_risk" => (bool) $antiFraudConfigModel->getOptionsCaptureOnLowRisk(),
+                    "void_on_high_risk" => (bool) $antiFraudConfigModel->getOptionsVoidOnHighRisk(),
                     "total_order_amount" => $dataCard['amount'],
                     "finger_print_id" => $antiFraudModel->getFingerPrintId(),
                     "browser" => $antiFraudModel->getBrowserData(),

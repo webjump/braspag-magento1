@@ -48,6 +48,23 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
     protected $_canVoid = true;
 
     /**
+     * @return bool
+     */
+    public function isInitializeNeeded()
+    {
+        return true;
+    }
+
+    public function initialize($paymentAction, $stateObject)
+    {
+        $payment = $this->getInfoInstance();
+
+        $payment->authorize(true, $payment->getOrder()->getTotalDue());
+
+        $stateObject->setData('is_notified', false);
+    }
+
+    /**
      * Return cc avaliable types
      *
      * @return array list of cc avaliable types
@@ -200,12 +217,10 @@ class Webjump_BraspagPagador_Model_Method_Transaction_Cc
         if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
             || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED
             || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_UNKNOWN
+            || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REVIEW
+
         ) {
             $payment->setIsFraudDetected(true);
-        }
-
-        if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REVIEW) {
-            $payment->setIsTransactionPending(true);
         }
 
         return $payment;
