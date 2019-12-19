@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e8b94794-6a95-403d-8209-5375384806b7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Abstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Abstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Cc.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Method/Transaction/Cc.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Observer/SalesOrderPaymentPlaceEnd.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Observer/SalesOrderPaymentPlaceEnd.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction/Creditcard.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction/Creditcard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction/Justclick.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/code/community/Webjump/BraspagPagador/Model/Pagador/Transaction/Justclick.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Pagador/Data/Response/Payment/DebitCard.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Pagador/Data/Response/Payment/DebitCard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Pagador/Transaction/Authorize/ResponseHydrator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Pagador/Transaction/Authorize/ResponseHydrator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Pagador/Transaction/Authorize/Template/Default.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/Webjump/BrasPag/Pagador/Transaction/Authorize/Template/Default.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -55,7 +46,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -63,47 +53,16 @@
               <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
               <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="code" type="462c0819:PsiDirectoryNode" />
-              <item name="community" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="magento1-module-braspagpagador2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="magento1-module-braspagpagador2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../magento1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../magento1_rest" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
@@ -146,18 +105,23 @@
       <workItem from="1567901981823" duration="10773000" />
       <workItem from="1568285477130" duration="1385000" />
       <workItem from="1568319849639" duration="4759000" />
-      <workItem from="1568501436040" duration="6014000" />
+      <workItem from="1568501436040" duration="8613000" />
+      <workItem from="1568630253047" duration="608000" />
+      <workItem from="1569298478361" duration="597000" />
+      <workItem from="1570411995989" duration="2334000" />
+      <workItem from="1570428325538" duration="599000" />
+      <workItem from="1570506456765" duration="649000" />
+      <workItem from="1571029738746" duration="88000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36704000" />
+    <option name="totallyTimeSpent" value="44178000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1366" height="741" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.35584217" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.39377844" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="10" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50208336" side_tool="true" weight="0.107068606" />

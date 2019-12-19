@@ -9,7 +9,9 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Transaction_Capture_Request extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Transaction_Capture_RequestInterface
+class Webjump_BrasPag_Pagador_Transaction_Capture_Request
+    extends Webjump_BrasPag_Core_Data_Abstract
+    implements Webjump_BrasPag_Pagador_Transaction_Capture_RequestInterface
 {
     protected $merchantId;
     protected $merchantKey;

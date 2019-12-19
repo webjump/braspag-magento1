@@ -1,5 +1,5 @@
 <?php
-class Webjump_BraspagPagador_Block_Form_Justclick extends Webjump_BraspagPagador_Block_Form_Cc
+class Webjump_BraspagPagador_Block_Form_Justclick extends Webjump_BraspagPagador_Block_Form_Creditcard
 {
 
     protected function _construct()

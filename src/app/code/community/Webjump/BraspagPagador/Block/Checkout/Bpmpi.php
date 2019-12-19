@@ -36,32 +36,32 @@ class Webjump_BraspagPagador_Block_Checkout_Bpmpi extends Mage_Checkout_Block_On
     /**
      * @return bool
      */
-    public function isBpmpiCcEnabled()
+    public function isBpmpiCreditCardEnabled()
     {
-        return (bool) $this->mpiConfig->isMpiCcActive();
+        return (bool) $this->mpiConfig->isMpiCreditCardActive();
     }
 
     /**
      * @return bool
      */
-    public function isBpmpiDcEnabled()
+    public function isBpmpiDebitCardEnabled()
     {
-        return (bool) $this->mpiConfig->isMpiDcActive();
+        return (bool) $this->mpiConfig->isMpiDebitCardActive();
     }
 
     /**
      * @return bool
      */
-    public function isBpmpiMcNotifyOnlyCcEnabled()
+    public function isBpmpiMcNotifyOnlyCreditCardEnabled()
     {
-        return (bool) $this->mpiConfig->isBpmpiMcNotifyOnlyCcEnabled();
+        return (bool) $this->mpiConfig->isBpmpiMcNotifyOnlyCreditCardEnabled();
     }
 
     /**
      * @return bool
      */
-    public function isBpmpiMcNotifyOnlyDcEnabled()
+    public function isBpmpiMcNotifyOnlyDebitCardEnabled()
     {
-        return (bool) $this->mpiConfig->isBpmpiMcNotifyOnlyDcEnabled();
+        return (bool) $this->mpiConfig->isBpmpiMcNotifyOnlyDebitCardEnabled();
     }
 }

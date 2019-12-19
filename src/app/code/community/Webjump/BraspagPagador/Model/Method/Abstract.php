@@ -1,10 +1,10 @@
 <?php
-abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment_Model_Method_Abstract {
 
+abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment_Model_Method_Abstract
+{
 	protected $_apiType;
-	protected $_validator;
 
-    protected $_canSaveCc     = false;
+    protected $_canSaveCreditCard     = false;
 
     protected $_isInitializeNeeded			= false;
     protected $_isGateway                   = true;
@@ -21,7 +21,7 @@ abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment
     protected $_canFetchTransactionInfo     = true;
     protected $_canReviewPayment            = false;
     protected $_canCreateBillingAgreement   = false;
-    protected $_canManageRecurringProfiles  = false;    
+    protected $_canManageRecurringProfiles  = false;
 
     /**
      * Retrieve model helper
@@ -53,11 +53,6 @@ abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment
         return $this->_apiType;
     }
 
-    public function getValidator()
-    {
-        return Mage::getModel($this->_validator);
-    }
-
 	/**
 	* Gateway response wrapper
 	*
@@ -78,6 +73,4 @@ abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment
     {
         return Mage::getModel('webjump_braspag_pagador/pagador');
     }
-
-  
 }

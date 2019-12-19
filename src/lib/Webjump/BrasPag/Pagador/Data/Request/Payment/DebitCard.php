@@ -14,6 +14,7 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCard
     implements Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCardInterface
 {
     public $interest;
+    public $installments;
     public $capture;
     public $authenticate;
     public $externalAuthentication;
@@ -43,6 +44,22 @@ class Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCard
     public function setInterest($interest)
     {
         $this->interest = $interest;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInstallments()
+    {
+        return $this->installments;
+    }
+
+    /**
+     * @param mixed $installments
+     */
+    public function setInstallments($installments)
+    {
+        $this->installments = $installments;
     }
 
     /**

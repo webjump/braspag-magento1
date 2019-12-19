@@ -13,7 +13,7 @@ class Webjump_BrasPag_Pagador_Data_Response_Payment_CreditCard
     extends Webjump_BrasPag_Pagador_Data_Response_Payment_Abstract
     implements Webjump_BrasPag_Pagador_Data_Response_Payment_CreditCardInterface
 {
-	protected $integrationType = 'TRANSACTION_CC';
+	protected $integrationType = 'TRANSACTION_CREDITCARD';
     protected $authorizationCode;
     protected $proofOfSale;
     protected $cardToken;

@@ -97,9 +97,9 @@
 <script type="text/javascript">
   var bpmpi = new Bpmpi();
   bpmpi.isTestEnvironment = <?php echo ($this->isTestEnvironmentEnabled() ? 'true' : 'false'); ?>;
-  bpmpi.isBpmpiEnabledCC = <?php echo ($this->isBpmpiCcEnabled() ? 'true' : 'false'); ?>;
-  bpmpi.isBpmpiEnabledDC = <?php echo ($this->isBpmpiDcEnabled() ? 'true' : 'false'); ?>;
-  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledCC = <?php echo ($this->isBpmpiMcNotifyOnlyCcEnabled() ? 'true' : 'false'); ?>;
-  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledDC = <?php echo ($this->isBpmpiMcNotifyOnlyDcEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiEnabledCC = <?php echo ($this->isBpmpiCreditCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiEnabledDC = <?php echo ($this->isBpmpiDebitCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledCC = <?php echo ($this->isBpmpiMcNotifyOnlyCreditCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledDC = <?php echo ($this->isBpmpiMcNotifyOnlyDebitCardEnabled() ? 'true' : 'false'); ?>;
   bpmpi.startTransaction();
 </script>

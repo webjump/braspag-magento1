@@ -4,17 +4,15 @@ $_code = $this->getMethodCode();
 //Retrieve data submited
 $_additionalInformation = $this->getInfoData('additional_information');
 
-$numPayments = 0;
 ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
-<?php for($_paymentRequestIndex = 0; $_paymentRequestIndex <= $numPayments; $_paymentRequestIndex++): ?>
-	<li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_token_div">
+	<li id="<?php echo $_code ?>_cc_token_div">
         <p class="required"><?php echo $this->__('* Required Fields') ?></p>
         <label for="<?php echo $_code ?>_cc_token" class="required"><em>*</em><?php echo $this->__('Saved Credit Cards (JustClick)') ?></label>
         <div class="input-box">
-            <select id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_token" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_token]" class="required-entry" title="<?php echo $this->__('Saved Credit Cards (JustClick)') ?>">
+            <select id="<?php echo $_code ?>_cc_token" name="payment[payment_request][cc_token]" class="required-entry" title="<?php echo $this->__('Saved Credit Cards (JustClick)') ?>">
                 <option value=""><?php echo $this->__('--Please Select--')?></option>
-            <?php $_ccType = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_token']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_token'] : null; ?>
+            <?php $_ccType = isset($_additionalInformation['payment_request']['cc_token']) ? $_additionalInformation['payment_request']['cc_token'] : null; ?>
             <?php foreach ($this->getAvailableCards() as $_card): ?>
                 <?php print_r($this->getAvailableCards()->getData()) ?>
                 <option value="<?php echo $_card['token'] ?>"<?php if($_card['token']==$_ccType): ?> selected="selected"<?php endif ?>><?php echo $_card['alias'] ?></option>
@@ -24,22 +22,22 @@ $numPayments = 0;
     </li>
     <?php echo $this->getChildHtml() ?>
     <?php if ($this->isShowCardVerifyCode()): ?>
-    <li id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_token_cvv_div">
-        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+    <li id="<?php echo $_code ?>_cc_token_cvv_div">
+        <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
         <div class="input-box">
             <div class="v-fix">
-                <input type="text" pattern="\d*" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_cc_cid" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][cc_cid]" value="" />
+                <input type="text" pattern="\d*" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_cc_cid" name="payment[payment_request][cc_cid]" value="" />
             </div>
             <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
         </div>
     </li>        
     <?php endif ?>
     <li>
-        <label for="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
+        <label for="<?php echo $_code ?>_installments" class="required"><em>*</em><?php echo $this->__('Installments') ?></label>
         <div class="input-box">
             <div class="v-fix">
-                <?php $_installments = isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['installments']) ? $_additionalInformation['payment_request'][$_paymentRequestIndex]['installments'] : null; ?>
-                <select id="<?php echo $_code ?>_<?php echo $_paymentRequestIndex; ?>_installments" name="payment[payment_request][<?php echo $_paymentRequestIndex; ?>][installments]" class="number required-entry">
+                <?php $_installments = isset($_additionalInformation['payment_request']['installments']) ? $_additionalInformation['payment_request']['installments'] : null; ?>
+                <select id="<?php echo $_code ?>_installments" name="payment[payment_request][installments]" class="number required-entry">
                 <?php foreach ($this->getInstallments() as $k=>$v): ?>
                     <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_installments): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
                 <?php endforeach ?>
@@ -47,5 +45,4 @@ $numPayments = 0;
             </div>
         </div>
     </li>
-<?php endfor; ?>
 </ul>

@@ -16,6 +16,6 @@ class Webjump_BraspagPagador_Block_Checkout_Bpmpi_Review_Button extends Mage_Che
      */
     public function isBpmpiActive()
     {
-        return (bool) ($this->bpmpiConfig->isMpiCcActive() || $this->bpmpiConfig->isMpiDcActive());
+        return (bool) ($this->bpmpiConfig->isMpiCreditCardActive() || $this->bpmpiConfig->isMpiDebitCardActive());
     }
 }

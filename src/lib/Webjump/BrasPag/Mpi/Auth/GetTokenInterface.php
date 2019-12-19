@@ -11,4 +11,5 @@
  **/
 interface Webjump_BrasPag_Mpi_Auth_GetTokenInterface
 {
+    function execute();
 }

@@ -5,4 +5,6 @@ $orgId = $this->getOrgId();
 ?>
 
 <script type="text/javascript" src="<?php echo $url."/fp/tags.js?org_id=".$orgId."&session_id=".$sessionId; ?>"></script>
-<iframe style="width: 100px; height: 100px; border: 0; position:absolute; top: -5000px;" src="<?php echo $url."/fp/tags?org_id=".$orgId."&session_id=".$sessionId; ?>"></iframe>
+<noscript>
+    <iframe style="width: 100px; height: 100px; border: 0; position:absolute; top: -5000px;" src="<?php echo $url."/fp/tags?org_id=".$orgId."&session_id=".$sessionId; ?>"></iframe>
+</noscript>

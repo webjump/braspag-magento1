@@ -32,7 +32,6 @@
  **/
 class Webjump_BraspagPagador_Model_Mpi extends Mage_Core_Model_Abstract
 {
-
     /**
      * @return mixed
      * @throws Exception

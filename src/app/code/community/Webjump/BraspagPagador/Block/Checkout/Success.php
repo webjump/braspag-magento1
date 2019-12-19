@@ -22,13 +22,13 @@ class Webjump_BraspagPagador_Block_Checkout_Success extends Mage_Checkout_Block_
 
         if (!empty($additionalData['payment_response'])) {
             if ($payment = $additionalData['payment_response']) {
-                if ($payment['integrationType'] == 'TRANSACTION_BOLETO') {
+                if ($payment['integrationType'] == 'TRANSACTION_BILLET') {
                     $data[] = array(
                         'target' => '_blank',
                         'label' => Mage::getStoreConfig('payment/webjump_braspag_boleto/payment_button_label'),
                         'url' => $payment['url'],
                     );
-                } elseif ($payment['integrationType'] == 'TRANSACTION_DC') {
+                } elseif ($payment['integrationType'] == 'TRANSACTION_DEBITCARD') {
                     $data[] = array(
                         'target' => '',
                         'label' => Mage::getStoreConfig('payment/webjump_braspag_dc/payment_button_label'),

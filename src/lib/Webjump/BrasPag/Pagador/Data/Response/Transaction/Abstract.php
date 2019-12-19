@@ -9,7 +9,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-abstract class Webjump_BrasPag_Pagador_Data_Response_Transaction_Abstract extends Webjump_BrasPag_Pagador_Data_Abstract
+abstract class Webjump_BrasPag_Pagador_Data_Response_Transaction_Abstract extends Webjump_BrasPag_Core_Data_Abstract
 {
     protected $braspagTransactionId;
     protected $amount;

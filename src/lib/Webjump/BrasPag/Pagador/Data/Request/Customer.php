@@ -9,7 +9,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Data_Request_Customer extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Data_Request_CustomerInterface
+class Webjump_BrasPag_Pagador_Data_Request_Customer extends Webjump_BrasPag_Core_Data_Abstract implements Webjump_BrasPag_Pagador_Data_Request_CustomerInterface
 {
     protected $identity;
     protected $identityType;

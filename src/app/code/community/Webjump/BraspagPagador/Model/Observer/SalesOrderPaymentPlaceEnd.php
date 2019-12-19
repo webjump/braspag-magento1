@@ -50,59 +50,99 @@ class Webjump_BraspagPagador_Model_Observer_SalesOrderPaymentPlaceEnd
 
             $paymentMethod = $payment->getMethodInstance()->getCode();
 
-            if (!$antiFraudConfigModel->isAntifraudActive($storeId)
-                || ($paymentMethod != 'webjump_braspag_cc' && $paymentMethod != 'webjump_braspag_justclick')
-            ) {
+            if ($paymentMethod != 'webjump_braspag_cc' && $paymentMethod != 'webjump_braspag_justclick') {
                 return $this;
             }
 
             $paymentResponseData = $payment->getAdditionalInformation('payment_response');
 
-            if (!$fraudAnalysisStatus = $paymentResponseData['fraudAnalysis']['Status']) {
-                return $this;
-            }
+            if ($fraudAnalysisStatus = $paymentResponseData['fraudAnalysis']['Status']) {
 
-            if (($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
-                || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED
-                || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_UNKNOWN)
-                && $payment->getIsFraudDetected()
-            ) {
+                if (($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
+                    || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED
+                    || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_UNKNOWN)
+                ) {
 
-                $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
-                $status = Mage::getStoreConfig('antifraud/creditcard_transation/reject_order_status', $storeId);
-                $message = $helper->__("Fraud Detected.");
+                    $status = Mage::getStoreConfig('antifraud/creditcard_transation/reject_order_status', $storeId);
 
-                if ($status == 'payment_review') {
-                    $message = $helper->__("Possible Fraud Detected. Analysing.");
+                    if ($status == 'payment_review') {
+                        $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
+                        $message = $helper->__("Possible Fraud Detected. Analysing.");
+
+                        $order->setState($state, $status, $message)
+                            ->save();
+
+                        return $this;
+                    }
+
+                    if ($status == 'canceled') {
+                        $payment->setIsFraudDetected(false);
+                        $order->cancel()->save();
+                        $state = Mage_Sales_Model_Order::STATE_CANCELED;
+                        $message = $helper->__("Canceled After Fraud Detected.");
+
+                        $order->setState($state, $status, $message)
+                            ->save();
+
+                        return $this;
+                    }
+
+                    if ($payment->getIsFraudDetected()) {
+                        $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
+                        $message = $helper->__("Anti Fraud - Fraud Detected.");
+                        $status = 'fraud';
+
+                        $order->setState($state, $status, $message)
+                            ->save();
+
+                        return $this;
+                    }
                 }
 
-                if ($status == 'canceled') {
-                    $payment->void();
-                    $order->cancel()->save();
-                    $state = Mage_Sales_Model_Order::STATE_CANCELED;
-                    $message = $helper->__("Canceled After Fraud Detected.");
+                if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REVIEW) {
+
+                    $status = Mage::getStoreConfig('antifraud/creditcard_transation/review_order_status', $storeId);
+
+                    if ($status == 'fraud') {
+
+                        $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
+                        $message = $helper->__("Fraud Detected.");
+                        $order->setState($state, $status, $message)
+                            ->save();
+
+                        return $this;
+                    }
+
+                    if ($status == 'canceled') {
+                        $payment->setIsTransactionPending(false);
+                        $order->cancel()->save();
+                        $state = Mage_Sales_Model_Order::STATE_CANCELED;
+                        $message = $helper->__("Canceled After Fraud Detected.");
+
+                        $order->setState($state, $status, $message)
+                            ->save();
+
+                        return $this;
+                    }
+
+                    if ($payment->getIsTransactionPending()) {
+                        $status = 'payment_review';
+
+                        $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
+                        $message = $helper->__('Anti Fraud - Payment Review.');
+
+                        $order->setState($state, $status, $message)
+                            ->save();
+
+                        return $this;
+                    }
                 }
-
-                $order
-                    ->setState($state, $status, $message)
-                    ->save();
-            }
-
-            if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REVIEW
-                && $payment->getIsTransactionPending()
-            ) {
-                $message = $this->getHelper()->__('Payment Review.');
-                $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
-                $status = Mage::getStoreConfig('antifraud/creditcard_transation/review_order_status', $storeId);
-
-                $order
-                    ->setState($state, $status, $message)
-                    ->save();
             }
 
             if (!$payment->getIsFraudDetected()
                 && !$payment->getIsTransactionPending()
                 && $order->canInvoice()
+                && $payment->getMethodInstance()->getConfigPaymentAction() == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
             ) {
                 $sendEmail = Mage::getStoreConfig('webjump_braspag_pagador/status_update/send_email');
                 $helper->invoiceOrder($order, $sendEmail);

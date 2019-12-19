@@ -9,7 +9,7 @@ class Webjump_BraspagPagador_Model_Justclick_Card extends Mage_Core_Model_Abstra
 
     public function loadCardsByCustomer($customer)
     {
-        $ccAvaliableTypes = Mage::getSingleton('webjump_braspag_pagador/method_transaction_cc')->getCcAvailableTypesCodes();
+        $ccAvaliableTypes = Mage::getSingleton('webjump_braspag_pagador/method_creditcard')->getCreditCardAvailableTypesCodes();
 
         return $this->getCollection()
                     ->addFieldToFilter('customer_id', $customer->getId())

@@ -9,7 +9,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Data_Response_Payment_Current extends Webjump_BrasPag_Pagador_Object
+class Webjump_BrasPag_Pagador_Data_Response_Payment_Current extends Webjump_BrasPag_Core_Data_Object
     implements Webjump_BrasPag_Pagador_Data_Response_Payment_CurrentInterface
 {
     protected $payment;

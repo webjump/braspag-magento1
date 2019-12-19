@@ -9,7 +9,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Data_Response_Transaction extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Data_Response_TransactionInterface
+class Webjump_BrasPag_Pagador_Data_Response_Transaction extends Webjump_BrasPag_Core_Data_Abstract implements Webjump_BrasPag_Pagador_Data_Response_TransactionInterface
 {
     protected $braspagTransactionId;
     protected $acquirerTransactionId;

@@ -9,7 +9,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Data_Request_Address extends Webjump_BrasPag_Pagador_Data_Abstract implements Webjump_BrasPag_Pagador_Data_Request_AddressInterface
+class Webjump_BrasPag_Pagador_Data_Request_Address extends Webjump_BrasPag_Core_Data_Abstract implements Webjump_BrasPag_Pagador_Data_Request_AddressInterface
 {
     protected $street;
     protected $number;

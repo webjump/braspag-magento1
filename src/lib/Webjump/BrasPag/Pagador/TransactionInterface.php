@@ -31,9 +31,5 @@ interface Webjump_BrasPag_Pagador_TransactionInterface
     const STATUS_FRAUD = 'fraud';
     const STATUS_PAYMENT_REVIEW = 'payment_review';
 
-    public function authorize($data);
-
-    public function void($data);
-
-    public function refund($data);
+    function execute();
 }

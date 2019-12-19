@@ -54,7 +54,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isMpiCcActive($storeId = null)
+    public function isMpiCreditCardActive($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_is_active', $storeId);
     }
@@ -63,7 +63,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param $storeId
      * @return bool
      */
-    public function isMpiDcActive($storeId = null)
+    public function isMpiDebitCardActive($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_is_active', $storeId);
     }
@@ -72,7 +72,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiMcNotifyOnlyCcEnabled($storeId = null)
+    public function isBpmpiMcNotifyOnlyCreditCardEnabled($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_mastercard_notify_only', $storeId);
     }
@@ -81,7 +81,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param $storeId
      * @return bool
      */
-    public function isBpmpiMcNotifyOnlyDcEnabled($storeId = null)
+    public function isBpmpiMcNotifyOnlyDebitCardEnabled($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_mastercard_notify_only', $storeId);
     }
@@ -120,7 +120,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiCcAuthorizedOnError($storeId = null)
+    public function isBpmpiCreditCardAuthorizedOnError($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_authorize_on_error', $storeId);
     }
@@ -129,7 +129,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiDcAuthorizedOnError($storeId = null)
+    public function isBpmpiDebitCardAuthorizedOnError($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_authorize_on_error', $storeId);
     }
@@ -138,7 +138,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiCcAuthorizedOnFailure($storeId = null)
+    public function isBpmpiCreditCardAuthorizedOnFailure($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_authorize_on_failure', $storeId);
     }
@@ -147,7 +147,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiDcAuthorizedOnFailure($storeId = null)
+    public function isBpmpiDebitCardAuthorizedOnFailure($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_authorize_on_failure', $storeId);
     }
@@ -156,7 +156,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiCcAuthorizedOnUnenrolled($storeId = null)
+    public function isBpmpiCreditCardAuthorizedOnUnenrolled($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_authorize_on_unenrolled', $storeId);
     }
@@ -165,7 +165,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return bool
      */
-    public function isBpmpiDcAuthorizedOnUnenrolled($storeId = null)
+    public function isBpmpiDebitCardAuthorizedOnUnenrolled($storeId = null)
     {
         return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_authorize_on_unenrolled', $storeId);
     }

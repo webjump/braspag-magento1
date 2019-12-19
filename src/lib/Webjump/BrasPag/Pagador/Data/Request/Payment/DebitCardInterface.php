@@ -17,6 +17,8 @@ interface Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCardInterface
 
     public function getCountry();
 
+    public function getInstallments();
+
     public function getInterest();
 
     public function getCapture();
@@ -41,4 +43,5 @@ interface Webjump_BrasPag_Pagador_Data_Request_Payment_DebitCardInterface
 
     public function getCardBrand();
 
+    public function getReturnUrl();
 }

@@ -4,10 +4,10 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     const MERCHANT_ID_DEMO_ACCOUNT = 'E42B3806-D36F-4B8D-8B66-227B60FC3D22';
     const MERCHANT_KEY_DEMO_ACCOUNT = '3uZkdtNRS1xbedqv0VtlcDwtEgONbL9KWTrFkvgm';
 
-    const METHOD_CC = 'webjump_braspag_cc';
+    const METHOD_CREDITCARD = 'webjump_braspag_cc';
     const METHOD_JUSTCLICK = 'webjump_braspag_justclick';
-    const METHOD_DC = 'webjump_braspag_dc';
-    const METHOD_BOLETO = 'webjump_braspag_boleto';
+    const METHOD_DEBITCARD = 'webjump_braspag_dc';
+    const METHOD_BILLET = 'webjump_braspag_boleto';
 
     const INTEGRATION_TRANSACTION = 'transaction';
 
@@ -90,7 +90,7 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     /**
      * @return array
      */
-    public function getAcquirersCcPaymentMethods()
+    public function getAcquirersCreditCardPaymentMethods()
     {
         $return = array(
             'Cielo' => array("Visa", "Master", "Amex", "Elo", "Aura", "Jcb", "Diners", "Discover"),
@@ -119,7 +119,7 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     /**
      * @return array
      */
-    public function getAvailableCcPaymentMethods()
+    public function getAvailableCreditCardPaymentMethods()
     {
         $storeId = Mage::app()->getStore()->getId();
         return explode(",", Mage::getStoreConfig('payment/webjump_braspag_cc/acquirers', $storeId));
@@ -128,16 +128,16 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     /**
      * @return array
      */
-    public function getAvailableDcPaymentMethods()
+    public function getAvailableDebitCardPaymentMethods()
     {
         $storeId = Mage::app()->getStore()->getId();
-        return explode(",", Mage::getStoreConfig('payment/webjump_braspag_dc/dctypes', $storeId));
+        return explode(",", Mage::getStoreConfig('payment/webjump_braspag_dc/debitcardtypes', $storeId));
     }
 
     /**
      * @return array
      */
-    public function getBoletoTypes()
+    public function getBilletTypes()
     {
 
         $return = array(
@@ -158,7 +158,7 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     /**
      * @return array
      */
-    public function getAcquirersDcPaymentMethods()
+    public function getAcquirersDebitCardPaymentMethods()
     {
         $return = array(
             'Cielo' => array("Visa", "Master"),
@@ -218,10 +218,10 @@ class Webjump_BraspagPagador_Model_Config extends Mage_Core_Model_Abstract
     /**
      * @param null $storeId
      * @return mixed
+     * @throws Mage_Core_Model_Store_Exception
      */
-    public function getDcReturnUrl($storeId = null)
+    public function getDebitCardReturnUrl($storeId = null)
     {
-        $storeId = Mage::app()->getStore()->getId();
         return Mage::getStoreConfig('payment/webjump_braspag_dc/return_url', $storeId);
     }
 

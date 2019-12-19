@@ -10,7 +10,7 @@
  * @link      http://www.webjump.com.br
  **/
 class Webjump_BrasPag_Mpi_Auth_GetToken_Request
-    extends Webjump_BrasPag_Mpi_Data_Abstract
+    extends Webjump_BrasPag_Core_Data_Abstract
     implements Webjump_BrasPag_Mpi_Auth_GetToken_RequestInterface
 {
     protected $authorization;

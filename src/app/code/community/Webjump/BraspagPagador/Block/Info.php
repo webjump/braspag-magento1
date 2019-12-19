@@ -2,7 +2,7 @@
 class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
 {
 
-    protected $_ccAvailableTypes = null;
+    protected $creditCardAvailableTypes = null;
     protected $_installments = null;
 
     protected function _construct()
@@ -44,7 +44,7 @@ class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
                 $paymentTotalDue = 0;
             }
 		}
-		
+
         if (!empty($paymentRequest)) {
             $paymentCount = count($additionalData['payment_request']);
 
@@ -54,7 +54,7 @@ class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
                 $order &&
                 $order->getBaseTotalDue() &&
                 !empty($additionalData['payment_response']) &&
-                $additionalData['payment_response']['integrationType'] == 'TRANSACTION_DC'
+                $additionalData['payment_response']['integrationType'] == 'TRANSACTION_DEBITCARD'
             ) {
                 $paymentResponse = $additionalData['payment_response'];
                 $tmp[] = '<a href="' . $paymentResponse['authenticationUrl'] . '" class="button webjump-braspagpagador payment-button payment-code-' . $this->getInfo()->getMethodInstance()->getCode() . '">' . $_hlp->__('Pay Order') . '</a>';
@@ -100,8 +100,8 @@ class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
                 $tmp[$_hlp->__('Expiration Date')] = $_hlp->__('%1$02s/%2$s', $paymentRequest['dc_exp_month'], $paymentRequest['dc_exp_year']);
             }
 
-            if ($paymentCount > 1 && !empty($paymentRequest['boleto_type'])) {
-                $tmp[] = $paymentRequest['boleto_type'];
+            if ($paymentCount > 1 && !empty($paymentRequest['billet_type'])) {
+                $tmp[] = $paymentRequest['billet_type'];
             }
 
             if (!empty($paymentRequest['amount'])) {
@@ -112,14 +112,14 @@ class Webjump_BraspagPagador_Block_Info extends Mage_Payment_Block_Info
                 $order &&
                 $order->getBaseTotalDue() &&
                 !empty($additionalData['payment_response']) &&
-                $additionalData['payment_response']['integrationType'] == 'TRANSACTION_BOLETO'
+                $additionalData['payment_response']['integrationType'] == 'TRANSACTION_BILLET'
             ) {
 
                 $paymentResponse = $additionalData['payment_response'];
 
                 $tmp[$_hlp->__('Barcode representation')] = $paymentResponse['barCodeNumber'];
                 $tmp[$_hlp->__('Expiration Date')] = \DateTime::createFromFormat('Y-m-d', $paymentResponse['expirationDate'])->format('d/m/Y');
-                $tmp[] = '<a href="' . $paymentResponse['url'] . '" target="_blank" class="button webjump-braspagpagador payment-button payment-code-' . $this->getInfo()->getMethodInstance()->getCode() . '">' . $_hlp->__('Print Boleto') . '</a>';
+                $tmp[] = '<a href="' . $paymentResponse['url'] . '" target="_blank" class="button webjump-braspagpagador payment-button payment-code-' . $this->getInfo()->getMethodInstance()->getCode() . '">' . $_hlp->__('Print Billet') . '</a>';
             }
 
             if (!empty($paymentTotalDue)) {

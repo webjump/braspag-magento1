@@ -8,21 +8,16 @@ class Webjump_BraspagPagador_Block_Form_Payment_Reorder extends Webjump_BraspagP
         $this->setTemplate('webjump/braspag_pagador/payment/form/payment/reorder.phtml');
     }
 
-	public function getCcAvailableTypes()
+	public function getCreditCardAvailableTypes()
 	{
         $types = array();
 
         if ($method = $this->getCreditCardMethod()) {
-	        $types = $method->getCcAvailableTypes();
+	        $types = $method->getCreditCardAvailableTypes();
         }
 
         return $types;
-	}	
-	
-    public function getMethodCode()
-    {
-        return Mage::getSingleton('webjump_braspag_pagador/method_transaction_multi_cccc')->getCode();
-    }
+	}
 
     public function getAmount()
     {
@@ -31,6 +26,7 @@ class Webjump_BraspagPagador_Block_Form_Payment_Reorder extends Webjump_BraspagP
 
     public function getInstallmentsSelectOptions()
     {
+        $options = "";
         foreach ($this->getInstallments() as $id => $value) {
             $options .= Mage::helper('webjump_braspag_pagador')->__('<option value="%1$s">%1$sx %2$s without interest</option>', $id, $value);
         }
@@ -40,8 +36,8 @@ class Webjump_BraspagPagador_Block_Form_Payment_Reorder extends Webjump_BraspagP
 
     protected function getInstallments()
     {
-        return Mage::getSingleton('webjump_braspag_pagador/method_transaction_cc_installments')
-            ->caculate($this->getAmount());
+        return Mage::getSingleton('webjump_braspag_pagador/pagador_creditcard_resource_authorize_installmentsBuilder')
+            ->calculate($this->getAmount());
     }
 
     public function isShowJustclickOption()
@@ -51,7 +47,7 @@ class Webjump_BraspagPagador_Block_Form_Payment_Reorder extends Webjump_BraspagP
 
     protected function getCreditCardMethod()
     {
-        return Mage::getSingleton('webjump_braspag_pagador/method_transaction_cc');
+        return Mage::getSingleton('webjump_braspag_pagador/method_creditcard');
     }
 
     protected function getPaymentPending()
@@ -72,8 +68,8 @@ class Webjump_BraspagPagador_Block_Form_Payment_Reorder extends Webjump_BraspagP
         return Mage::app()->getRequest()->getQuery('order', Mage::getSingleton('webjump_braspag_pagador/session')->getOrderId());
     }
 
-    public function getBoletoType()
+    public function getBilletType()
     {
-        return Mage::getSingleton('webjump_braspag_pagador/method_transaction_boleto')->getBoletoType();
+        return Mage::getSingleton('webjump_braspag_pagador/method_billet')->getBilletType();
     }
 }

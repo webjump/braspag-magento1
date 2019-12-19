@@ -46,7 +46,7 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
             }
 
             // 2 = capture
-            if ($transactionDataPayment['Type'] == 'Boleto'
+            if ($transactionDataPayment['Type'] == 'Billet'
                 && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
             ) {
                 return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);

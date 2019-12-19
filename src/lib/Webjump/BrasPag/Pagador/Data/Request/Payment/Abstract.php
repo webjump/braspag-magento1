@@ -10,7 +10,7 @@
  * @link      http://www.webjump.com.br
  **/
 abstract class Webjump_BrasPag_Pagador_Data_Request_Payment_Abstract
-    extends Webjump_BrasPag_Pagador_Data_Abstract
+    extends Webjump_BrasPag_Core_Data_Abstract
 {
     protected $type;
     protected $method;

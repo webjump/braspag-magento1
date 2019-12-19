@@ -13,7 +13,7 @@ class Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCard
     extends Webjump_BrasPag_Pagador_Data_Response_Payment_Abstract
     implements Webjump_BrasPag_Pagador_Data_Response_Payment_DebitCardInterface
 {
-	protected $integrationType = 'TRANSACTION_DC';
+	protected $integrationType = 'TRANSACTION_DEBITCARD';
     protected $authenticate;
     protected $authenticationUrl;
     protected $returnUrl;
