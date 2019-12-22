@@ -41,12 +41,8 @@ class Webjump_BrasPag_Pagador_Transaction_Capture extends Webjump_BrasPag_Core_H
         $amount = $this->getRequest()->getOrder()->getOrderAmount();
 
         try {
-            $this->getRequestValidator()->validate($this->getRequest());
-
             $this->doRequest($this->getRequest(), 'v2/sales/'.$paymentId."/capture?amount=".$amount, 'PUT');
             $this->prepareResponse($this->getResponse());
-
-            $this->getResponseValidator()->validate($this->getResponse());
 
         } catch (Exception $e) {
             $this->getResponse()->getErrorReport()

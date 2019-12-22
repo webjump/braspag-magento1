@@ -88,18 +88,15 @@
                     <authorize>
                         <class>Webjump_BrasPag_Pagador_Transaction_AuthorizeService</class>
                     </authorize>
+                    <order>
+                        <class>Webjump_BrasPag_Pagador_Transaction_OrderService</class>
+                    </order>
                     <capture>
                         <class>Webjump_BrasPag_Pagador_Transaction_CaptureService</class>
                     </capture>
                     <void>
                         <class>Webjump_BrasPag_Pagador_Transaction_VoidService</class>
                     </void>
-                    <query>
-                        <class>Webjump_BrasPag_Pagador_Transaction_QueryService</class>
-                    </query>
-                    <client>
-                        <class>Webjump_BrasPag_Pagador_Transaction_ClientService</class>
-                    </client>
                     <refund>
                         <class>Webjump_BrasPag_Pagador_Transaction_RefundService</class>
                     </refund>
@@ -113,6 +110,16 @@
                     </response>
                 </data>
             </pagador>
+            <!--<pagadorQuery>-->
+                <!--<transaction>-->
+                    <!--<getByPaymentId>-->
+                        <!--<class>Webjump_BrasPag_PagadorQuery_Transaction_GetByPaymentIdService</class>-->
+                    <!--</getByPaymentId>-->
+                    <!--<getByMerchantOrderId>-->
+                        <!--<class>Webjump_BrasPag_PagadorQuery_Transaction_GetByMerchantOrderIdService</class>-->
+                    <!--</getByMerchantOrderId>-->
+                <!--</transaction>-->
+            <!--</pagadorQuery>-->
         </braspag_services>
     </global>
 	<frontend>
@@ -161,25 +168,25 @@
                 <title>Credit Card</title>
                 <group>braspag</group>
                 <payment_action>authorize</payment_action>
-                <order_status>processing</order_status>
+                <order_status>pending</order_status>
                 <justclick_active>1</justclick_active>
             </webjump_braspag_cc>
-            <webjump_braspag_justclick translate="title" module="webjump_braspag_pagador">
-                <active>0</active>
-                <model>webjump_braspag_pagador/method_justclick</model>
-                <title>JustClick</title>
-                <group>braspag</group>
-                <payment_action>authorize</payment_action>
-                <order_status>processing</order_status>
-                <cvv_required>1</cvv_required>
-            </webjump_braspag_justclick>
+            <!--<webjump_braspag_justclick translate="title" module="webjump_braspag_pagador">-->
+                <!--<active>0</active>-->
+                <!--<model>webjump_braspag_pagador/method_justclick</model>-->
+                <!--<title>JustClick</title>-->
+                <!--<group>braspag</group>-->
+                <!--<payment_action>authorize</payment_action>-->
+                <!--<order_status>processing</order_status>-->
+                <!--<cvv_required>1</cvv_required>-->
+            <!--</webjump_braspag_justclick>-->
  			<webjump_braspag_dc translate="title" module="webjump_braspag_pagador">
     			<active>0</active>
                 <model>webjump_braspag_pagador/method_debitcard</model>
                 <title>Debit Card</title>
                 <group>braspag</group>
                 <payment_action>authorize</payment_action>
-                <order_status>pending</order_status>
+                <order_status>pending_payment</order_status>
                 <payment_button_label>Click here to pay your order</payment_button_label>
 			</webjump_braspag_dc>
 			<webjump_braspag_boleto translate="title,payment_instructions,billet_instructions" module="webjump_braspag_pagador">
@@ -188,7 +195,7 @@
                 <title>Boleto Bancário</title>
                 <group>braspag</group>
                 <payment_action>order</payment_action>
-                <order_status>pending</order_status>
+                <order_status>pending_payment</order_status>
                 <payment_instructions>Pagável em qualquer agência bancária ou bankline até a data do vencimento.</payment_instructions>
                 <payment_button_label>Clique aqui para imprimir o boleto</payment_button_label>
                 <billet_instructions><![CDATA[Sr. Caixa, não conceder desconto

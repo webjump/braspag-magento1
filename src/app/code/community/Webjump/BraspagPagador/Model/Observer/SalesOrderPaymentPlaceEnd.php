@@ -50,20 +50,19 @@ class Webjump_BraspagPagador_Model_Observer_SalesOrderPaymentPlaceEnd
 
             $paymentMethod = $payment->getMethodInstance()->getCode();
 
-            if ($paymentMethod != 'webjump_braspag_cc' && $paymentMethod != 'webjump_braspag_justclick') {
-                return $this;
-            }
-
             $paymentResponseData = $payment->getAdditionalInformation('payment_response');
 
-            if ($fraudAnalysisStatus = $paymentResponseData['fraudAnalysis']['Status']) {
+            if ($fraudAnalysisStatus = $paymentResponseData['fraudAnalysis']['Status']
+                && $antiFraudConfigModel->isAntifraudActive()
+                && in_array($paymentMethod, ['webjump_braspag_cc', 'webjump_braspag_justclick'])
+            ) {
 
                 if (($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
                     || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED
                     || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_UNKNOWN)
                 ) {
 
-                    $status = Mage::getStoreConfig('antifraud/creditcard_transation/reject_order_status', $storeId);
+                    $status = Mage::getStoreConfig('antifraud/creditcard_transaction/reject_order_status', $storeId);
 
                     if ($status == 'payment_review') {
                         $state = Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW;
@@ -101,7 +100,7 @@ class Webjump_BraspagPagador_Model_Observer_SalesOrderPaymentPlaceEnd
 
                 if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REVIEW) {
 
-                    $status = Mage::getStoreConfig('antifraud/creditcard_transation/review_order_status', $storeId);
+                    $status = Mage::getStoreConfig('antifraud/creditcard_transaction/review_order_status', $storeId);
 
                     if ($status == 'fraud') {
 
@@ -139,11 +138,13 @@ class Webjump_BraspagPagador_Model_Observer_SalesOrderPaymentPlaceEnd
                 }
             }
 
-            if (!$payment->getIsFraudDetected()
+            if (($paymentMethod == 'webjump_braspag_cc' || $paymentMethod == 'webjump_braspag_justclick')
+                && !$payment->getIsFraudDetected()
                 && !$payment->getIsTransactionPending()
                 && $order->canInvoice()
                 && $payment->getMethodInstance()->getConfigPaymentAction() == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
             ) {
+
                 $sendEmail = Mage::getStoreConfig('webjump_braspag_pagador/status_update/send_email');
                 $helper->invoiceOrder($order, $sendEmail);
             }

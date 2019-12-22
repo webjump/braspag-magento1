@@ -9,7 +9,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BrasPag_Pagador_Transaction_Capture_Template_Builder
+class Webjump_BrasPag_Pagador_Transaction_Capture_Request_Builder
     implements Webjump_BrasPag_Core_Builder_Interface
 {
     protected $request;
@@ -41,7 +41,6 @@ class Webjump_BrasPag_Pagador_Transaction_Capture_Template_Builder
     public function build()
     {
         try{
-
             $this->data["Header"] = [];
             $this->data["Params"] = [
                 'PaymentId' => $this->getRequest()->getOrder()->getBraspagOrderId(),

@@ -43,12 +43,8 @@ class Webjump_BrasPag_Pagador_Transaction_Void extends Webjump_BrasPag_Core_Http
         $amount = $this->getRequest()->getOrder()->getOrderAmount();
 
         try {
-            $this->getRequestValidator()->validate($this->getRequest());
-
-            $this->__doRequest($this->getRequest(), 'v2/sales/'.$paymentId."/void?amount=".$amount, 'PUT');
+            $this->doRequest($this->getRequest(), 'v2/sales/'.$paymentId."/void?amount=".$amount, 'PUT');
             $this->prepareResponse($this->getResponse());
-
-            $this->getResponseValidator()->validate($this->getResponse());
 
         } catch (Exception $e) {
             $this->getResponse()->getErrorReport()

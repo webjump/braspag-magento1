@@ -1,41 +1,55 @@
 <?php
 
 class Webjump_BrasPag_Pagador_Transaction_Void_Request_Hydrator
+    extends Webjump_BrasPag_Core_Hydrator_Abstract
     implements Webjump_BrasPag_Pagador_Transaction_Void_Request_HydratorInterface
 {
-    private $serviceManager;
-
-    public function __construct(Webjump_BrasPag_Pagador_Service_ServiceManagerInterface $serviceManager)
+    /**
+     * @param array $data
+     * @param Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request
+     * @return Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface
+     */
+    public function hydrate(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
     {
-        $this->serviceManager = $serviceManager;
+        $this->hydrateDefault($data, $request);
+        $this->hydrateOrder($data, $request);
+        $this->hydratePayment($data, $request);
+        $this->hydrateCustomer($data, $request);
+
+        return $request;
     }
 
-	public function hydrate(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-	{
-		$this->hydrateDefault($data, $request);
-		$this->hydrateOrder($data, $request);
-		$this->hydratePayment($data, $request);
-		$this->hydrateCustomer($data, $request);
+    /**
+     * @param array $data
+     * @param Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request
+     * @return mixed
+     */
+    protected function hydrateDefault(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+    {
+        $request->setRequestId((isset($data['requestId'])) ? $data['requestId'] : null);
+        return $request->setVersion((isset($data['version'])) ? $data['version'] : null);
+    }
 
-		return $request;
-	}
-
-	protected function hydrateDefault(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-	{
-       $request->setRequestId((isset($data['requestId'])) ? $data['requestId'] : null);
-       return $request->setVersion((isset($data['version'])) ? $data['version'] : null);
-	}
-
-	protected function hydrateOrder(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-	{
+    /**
+     * @param array $data
+     * @param Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request
+     * @return mixed
+     */
+    protected function hydrateOrder(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+    {
         $order = $this->getServiceManager()->get('Pagador\Data\Request\Order');
         $order->populate((isset($data['order'])) ? $data['order'] : array());
-        
-        return $request->setOrder($order);
-	}
 
-	protected function hydratePayment(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-	{
+        return $request->setOrder($order);
+    }
+
+    /**
+     * @param array $data
+     * @param Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request
+     * @return mixed
+     */
+    protected function hydratePayment(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+    {
         $paymentCurrent = $this->getServiceManager()->get('Pagador\Data\Request\Payment\Current');
 
         $paymentData = (isset($data['payment'])) ? $data['payment'] : array();
@@ -46,10 +60,14 @@ class Webjump_BrasPag_Pagador_Transaction_Void_Request_Hydrator
         }
 
         return $request->setPayment($paymentCurrent);
-	}
+    }
 
-	protected function getPaymentByType($paymentData)
-	{
+    /**
+     * @param $paymentData
+     * @return bool
+     */
+    protected function getPaymentByType($paymentData)
+    {
         if (isset($paymentData['type'])) {
             switch ($paymentData['type']) {
                 case Webjump_BrasPag_Pagador_Data_Request_Payment_CreditCard::METHOD:
@@ -65,10 +83,15 @@ class Webjump_BrasPag_Pagador_Transaction_Void_Request_Hydrator
         }
 
         return false;
-	}
+    }
 
-	protected function hydrateCustomer(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
-	{
+    /**
+     * @param array $data
+     * @param Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request
+     * @return mixed
+     */
+    protected function hydrateCustomer(array $data, Webjump_BrasPag_Pagador_Transaction_Void_RequestInterface $request)
+    {
         if (isset($data['customer']['address'])) {
             $address = $this->getServiceManager()->get('Pagador\Data\Request\Address');
             $address->populate($data['customer']['address']);
@@ -79,10 +102,5 @@ class Webjump_BrasPag_Pagador_Transaction_Void_Request_Hydrator
         $customer->populate((isset($data['customer'])) ? $data['customer'] : array());
 
         return $request->setCustomer($customer);
-	}
-
-    private function getServiceManager()
-    {
-        return $this->serviceManager;
     }
 }

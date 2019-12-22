@@ -300,13 +300,14 @@ class Webjump_BraspagPagador_Model_Method_Creditcard
 
     /**
      * @param Varien_Object $payment
+     * @param $amount
      * @return $this|Mage_Payment_Model_Abstract
      */
     public function void(Varien_Object $payment)
     {
         parent::void($payment);
 
-        Mage::getSingleton('webjump_braspag_pagador/method_transaction_cc_command_voidCommand')->execute();
+        Mage::getSingleton('webjump_braspag_pagador/pagador_creditcard')->void($payment);
 
         return $this;
     }
@@ -320,7 +321,7 @@ class Webjump_BraspagPagador_Model_Method_Creditcard
     {
         parent::refund($payment, $amount);
 
-        Mage::getSingleton('webjump_braspag_pagador/method_transaction_cc_command_refundCommand')->execute();
+        Mage::getSingleton('webjump_braspag_pagador/pagador_creditcard')->refund($payment, $amount);
 
         return $this;
     }

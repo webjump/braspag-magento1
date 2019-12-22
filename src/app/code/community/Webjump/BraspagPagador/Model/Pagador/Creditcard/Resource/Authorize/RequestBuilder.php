@@ -50,7 +50,6 @@ class Webjump_BraspagPagador_Model_Pagador_Creditcard_Resource_Authorize_Request
 
         $dataOrder = $this->getServiceManager()->get('Pagador\Data\Request\Order')
             ->setOrderId($order->getIncrementId())
-//            ->setBraspagOrderId($this->getPaymentTransactionId())
             ->setOrderAmount(($amount == 0 ? $order->getGrandTotal() : $amount));
 
         $paymentData = Mage::getModel('webjump_braspag_pagador/pagador_creditcard_resource_authorize_paymentBuilder')

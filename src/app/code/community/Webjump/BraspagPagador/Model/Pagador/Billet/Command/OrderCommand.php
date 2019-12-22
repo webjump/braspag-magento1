@@ -1,6 +1,6 @@
 <?php
 class Webjump_BraspagPagador_Model_Pagador_Billet_Command_OrderCommand
-    extends Webjump_BraspagPagador_Model_Pagador_AuthorizeAbstract
+    extends Webjump_BraspagPagador_Model_Pagador_OrderAbstract
 {
     /**
      * @return false|Mage_Core_Model_Abstract

@@ -106,19 +106,33 @@ class Webjump_BraspagPagador_Helper_Data extends Mage_Core_Helper_Abstract
 		return false;
 	}
 
-	public function invoiceOrder(Mage_Sales_Model_Order $order, $sendEmail)
+	public function invoiceOrder(Mage_Sales_Model_Order $order, $sendEmail, $captureOnline = true, $paymentDataResponse = [])
 	{
 		try {
 	        $payment = $order->getPayment();
 	        $method = $payment->getMethodInstance();
 
+            $payment->registerCaptureNotification($paymentDataResponse['amount'], true);
+
 	        $invoice = $order->prepareInvoice();
 	        
 	        if ($invoice->getTotalQty()) {
-	            if ($method->canCapture()) {
+	            if ($method->canCapture() && $captureOnline) {
 	                $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
 	            } else {
 	                $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
+
+                    $payment->setParentTransactionId($payment->getLastTransId())
+                        ->setTransactionId($payment->getLastTransId()."-capture")
+                        ->setIsTransactionClosed(0);
+
+                    $raw_details = [];
+                    foreach ($paymentDataResponse as $r_key => $r_value) {
+                        $raw_details['payment_capture_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
+                    }
+
+                    $payment->resetTransactionAdditionalInfo();
+                    $payment->setTransactionAdditionalInfo(\Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
 	            }
 	            
 	            if ($sendEmail) {
@@ -135,6 +149,8 @@ class Webjump_BraspagPagador_Helper_Data extends Mage_Core_Helper_Abstract
 	                ->addObject($invoice->getOrder());
 	            
 	            $transactionSave->save();
+
+                $payment->save();
 
 	            if ($sendEmail) {
 	                $invoice->sendEmail(true);

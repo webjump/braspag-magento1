@@ -56,7 +56,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isMpiCreditCardActive($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_is_active', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/creditcard_transaction/mpi_is_active', $storeId);
     }
 
     /**
@@ -65,7 +65,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isMpiDebitCardActive($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_is_active', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/debitcard_transaction/mpi_is_active', $storeId);
     }
 
     /**
@@ -74,7 +74,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiMcNotifyOnlyCreditCardEnabled($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_mastercard_notify_only', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/creditcard_transaction/mpi_mastercard_notify_only', $storeId);
     }
 
     /**
@@ -83,7 +83,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiMcNotifyOnlyDebitCardEnabled($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_mastercard_notify_only', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/debitcard_transaction/mpi_mastercard_notify_only', $storeId);
     }
 
     /**
@@ -122,7 +122,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiCreditCardAuthorizedOnError($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_authorize_on_error', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/creditcard_transaction/mpi_authorize_on_error', $storeId);
     }
 
     /**
@@ -131,7 +131,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiDebitCardAuthorizedOnError($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_authorize_on_error', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/debitcard_transaction/mpi_authorize_on_error', $storeId);
     }
 
     /**
@@ -140,7 +140,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiCreditCardAuthorizedOnFailure($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_authorize_on_failure', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/creditcard_transaction/mpi_authorize_on_failure', $storeId);
     }
 
     /**
@@ -149,7 +149,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiDebitCardAuthorizedOnFailure($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_authorize_on_failure', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/debitcard_transaction/mpi_authorize_on_failure', $storeId);
     }
 
     /**
@@ -158,7 +158,7 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiCreditCardAuthorizedOnUnenrolled($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/creditcard_transation/mpi_authorize_on_unenrolled', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/creditcard_transaction/mpi_authorize_on_unenrolled', $storeId);
     }
 
     /**
@@ -167,6 +167,6 @@ class Webjump_BraspagPagador_Model_Config_Mpi extends Mage_Core_Model_Abstract
      */
     public function isBpmpiDebitCardAuthorizedOnUnenrolled($storeId = null)
     {
-        return (bool) Mage::getStoreConfig('mpi/debitcard_transation/mpi_authorize_on_unenrolled', $storeId);
+        return (bool) Mage::getStoreConfig('mpi/debitcard_transaction/mpi_authorize_on_unenrolled', $storeId);
     }
 }

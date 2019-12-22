@@ -5,11 +5,10 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
 
     /**
      * @param $paymentId
-     * @param $changeType
-     * @param $recurrentPaymentId
      * @return bool
+     * @throws Mage_Core_Exception
      */
-    public function process($paymentId, $changeType, $recurrentPaymentId)
+    public function process($paymentId)
     {
         $helper = $this->getHelper();
         $helper->debug($helper->getCurrentRequestInfo());
@@ -38,7 +37,7 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         foreach($transactions AS $transaction) {
 
             $this->setRequestId($helper->generateGuid($order->getIncrementId()));
-            $transactionData = $this->getBraspagTransactionData($this->getData() + $transaction->getData());
+            $transactionData = $this->getBraspagTransactionData(array_merge($this->getData(), $transaction->getData()));
 
             if (!$transactionDataPayment = $transactionData['Payment']) {
                 $errorMsg = 'Error: While retrieving transaction data ' . $transaction->getData('braspag_transaction_id');
@@ -49,14 +48,16 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
             if ($transactionDataPayment['Type'] == 'Billet'
                 && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
             ) {
-                return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+                $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+                continue;
             }
 
             // 2 = capture
             if (($transactionDataPayment['Type'] == 'CreditCard' || $transactionDataPayment['Type'] == 'DebitCard')
                 && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
             ) {
-                return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+                $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+                continue;
             }
 
             // 3 = Denied/10 = Voided/13 = Aborted
@@ -65,123 +66,168 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
                 Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED,
                 Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
             ])) {
-                return $this->cancelOrder($paymentResponse, $transactionData, $orderPayment);
+                $this->cancelOrder($paymentResponse, $orderPayment);
+                continue;
             }
 
             // 11 = Refunded
             if ($transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED) {
-                return $this->createCreditMemo($paymentResponse, $transactionData, $orderPayment);
+                $this->createCreditMemo($paymentResponse, $transactionData, $orderPayment);
+                continue;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
      * @param $paymentResponse
      * @param $transactionData
-     * @param $orderPayment
+     * @param $payment
      * @return bool
+     * @throws Exception
      */
-    protected function createInvoice($paymentResponse, $transactionData, $orderPayment)
+    protected function createInvoice($paymentResponse, $transactionData, $payment)
     {
+        $order = $payment->getOrder();
+
         $transactionDataPayment = $transactionData['Payment'];
 
-        $amountPaid = $transactionDataPayment['Amount']/100;
+        $amountOrdered = floatval($order->getGrandTotal());
+        $amountPaid = floatval($transactionDataPayment['Amount']/100);
 
         if ($paymentResponse['paymentId'] == $transactionDataPayment['PaymentId']) {
             $paymentResponse['proofOfSale'] = $transactionDataPayment['ProofOfSale'];
         }
 
-        $orderPayment->setAdditionalInformation('payment_response', $paymentResponse)
+        $payment->setAdditionalInformation('payment_response', $paymentResponse)
             ->setAdditionalInformation('authorized_total_paid', $amountPaid)
             ->save();
-
-        $order = $orderPayment->getOrder();
-
-        if ($amountPaid >= $order->getGrandTotal()) {
-            if ($order->canUnhold()) {
-
-                //If order is holded by antifraud...
-                if ($order->getStatus() == Webjump_BrasPag_Pagador_TransactionInterface::STATUS_PAYMENT_REVIEW
-                    ||$order->getStatus() == Webjump_BrasPag_Pagador_TransactionInterface::STATUS_FRAUD
-                ) {
-                    $errorMsg = $this->getHelper()->__('Order updating aborted - order was holded by antifraud');
-                    Mage::throwException($errorMsg);
-                }
-                $order->unhold()->save();
-            }
-
-            if (Mage::getStoreConfig('webjump_braspag_pagador/status_update/autoinvoice') && !$order->hasInvoices()) {
-
-                $orderStatusPaid = Mage::getStoreConfig('webjump_braspag_pagador/status_update/order_status_paid');
-                $sendEmail = Mage::getStoreConfig('webjump_braspag_pagador/status_update/send_email');
-
-                $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
-
-                $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_OFFLINE);
-                $invoice->register();
-
-                $invoice->getOrder()->setCustomerNoteNotify($sendEmail);
-                $invoice->getOrder()->setIsInProcess(true);
-
-
-                $message = $this->getHelper()->__('Payment Confirmed. Amount of R$'.$amountPaid.'. Transaction ID: "'.$paymentResponse['paymentId'].'".');
-                $state = Mage_Sales_Model_Order::STATE_PROCESSING;
-
-                $order->setState($state, $orderStatusPaid, $message);
-
-                $transactionSave = Mage::getModel('core/resource_transaction')
-                    ->addObject($invoice)
-                    ->addObject($invoice->getOrder());
-
-                $transactionSave->save();
-
-                return true;
-            }
+        
+        if ($order->hasInvoices()) {
+            throw new \Exception('The Order already has Invoices.', 400);
         }
+
+        if ($amountPaid < $amountOrdered) {
+            throw new \Exception('Invalid Amount for Invoice', 400);
+        }
+
+        if ($order->canUnhold()) {
+            $order->unhold()->save();
+        }
+
+        if (!Mage::getStoreConfig('webjump_braspag_pagador/status_update/autoinvoice')){
+            throw new \Exception('Invoice creation is disabled.', 400);
+        }
+
+        $payment->setParentTransactionId($payment->getLastTransId())
+            ->setTransactionId($payment->getLastTransId()."-capture")
+            ->setIsTransactionClosed(0);
+
+        $raw_details = [];
+        foreach ($transactionDataPayment as $r_key => $r_value) {
+            $raw_details['payment_capture_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
+        }
+
+        $payment->resetTransactionAdditionalInfo();
+        $payment->setTransactionAdditionalInfo(\Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
+
+        $payment->registerCaptureNotification($amountPaid, true);
+
+        $invoice = $payment->getCreatedInvoice();
+        
+        $transactionSave = Mage::getModel('core/resource_transaction')
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder());
+        $transactionSave->save();
+
+        $invoice->sendEmail(true);
+        $order->save();
 
         return true;
     }
 
     /**
-     * @param $orderPayment
+     * @param $paymentResponse
+     * @param $payment
      * @return bool
+     * @throws Exception
      */
-    protected function cancelOrder($orderPayment)
+    protected function cancelOrder($paymentResponse, $payment)
     {
-        $order = $orderPayment->getOrder();
+        $order = $payment->getOrder();
+
+        if (!$order->canCancel()) {
+            throw new \Exception("The order cannot be canceled", 400);
+        }
+
+        $payment->setParentTransactionId($payment->getLastTransId())
+            ->setTransactionId($payment->getLastTransId()."-capture")
+            ->setIsTransactionClosed(0);
+
+        $raw_details = [];
+        foreach ($paymentResponse as $r_key => $r_value) {
+            $raw_details['payment_cancel_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
+        }
+
+        $payment->resetTransactionAdditionalInfo();
+        $payment->setTransactionAdditionalInfo(\Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
+
+        $payment->registerVoidNotification();
+
+        $transactionSave = Mage::getModel('core/resource_transaction')
+            ->addObject($order);
+        $transactionSave->save();
         $order->cancel();
+        $order->save();
 
         return true;
     }
 
     /**
-     * @param $orderPayment
+     * @param $paymentResponse
+     * @param $transactionData
+     * @param $payment
      * @return bool
+     * @throws Exception
      */
-    protected function createCreditMemo($orderPayment)
+    protected function createCreditMemo($paymentResponse, $transactionData, $payment)
     {
-        $order = $orderPayment->getOrder();
+        $order = $payment->getOrder();
 
-        $invoices = array();
-        foreach ($order->getInvoiceCollection() as $invoice) {
-            if ($invoice->canRefund()) {
-                $invoices[] = $invoice;
-            }
+        if (!$order->hasInvoices()) {
+            throw new \Exception("There aren't invoices to credit memo creation.", 400);
         }
 
-        $service = Mage::getModel('sales/service_order', $order);
-        foreach ($invoices as $invoice) {
-            $creditmemo = $service->prepareInvoiceCreditmemo($invoice);
-            $creditmemo->refund();
+        $transactionDataPayment = $transactionData['Payment'];
+
+        $raw_details = [];
+        foreach ($transactionDataPayment as $r_key => $r_value) {
+            $raw_details['payment_refund_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
         }
+
+        $amountRefunded = floatval($transactionDataPayment['Amount']/100);
+
+        $transactionId = str_replace("-capture", "", $payment->getLastTransId());
+
+        $payment->setTransactionAdditionalInfo(\Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
+
+        $payment->setParentTransactionId($transactionId)
+            ->setTransactionId($transactionId."-refund");
+
+        $payment->registerRefundNotification($amountRefunded);
+
+        $transactionSave = Mage::getModel('core/resource_transaction')
+            ->addObject($payment->getOrder())
+            ->addObject($payment);
+        $transactionSave->save();
+
+        $order->save();
 
         return true;
     }
 
-    /**                    ->debug($errorMsg);
-
+    /**
      * @return Mage_Core_Helper_Abstract
      */
     protected function getHelper()
@@ -228,6 +274,7 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
     /**
      * @param $paymentId
      * @return mixed
+     * @throws Mage_Core_Exception
      */
     protected function loadOrderByPaymentId($paymentId)
     {
@@ -245,9 +292,9 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
             );
         }
 
-        $order = Mage::getModel('sales/order_payment')->getCollection()
-            ->addAttributeToFilter('last_trans_id', ['eq' => $paymentId])
-            ->getFirstItem();
+        $paymentOrderCollection = Mage::getModel('sales/order_payment')->getCollection();
+        $paymentOrderCollection->getSelect()->where("last_trans_id like '{$paymentId}%'");
+        $order = $paymentOrderCollection->getFirstItem();
 
         if (!$order->getParentId()) {
             $errorMsg = 'Error: Order not found';
@@ -302,6 +349,7 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
 
             $this->setOrderIncrementId($order->getIncrementId());
             $this->setRequestId($helper->generateGuid($order->getIncrementId()));
+
             $braspagOrderIdData = $this->getBraspagOrderIdData($data);
 
             if ($payments = $braspagOrderIdData['Payments']) {

@@ -168,19 +168,6 @@ class Webjump_BrasPag_Core_Http_Client extends \Zend_Http_Client
     }
 
     /**
-     * @param array $config
-     * @return array
-     */
-//    public function getDefaultOptions(array $config)
-//    {
-//        if (isset($config[self::CONFIG_OPTIONS_KEY])) {
-//            $this->defaultOptions = array_merge($this->defaultOptions, $config[self::CONFIG_OPTIONS_KEY]);
-//        }
-//
-//        return $this->defaultOptions;
-//    }
-
-    /**
      * @return mixed
      */
     protected function prepareRequest()

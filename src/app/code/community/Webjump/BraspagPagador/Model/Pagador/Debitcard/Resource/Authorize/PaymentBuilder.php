@@ -53,11 +53,7 @@ class Webjump_BraspagPagador_Model_Pagador_Debitcard_Resource_Authorize_PaymentB
 
             $card = $this->getServiceManager()->get('Pagador\Data\Request\Payment\DebitCard');
 
-            $providerBrand = explode("-", $dataPayment['cc_type']);
-
-            if (!isset($dataPayment['installments'])) {
-                $dataPayment['installments'] = 1;
-            }
+            $providerBrand = explode("-", $dataPayment['dc_type']);
 
             $amount = (empty($dataPayment['amount']) ? $amount : $dataPayment['amount']);
 

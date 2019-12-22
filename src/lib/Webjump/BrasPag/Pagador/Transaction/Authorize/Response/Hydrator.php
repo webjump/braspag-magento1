@@ -188,16 +188,6 @@ class Webjump_BrasPag_Pagador_Transaction_Authorize_Response_Hydrator
 		}
 	}
 
-//    /**
-//     * @param null $error
-//     * @return $this
-//     */
-//	protected function hydrateErrors()
-//    {
-//        $this->responseClass->getErrorReport()->setErrors($this->errorMessages);
-//        return $this;
-//	}
-
     /**
      * @return Webjump_BrasPag_Pagador_Service_ServiceManagerInterface
      */

@@ -38,6 +38,9 @@ class Webjump_BraspagPagador_Model_Method_Debitcard
     protected $_formBlockType = 'webjump_braspag_pagador/form_debitcard';
     protected $_infoBlockType = 'webjump_braspag_pagador/info_debitcard';
 
+    protected $_canOrder                    = false;
+    protected $_canVoid                     = true;
+
     /**
      * @param mixed $data
      * @return $this|bool|Mage_Payment_Model_Info
@@ -143,6 +146,21 @@ class Webjump_BraspagPagador_Model_Method_Debitcard
 
         return $this;
     }
+
+    /**
+     * @param Varien_Object $payment
+     * @param float $amount
+     * @return $this|Mage_Payment_Model_Abstract
+     */
+    public function void(Varien_Object $payment, $amount)
+    {
+        parent::void($payment, $amount);
+
+        Mage::getModel('webjump_braspag_pagador/pagador_debitcard')->void($payment, $amount);
+
+        return $this;
+    }
+
     /**
      * Retrieve availables debit card types
      *

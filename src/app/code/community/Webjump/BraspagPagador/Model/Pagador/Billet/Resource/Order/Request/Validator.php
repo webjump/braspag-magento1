@@ -48,8 +48,6 @@ class Webjump_BraspagPagador_Model_Pagador_Billet_Resource_Order_Request_Validat
      */
     public function validate($paymentRequest, $amount)
     {
-//        $this->addEncryptedNumber($paymentRequest);
-//        $this->validateTotal($paymentRequest);
         $this->filterValidAttributes($paymentRequest);
         $this->validateType($paymentRequest);
 

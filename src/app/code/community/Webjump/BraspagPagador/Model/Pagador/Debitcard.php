@@ -9,4 +9,12 @@ class Webjump_BraspagPagador_Model_Pagador_Debitcard extends Webjump_BraspagPaga
     {
         return Mage::getModel('webjump_braspag_pagador/pagador_debitcard_command_authorizeCommand');
     }
+
+    /**
+     * @return false|Mage_Core_Model_Abstract
+     */
+    public function getVoidCommand()
+    {
+        return Mage::getModel('webjump_braspag_pagador/pagador_debitcard_command_voidCommand');
+    }
 }

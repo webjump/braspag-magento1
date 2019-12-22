@@ -26,7 +26,10 @@ abstract class Webjump_BrasPag_Core_Data_Abstract
 
             if (method_exists($this, $method)) {
                 $value = (isset($dataAlt[$attribute])) ? $dataAlt[$attribute] : null;
-                $this->$method($value);
+
+                if (!empty($value)) {
+                    $this->$method($value);
+                }
             }
         }
 

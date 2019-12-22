@@ -3,31 +3,50 @@ class Webjump_BraspagPagador_StatusController extends Mage_Core_Controller_Front
 {
     public function updateAction()
     {
-        $_hlp = Mage::helper('webjump_braspag_pagador');
-
+        $statusUpdate = Mage::getModel('webjump_braspag_pagador/status_update');
+        
         try {
-
             $data = json_decode($this->getRequest()->getRawBody());
 
             $paymentId = $data->PaymentId;
             $changeType = $data->ChangeType;
             $recurrentPaymentId = $data->RecurrentPaymentId;
 
-            $model = Mage::getModel('webjump_braspag_pagador/status_update');
-            $model->process($paymentId, $changeType, $recurrentPaymentId);
+            $statusUpdate->process($paymentId, $changeType, $recurrentPaymentId);
         } catch (Exception $e) {
-            $_hlp->debug($e->getMessage());
-            $_hlp->debug($this->getRequest()->getPost());
 
-            $order = $model->getOrder();
+            $pagadorHelper = Mage::helper('webjump_braspag_pagador');
+            $pagadorHelper->debug($e->getMessage());
+            $pagadorHelper->debug($this->getRequest()->getPost());
+
+            $order = $statusUpdate->getOrder();
             if ($order && $order->getId()) {
-                $order->addStatusHistoryComment($_hlp->__('Order status updated (2º Post): Exception occurred during update action. Exception message: %s.', $e->getMessage()), false);
+                $order->addStatusHistoryComment(
+                    $pagadorHelper->
+                    __(
+                        'Order status updated (2º Post): Exception occurred during update action. Exception message: %s.'
+                        , $e->getMessage()
+                    )
+                , false);
                 $order->save();
             }
+            $this->getResponse()->setHeader('Content-Type', 'application/json');
+            $this->getResponse()->setBody(
+                json_encode([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ])
+            );
 
-            $this->getResponse()->setHttpResponseCode(500);
+            $code = $e->getCode();
+
+            if (empty($code)) {
+                $code = 500;
+            }
+
+            return $this->getResponse()->setHttpResponseCode($code);
         }
 
-        $this->getResponse()->setHttpResponseCode(200);
+        return $this->getResponse()->setHttpResponseCode(200);
     }
 }

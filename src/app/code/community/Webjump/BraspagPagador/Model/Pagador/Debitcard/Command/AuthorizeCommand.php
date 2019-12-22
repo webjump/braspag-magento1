@@ -1,4 +1,5 @@
 <?php
+
 class Webjump_BraspagPagador_Model_Pagador_Debitcard_Command_AuthorizeCommand
     extends Webjump_BraspagPagador_Model_Pagador_AuthorizeAbstract
 {
@@ -52,6 +53,7 @@ class Webjump_BraspagPagador_Model_Pagador_Debitcard_Command_AuthorizeCommand
 
     /**
      * @param $response
+     * @param $payment
      * @return $this
      * @throws Exception
      */
@@ -60,6 +62,7 @@ class Webjump_BraspagPagador_Model_Pagador_Debitcard_Command_AuthorizeCommand
         if (!$payment) {
             throw new \Exception("Invalid Payment Instance");
         }
+
         $errors = [];
         $paymentDataResponse = $response->getPayment()->get();
 
@@ -70,6 +73,7 @@ class Webjump_BraspagPagador_Model_Pagador_Debitcard_Command_AuthorizeCommand
 
         $payment
             ->setTransactionId($response->getOrder()->getBraspagOrderId())
+            ->setParentTransactionId($response->getOrder()->getBraspagOrderId())
             ->setIsTransactionClosed(0);
 
         $this->saveErrors($errors, $paymentDataResponse, $payment);

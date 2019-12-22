@@ -74,6 +74,14 @@ class Webjump_BraspagPagador_Model_Pagador_Creditcard_Command_AuthorizeCommand
     }
 
     /**
+     * @return Mage_Core_Helper_Abstract
+     */
+    protected function getHelper()
+    {
+        return Mage::helper('webjump_braspag_pagador');
+    }
+
+    /**
      * @param $response
      * @param $payment
      * @return $this
@@ -149,10 +157,6 @@ class Webjump_BraspagPagador_Model_Pagador_Creditcard_Command_AuthorizeCommand
         }
 
         $fraudAnalysisStatus = $fraudAnalysis['Status'];
-
-//        if ($antiFraudConfig->getOptionsSequence() != 'AnalyseFirst') {
-//            return $this;
-//        }
 
         if ($fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
             || $fraudAnalysisStatus == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED

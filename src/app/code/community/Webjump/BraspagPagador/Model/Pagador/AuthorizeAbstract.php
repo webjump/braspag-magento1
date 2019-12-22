@@ -31,7 +31,6 @@
  * @link      http://www.webjump.com.br
  **/
 abstract class Webjump_BraspagPagador_Model_Pagador_AuthorizeAbstract
-//    extends Webjump_BraspagPagador_Model_Pagador_Transaction
 {
     protected $payment;
 
@@ -71,34 +70,7 @@ abstract class Webjump_BraspagPagador_Model_Pagador_AuthorizeAbstract
 
             $this->setPayment($payment);
 
-//            $error_msg = [];
-//            if ($errors = $response->getErrorReport()->getErrors()) {
-//
-//                foreach ($errors AS $error) {
-//
-//                    if (empty($error)) {
-//                        continue;
-//                    }
-//
-//                    $error = json_decode($error);
-//                    foreach ($error as $errorDetail) {
-//                        $error_msg[] = Mage::helper('webjump_braspag_pagador')->__('* Error: %1$s (code %2$s)', $errorDetail->Message, $errorDetail->Code);
-//                    }
-//                }
-//
-//                throw new Exception(implode(PHP_EOL, $error_msg));
-//            }
-
             $this->processResponse($response, $payment);
-
-        } catch (\Mage_Core_Exception $e) {
-
-//            if (preg_match("#Sent MerchantOrderId is duplicated#is", $e->getMessage())) {
-//                $payment->getOrder()->getQuote()->reserveOrderId()->save();
-//                throw new \Mage_Core_Exception('Invalid Response, please try place order again.');
-//            }
-
-            throw new \Mage_Core_Exception($e->getMessage());
 
         } catch (\Exception $e) {
             throw new \Mage_Core_Exception($e->getMessage());
@@ -131,7 +103,7 @@ abstract class Webjump_BraspagPagador_Model_Pagador_AuthorizeAbstract
     {
         $raw_details = [];
         foreach ($paymentDataResponse->getDataAsArray() as $r_key => $r_value) {
-            $raw_details['payment_'. $r_key] = $r_value;
+            $raw_details['payment_authorize_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
         }
 
         $payment->setTransactionAdditionalInfo(\Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
@@ -144,6 +116,7 @@ abstract class Webjump_BraspagPagador_Model_Pagador_AuthorizeAbstract
      * @param $paymentDataResponse
      * @param $payment
      * @return $this
+     * @throws Mage_Core_Exception
      */
     protected function saveErrors($errors, $paymentDataResponse, $payment)
     {

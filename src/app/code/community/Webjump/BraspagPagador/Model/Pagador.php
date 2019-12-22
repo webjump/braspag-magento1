@@ -71,90 +71,60 @@ class Webjump_BraspagPagador_Model_Pagador extends Mage_Core_Model_Abstract
         return $this;
     }
 
-//    /**
-//     * @param Varien_Object $payment
-//     * @param $amount
-//     * @return mixed
-//     * @throws Exception
-//     */
-//    public function capture(Varien_Object $payment, $amount)
-//    {
-//    	try{
-//    		$api = $this->getApi($payment);
-//    		if (!method_exists($api, 'capture')) {
-//				throw new Exception(Mage::helper('webjump_braspag_pagador')->__('Error: API does not have method capture'));
-//    		}
-//
-//    		$result = $api->capture($payment, $amount);
-//			if ($errors = $result->getErrorReport()->getErrors()) {
-//                foreach ($errors AS $error) {
-//                    if (empty($error)) {
-//                        continue;
-//                    }
-//
-//                    $error = json_decode($error);
-//                    foreach ($error as $errorDetail) {
-//                        $error_msg[] = Mage::helper('webjump_braspag_pagador')->__('* Error: %1$s (code %2$s)', $errorDetail->Message, $errorDetail->Code);
-//                    }
-//                }
-//				throw new Exception(implode(PHP_EOL, $error_msg));
-//			}
-//	        return $result;
-//		} catch (Exception $e) {
-//			throw new Exception($e->getMessage());
-//		}
-//
-//    }
-//
-//    /**
-//     * @param Varien_Object $payment
-//     * @return mixed
-//     * @throws Exception
-//     */
-//    public function void(Varien_Object $payment, $amount = 0)
-//    {
-//        try{
-//            $api = $this->getApi($payment);
-//
-//            if (!method_exists($api, 'void')) {
-//                throw new Exception(Mage::helper('webjump_braspag_pagador')->__('Error: API does not have method void'));
-//            }
-//
-//            $result = $api->void($payment, $amount);
-//            if ($errors = $result->getErrorReport()->getErrors()) {
-//                foreach ($errors AS $error) {
-//                    if (empty($error)) {
-//                        continue;
-//                    }
-//
-//                    $error = json_decode($error);
-//                    foreach ($error as $errorDetail) {
-//                        $error_msg[] = Mage::helper('webjump_braspag_pagador')->__('* Error: %1$s (code %2$s)', $errorDetail->Message, $errorDetail->Code);
-//                    }
-//                }
-//                throw new Exception(implode(PHP_EOL, $error_msg));
-//            }
-//            return $result;
-//        } catch (Exception $e) {
-//            throw new Exception($e->getMessage());
-//        }
-//    }
-//
-//    /**
-//     * @param $method
-//     * @return Mage_Core_Model_Abstract
-//     */
-//    public function getApi($method)
-//    {
-//    	if ($method instanceof Mage_Sales_Model_Order_Payment) {
-//    		$method = $method->getMethodInstance();
-//    	}
-//
-//    	$api = $method->getApiType();
-//
-//    	if (!$api) {
-//			Mage::throwException((Mage::helper('webjump_braspag_pagador')->__('Error in payment module - Api is not defined')));
-//    	}
-//        return Mage::getSingleton($api);
-//    }
+    /**
+     * @param $payment
+     * @param $amount
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    public function capture($payment, $amount)
+    {
+        try {
+
+            $this->getCaptureCommand()->execute($payment, $amount);
+
+        } catch (Exception $e) {
+            throw new \Mage_Core_Exception($e->getMessage());
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Varien_Object $payment
+     * @param int $amount
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    public function void(Varien_Object $payment, $amount = 0)
+    {
+        try {
+
+            $this->getVoidCommand()->execute($payment, $amount);
+
+        } catch (Exception $e) {
+            throw new \Mage_Core_Exception($e->getMessage());
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Varien_Object $payment
+     * @param int $amount
+     * @return $this
+     * @throws Mage_Core_Exception
+     */
+    public function refund(Varien_Object $payment, $amount = 0)
+    {
+        try {
+
+            $this->getRefundCommand()->execute($payment, $amount);
+
+        } catch (Exception $e) {
+            throw new \Mage_Core_Exception($e->getMessage());
+        }
+
+        return $this;
+    }
 }

@@ -13,7 +13,7 @@
  * to license@webjump.com so we can send you a copy immediately.
  *
  * @category  Model
- * @package   Webjump_BraspagPagador_Model_Method
+ * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
  * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
@@ -24,93 +24,60 @@
  * BrasPag Pagador Model
  *
  * @category  Model
- * @package   Webjump_BraspagPagador_Model_Method
+ * @package   Webjump_BraspagPagador_Model_Pagador
  * @author    Webjump Core Team <desenvolvedores@webjump.com>
  * @copyright 2019 Webjump (http://www.webjump.com.br)
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BraspagPagador_Model_Method_Transaction_Refund_Creditcard
-    extends Webjump_BraspagPagador_Model_Method_Transaction_Abstract
+class Webjump_BraspagPagador_Model_Pagador_Creditcard_Command_RefundCommand
+    extends Webjump_BraspagPagador_Model_Pagador_RefundAbstract
 {
-    protected $_code = Webjump_BraspagPagador_Model_Config::METHOD_CREDITCARD;
-
-    protected $_apiType = 'webjump_braspag_pagador/pagador_transaction_refund_creditcard';
-
-    protected $_formBlockType = 'webjump_braspag_pagador/form_creditcard';
-    protected $_infoBlockType = 'webjump_braspag_pagador/info_creditcard';
-
-    protected $_canCapture = true;
-    protected $_canCapturePartial = false;
-    protected $_canRefund = true;
-    protected $_canRefundInvoicePartial = false;
-    protected $_canVoid = true;
-
     /**
-     * @param Varien_Object $payment
-     * @param float $amount
-     * @return $this|Mage_Payment_Model_Abstract
+     * @return false|Mage_Core_Model_Abstract
      */
-    public function refund(Varien_Object $payment, $amount)
+    public function getRequestValidator()
     {
-        try {
-            $result = $this->getPagadorTransaction()->void($payment, $amount);
-            if ($result === false) {
-                $errorMsg = $this->getHelper()->__('Error processing the request.');
-                throw new Exception($errorMsg);
-            }
-        } catch (Exception $e) {
-            Mage::throwException($e->getMessage());
-        }
-
-        if (!$result->isSuccess()) {
-            $errorMsg = $this->getHelper()->__(implode(PHP_EOL, $result->getErrorReport()->getErrors()));
-            Mage::throwException($errorMsg);
-        } else {
-            $this->_importRefundResultToPayment($result, $payment, $amount);
-        }
-
-        return $this;
-
-        return $this;
+        return Mage::getModel('webjump_braspag_pagador/pagador_creditcard_resource_refund_request_validator');
     }
 
     /**
-     * @param $result
-     * @param $payment
-     * @param $amount
-     * @return $this
+     * @return false|Mage_Core_Model_Abstract
      */
-    protected function _importRefundResultToPayment($result, $payment, $amount)
+    public function getResponseValidator()
     {
-        $order = $payment->getOrder();
-        $resultData = $result->getDataAsArray();
+        return Mage::getModel('webjump_braspag_pagador/pagador_creditcard_resource_refund_response_validator');
+    }
 
-        $refundedAmount = 0;
-        $errorMsg = array();
+    /**
+     * @return false|Mage_Core_Model_Abstract
+     */
+    public function getRequestBuilder()
+    {
+        return Mage::getModel('webjump_braspag_pagador/pagador_creditcard_resource_refund_requestBuilder');
+    }
 
-        $this->errorMsg = $resultData['errorReport']['errors'];
+    /**
+     * @return Webjump_BrasPag_Core_Service_Manager
+     */
+    protected function getServiceManager()
+    {
+        return new Webjump_BrasPag_Core_Service_Manager($this->getConfigData());
+    }
 
-        if ($success = (bool) $resultData['success']) {
-            $refundedAmount += $payment->getOrder()->getTotalRefunded();
-        }
+    /**
+     * @return mixed
+     */
+    protected function getConfigData()
+    {
+        return Mage::getModel('webjump_braspag_pagador/config')->getConfig();
+    }
 
-        if (!empty($errorMsg)) {
-            $errorMsg = $this->getHelper()->__(implode(PHP_EOL, $errorMsg));
-            Mage::throwException($errorMsg);
-        } elseif ($refundedAmount != $amount) {
-            $formatedVoidedAmount = $order->getBaseCurrency()->formatTxt($refundedAmount);
-            $formatedAmount = $order->getBaseCurrency()->formatTxt($amount);
-            Mage::throwException($this->getHelper()->__('The voided amount (%1$s) differs from requested (%2$s).', $formatedVoidedAmount, $formatedAmount));
-        }
-
-        $raw_details['transaction_success'] = true;
-
-        $payment
-            ->setTransactionId($payment->getTransactionId())
-            ->setIsTransactionClosed(1)
-            ->setTransactionAdditionalInfo(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);
-
-        return $this;
+    /**
+     * @return Mage_Core_Helper_Abstract
+     */
+    protected function getHelper()
+    {
+        return Mage::helper('webjump_braspag_pagador');
     }
 }
