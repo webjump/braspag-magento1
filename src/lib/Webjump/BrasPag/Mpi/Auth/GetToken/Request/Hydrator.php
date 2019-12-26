@@ -1,4 +1,4 @@
-<?php
+'<?php
 
 class Webjump_BrasPag_Mpi_Auth_GetToken_RequestHydrator
     implements Webjump_BrasPag_Mpi_Auth_GetToken_Request_HydratorInterface

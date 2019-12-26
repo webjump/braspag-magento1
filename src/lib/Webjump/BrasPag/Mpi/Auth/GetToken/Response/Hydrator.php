@@ -1,6 +1,6 @@
 <?php
 
-class Webjump_BrasPag_Mpi_Auth_GetToken_ResponseHydrator
+class Webjump_BrasPag_Mpi_Auth_GetToken_Response_Hydrator
     implements Webjump_BrasPag_Mpi_Auth_GetToken_Response_HydratorInterface
 {
     protected $serviceManager;
@@ -13,7 +13,7 @@ class Webjump_BrasPag_Mpi_Auth_GetToken_ResponseHydrator
      * Webjump_BrasPag_Mpi_Auth_GetToken_ResponseHydrator constructor.
      * @param Webjump_BrasPag_Mpi_Service_ServiceManagerInterface $serviceManager
      */
-    public function __construct(Webjump_BrasPag_Mpi_Service_ServiceManagerInterface $serviceManager)
+    public function __construct(Webjump_BrasPag_Core_Service_ManagerInterface $serviceManager)
     {
         $this->serviceManager = $serviceManager;
         $this->responseStatus = true;
@@ -62,7 +62,7 @@ class Webjump_BrasPag_Mpi_Auth_GetToken_ResponseHydrator
      */
 	protected function prepare()
     {
-        $this->dataBodyObject->addData(json_decode($this->responseData->getBody(), HTTP_RAW_POST_DATA));
+        $this->dataBodyObject->addData(json_decode($this->responseData->getBody(), true));
 
         if (!$paymentData = $this->dataBodyObject->getData()) {
             return false;

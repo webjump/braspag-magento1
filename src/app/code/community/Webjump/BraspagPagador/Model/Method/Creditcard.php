@@ -231,7 +231,7 @@ class Webjump_BraspagPagador_Model_Method_Creditcard
                 continue;
             }
             $acquirerCode = $availableTypeExploded[0];
-            $brand = $availableTypeExploded[1];
+            $brand = isset($availableTypeExploded[1]) ? $availableTypeExploded[1] : "";
 
             $creditCardTypes[!empty($brand) ? $acquirerCode.'-'.$brand : $acquirerCode] = (empty($_acquirers[$acquirerCode]) ? $acquirerCode : $_acquirers[$acquirerCode]." - ").$brand;
         }
@@ -323,6 +323,19 @@ class Webjump_BraspagPagador_Model_Method_Creditcard
 
         Mage::getSingleton('webjump_braspag_pagador/pagador_creditcard')->refund($payment, $amount);
 
+        return $this;
+    }
+
+    /**
+     * @param Varien_Object $payment
+     * @return $this|Mage_Payment_Model_Abstract
+     */
+    public function cancel(Varien_Object $payment)
+    {
+        parent::void($payment);
+
+        Mage::getSingleton('webjump_braspag_pagador/pagador_creditcard')->void($payment);
+        
         return $this;
     }
 }

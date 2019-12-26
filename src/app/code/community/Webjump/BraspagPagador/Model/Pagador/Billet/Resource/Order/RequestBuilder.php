@@ -69,7 +69,7 @@ class Webjump_BraspagPagador_Model_Pagador_Billet_Resource_Order_RequestBuilder
             'customer' 	=> $customerData
         );
 
-        $request = $this->getServiceManager()->get('Pagador\Transaction\Authorize\Request');
+        $request = $this->getServiceManager()->get('Pagador\Transaction\Order\Request');
         $request->populate($dataRequest);
 
         return $request;

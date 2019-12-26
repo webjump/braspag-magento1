@@ -78,7 +78,7 @@ class Webjump_BrasPag_PagadorQuery_Transaction_GetByPaymentId_Response_Hydrator
      */
 	protected function prepareBody()
     {
-        if (!$dataBody = json_decode($this->responseData->getBody(), HTTP_RAW_POST_DATA)) {
+        if (!$dataBody = json_decode($this->responseData->getBody(), true)) {
             return false;
         }
 

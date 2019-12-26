@@ -73,4 +73,8 @@ abstract class Webjump_BraspagPagador_Model_Method_Abstract extends Mage_Payment
     {
         return Mage::getModel('webjump_braspag_pagador/pagador');
     }
+
+//    public function cancel($payment) {
+//        exit('dfsfd');
+//    }
 }

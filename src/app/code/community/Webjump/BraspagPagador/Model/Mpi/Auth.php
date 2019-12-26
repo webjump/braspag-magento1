@@ -92,7 +92,6 @@ class Webjump_BraspagPagador_Model_Mpi_Auth extends Mage_Core_Model_Abstract
      */
     protected function getServiceManager()
     {
-        $this->serviceManager = new Webjump_BrasPag_Mpi_Service_ServiceManager($this->mpiConfig->getEndPoint());
-        return $this->serviceManager;
+        return new Webjump_BrasPag_Core_Service_Manager($this->mpiConfig->getEndPoint());
     }
 }

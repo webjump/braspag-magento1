@@ -19,13 +19,6 @@ class Webjump_BrasPag_Mpi_Auth_GetToken
     protected $hydrator;
     protected $serviceManager;
 
-    public function __construct(Webjump_BrasPag_Mpi_Service_ServiceManagerInterface $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
-
-        return parent::__construct($this->serviceManager);
-    }
-
     public function getRequest()
     {
         return $this->request;
@@ -52,7 +45,7 @@ class Webjump_BrasPag_Mpi_Auth_GetToken
     public function execute()
     {
         try {
-            $this->__doRequest($this->getRequest(), 'v2/auth/token', 'POST');
+            $this->doRequest($this->getRequest(), 'v2/auth/token', 'POST');
             $this->prepareResponse($this->getResponse());
         } catch (Exception $e) {
             $this->getResponse()->getErrorReport()
@@ -62,38 +55,21 @@ class Webjump_BrasPag_Mpi_Auth_GetToken
         return $this->getResponse();
     }
 
-    protected function prepareRequest($request, $path, $action)
+    protected function getRequestBuilder()
     {
-        $template = $this->getTemplate();
-        $template->setRequest($request);
-        return $template->getData();
-    }
-
-    protected function prepareResponse($response)
-    {
-        $this->getResponseHydrator()->hydrate($this->getLastResponse(), $response);
-    }
-
-    protected function getTemplate()
-    {
-        if (!$this->template) {
-            $this->template = $this->getServiceManager()->get('Mpi\Auth\GetToken\Template\Default');
+        if (!$this->requestBuilder) {
+            $this->requestBuilder = $this->getServiceManager()->get('Mpi\Auth\GetToken\Request\Builder');
         }
 
-        return $this->template;
+        return $this->requestBuilder;
     }
 
     protected function getResponseHydrator()
     {
         if (!$this->hydrator) {
-            $this->hydrator = $this->getServiceManager()->get('Mpi\Auth\GetToken\ResponseHydrator');
+            $this->hydrator = $this->getServiceManager()->get('Mpi\Auth\GetToken\Response\Hydrator');
         }
 
         return $this->hydrator;
-    }
-
-    protected function getServiceManager()
-    {
-        return $this->serviceManager;
     }
 }

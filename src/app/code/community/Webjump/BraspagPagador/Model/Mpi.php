@@ -44,7 +44,8 @@ class Webjump_BraspagPagador_Model_Mpi extends Mage_Core_Model_Abstract
             $result = unserialize(Mage::getSingleton('core/session')->getMpiTokenResult());
 
             $dateNow = new \DateTime('now');
-            if (!$result || $dateNow > $result->getExpirationDate()) {
+//            if (!$result || $dateNow > $result->getExpirationDate()) {
+
                 $result = $api->getToken();
 
                 if ($result->getExpiresIn() === null) {
@@ -56,7 +57,7 @@ class Webjump_BraspagPagador_Model_Mpi extends Mage_Core_Model_Abstract
                 $result->setExpirationDate($dateToExpire);
 
                 \Mage::getSingleton('core/session')->setMpiTokenResult(serialize($result));
-            }
+//            }
 
 			if ($errors = $result->getErrorReport()->getErrors()) {
 

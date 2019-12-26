@@ -75,11 +75,11 @@ class Webjump_BrasPag_Core_Service_Manager
             throw new Exception("Service Invalid: \"{$serviceName}\"", 1);
         }
 
-        if (is_callable($service)) {
-            return call_user_func($service, $this);
+        if (!is_callable($service)) {
+            $service;
         }
 
-        return $service;
+        return call_user_func($service, $this);
     }
 
     /**

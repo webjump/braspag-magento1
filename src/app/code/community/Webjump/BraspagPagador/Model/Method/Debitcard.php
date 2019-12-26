@@ -162,6 +162,23 @@ class Webjump_BraspagPagador_Model_Method_Debitcard
     }
 
     /**
+     * @param Varien_Object $payment
+     * @param string $transactionId
+     * @return $this|array
+     */
+    public function fetchTransactionInfo(Varien_Object $payment, $transactionId)
+    {
+        $response = Mage::getModel('webjump_braspag_pagador/status_update')
+            ->process($transactionId);
+
+        if ($response->getIsTransactionApproved()) {
+            $payment->setIsTransactionApproved(true);
+        }
+
+        return $this;
+    }
+
+    /**
      * Retrieve availables debit card types
      *
      * @return array
@@ -180,7 +197,7 @@ class Webjump_BraspagPagador_Model_Method_Debitcard
                 continue;
             }
             $acquirerCode = $availableTypeExploded[0];
-            $brand = $availableTypeExploded[1];
+            $brand = isset($availableTypeExploded[1]) ? $availableTypeExploded[1] : "";
 
             $debitcardTypes[!empty($brand) ? $acquirerCode.'-'.$brand : $acquirerCode] = (empty($_acquirers[$acquirerCode]) ? $acquirerCode : $_acquirers[$acquirerCode]." - ").$brand;
         }

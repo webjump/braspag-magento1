@@ -27,18 +27,18 @@ class Webjump_BrasPag_Mpi_Auth_GetTokenService implements Webjump_BrasPag_Core_S
             },
             'Mpi\Auth\GetToken\Response' => function ($serviceManager) {
                 $response = new Webjump_BrasPag_Mpi_Auth_GetToken_Response($serviceManager);
-                $response->setErrorReport($serviceManager->get('Mpi\Data\Response\ErrorReport'));
+                $response->setErrorReport($serviceManager->get('Core\Data\Response\ErrorReport'));
 
                 return $response;
             },
             'Mpi\Auth\GetToken\Request\Hydrator' => function ($serviceManager) {
                 return new Webjump_BrasPag_Mpi_Auth_GetToken_RequestHydrator($serviceManager);
             },
-            'Mpi\Auth\GetToken\ResponseHydrator' => function ($serviceManager) {
-                return new Webjump_BrasPag_Mpi_Auth_GetToken_ResponseHydrator($serviceManager);
+            'Mpi\Auth\GetToken\Response\Hydrator' => function ($serviceManager) {
+                return new Webjump_BrasPag_Mpi_Auth_GetToken_Response_Hydrator($serviceManager);
             },
-            'Mpi\Auth\GetToken\Template\Default' => function ($serviceManager) {
-                return new Webjump_BrasPag_Mpi_Auth_GetToken_Template_Default($serviceManager);
+            'Mpi\Auth\GetToken\Request\Builder' => function ($serviceManager) {
+                return new Webjump_BrasPag_Mpi_Auth_GetToken_Request_Builder($serviceManager);
             }
         );
     }

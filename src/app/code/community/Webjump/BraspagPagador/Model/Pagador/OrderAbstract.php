@@ -103,7 +103,7 @@ abstract class Webjump_BraspagPagador_Model_Pagador_OrderAbstract
     {
         $raw_details = [];
         foreach ($paymentDataResponse->getDataAsArray() as $r_key => $r_value) {
-            $raw_details['payment_order_'. $r_key] = $r_value;
+            $raw_details['payment_order_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
         }
 
         $payment->setTransactionAdditionalInfo(\Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $raw_details);

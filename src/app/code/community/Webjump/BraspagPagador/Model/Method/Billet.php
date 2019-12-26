@@ -38,6 +38,8 @@ class Webjump_BraspagPagador_Model_Method_Billet
     protected $_formBlockType = 'webjump_braspag_pagador/form_billet';
     protected $_infoBlockType = 'webjump_braspag_pagador/info_billet';
 
+    protected $_canVoid = true;
+
     /**
      * @param mixed $data
      * @return $this|bool|Mage_Payment_Model_Info

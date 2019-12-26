@@ -13,11 +13,8 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         $helper = $this->getHelper();
         $helper->debug($helper->getCurrentRequestInfo());
 
-        $merchantId = $helper->getMerchantId();
-        $this->setMerchantId($merchantId);
-
-        $merchantKey = $helper->getMerchantKey();
-        $this->setMerchantKey($merchantKey);
+        $this->setMerchantId($helper->getMerchantId());
+        $this->setMerchantKey($helper->getMerchantKey());
 
         $orderPayment = $this->loadOrderByPaymentId($paymentId);
 
@@ -34,50 +31,49 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         $order = Mage::getModel('sales/order')->load($orderPayment->getParentId());
         $orderPayment->setOrder($order);
 
-        foreach($transactions AS $transaction) {
-
-            $this->setRequestId($helper->generateGuid($order->getIncrementId()));
-            $transactionData = $this->getBraspagTransactionData(array_merge($this->getData(), $transaction->getData()));
-
-            if (!$transactionDataPayment = $transactionData['Payment']) {
-                $errorMsg = 'Error: While retrieving transaction data ' . $transaction->getData('braspag_transaction_id');
-                Mage::throwException($helper->__($errorMsg));
-            }
-
-            // 2 = capture
-            if ($transactionDataPayment['Type'] == 'Billet'
-                && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
-            ) {
-                $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
-                continue;
-            }
-
-            // 2 = capture
-            if (($transactionDataPayment['Type'] == 'CreditCard' || $transactionDataPayment['Type'] == 'DebitCard')
-                && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
-            ) {
-                $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
-                continue;
-            }
-
-            // 3 = Denied/10 = Voided/13 = Aborted
-            if (in_array($transactionDataPayment['Status'], [
-                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED,
-                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED,
-                Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
-            ])) {
-                $this->cancelOrder($paymentResponse, $orderPayment);
-                continue;
-            }
-
-            // 11 = Refunded
-            if ($transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED) {
-                $this->createCreditMemo($paymentResponse, $transactionData, $orderPayment);
-                continue;
-            }
+        if (empty($transactions)) {
+            throw new Exception('Data Error.');
         }
 
-        return true;
+        $transaction = $transactions[0];
+
+        $this->setRequestId($helper->generateGuid($order->getIncrementId()));
+        $transactionData = $this->getBraspagTransactionData(array_merge($this->getData(), $transaction->getData()));
+
+        if (!$transactionDataPayment = $transactionData['Payment']) {
+            $errorMsg = 'Error: While retrieving transaction data ' . $transaction->getData('braspag_transaction_id');
+            Mage::throwException($helper->__($errorMsg));
+        }
+
+        // 2 = capture
+        if ($transactionDataPayment['Type'] == 'Boleto'
+            && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
+        ) {
+            return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+        }
+
+        // 2 = capture
+        if (($transactionDataPayment['Type'] == 'CreditCard' || $transactionDataPayment['Type'] == 'DebitCard')
+            && $transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_PAYMENT_CONFIRMED
+        ) {
+            return $this->createInvoice($paymentResponse, $transactionData, $orderPayment);
+        }
+
+        // 3 = Denied/10 = Voided/13 = Aborted
+        if (in_array($transactionDataPayment['Status'], [
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_DENIED,
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_VOIDED,
+            Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_ABORTED
+        ])) {
+            return $this->cancelOrder($paymentResponse, $orderPayment);
+        }
+
+        // 11 = Refunded
+        if ($transactionDataPayment['Status'] == Webjump_BrasPag_Pagador_TransactionInterface::TRANSACTION_STATUS_REFUNDED) {
+            return $this->createCreditMemo($paymentResponse, $transactionData, $orderPayment);
+        }
+
+        return $orderPayment;
     }
 
     /**
@@ -144,7 +140,9 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
         $invoice->sendEmail(true);
         $order->save();
 
-        return true;
+        $payment->setIsTransactionApproved(true);
+
+        return $payment;
     }
 
     /**
@@ -157,17 +155,12 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
     {
         $order = $payment->getOrder();
 
-        if (!$order->canCancel()) {
-            throw new \Exception("The order cannot be canceled", 400);
-        }
-
         $payment->setParentTransactionId($payment->getLastTransId())
-            ->setTransactionId($payment->getLastTransId()."-capture")
-            ->setIsTransactionClosed(0);
+            ->setTransactionId($payment->getLastTransId()."-void");
 
         $raw_details = [];
         foreach ($paymentResponse as $r_key => $r_value) {
-            $raw_details['payment_cancel_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
+            $raw_details['payment_void_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
         }
 
         $payment->resetTransactionAdditionalInfo();
@@ -175,13 +168,15 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
 
         $payment->registerVoidNotification();
 
+        $order->registerCancellation();
+
         $transactionSave = Mage::getModel('core/resource_transaction')
             ->addObject($order);
+
         $transactionSave->save();
-        $order->cancel();
         $order->save();
 
-        return true;
+        return $payment;
     }
 
     /**
@@ -224,7 +219,7 @@ class Webjump_BraspagPagador_Model_Status_Update extends Mage_Core_Model_Abstrac
 
         $order->save();
 
-        return true;
+        return $payment;
     }
 
     /**

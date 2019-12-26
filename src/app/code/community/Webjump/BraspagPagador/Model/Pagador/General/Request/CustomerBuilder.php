@@ -93,11 +93,7 @@ class Webjump_BraspagPagador_Model_Pagador_General_Request_CustomerBuilder
 
     protected function getHelper()
     {
-        if (!$this->_helper) {
-            $this->_helper = Mage::helper('webjump_braspag_pagador');
-        }
-
-        return $this->_helper;
+        return Mage::helper('webjump_braspag_pagador');
     }
 
     /**
