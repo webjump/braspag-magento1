@@ -1,0 +1,64 @@
+<!--<h3>--><?php //echo $this->__('Authorized payments') ?><!--</h3>-->
+<!--<ul>-->
+<!--	<li>-->
+<!--		<dl>-->
+<!--		  <dt><strong>--><?php //echo $this->__('Total') ?><!--</strong></dt>-->
+<!--		  <dd>--><?php //echo $this->getGrandTotal(); ?><!--</dd>-->
+<!--		</dl>	-->
+<!--		<dl>-->
+<!--		  <dt><strong>--><?php //echo $this->__('Total Authorized Paid') ?><!--</strong></dt>-->
+<!--		  <dd>--><?php //echo $this->getTotalAuthorizedPaid(); ?><!--</dd>-->
+<!--		</dl>		-->
+<!--		<dl>-->
+<!--		  <dt><strong>--><?php //echo $this->__('Total Authorized Due') ?><!--</strong></dt>-->
+<!--		  <dd>--><?php //echo $this->getTotalAuthorizedDue(); ?><!--</dd>-->
+<!--		</dl>		-->
+<!--	</li>-->
+<!--</ul>-->
+<!--<p>&nbsp;</p>-->
+<!--<p><strong>--><?php //echo $this->escapeHtml($this->getMethod()->getTitle()) ?><!--</strong></p>-->
+<!---->
+<?php //if ($_specificInfo = $this->getSpecificInformation()):?>
+<!--<table>-->
+<!--    <tbody>-->
+<!--    --><?php //foreach ($_specificInfo as $_label => $_value):?>
+<!--    	--><?php //if(is_array($_value)): ?>
+<!--    		--><?php //if (is_string($_label)): ?>
+<!--    			<tr class="payment_info_group">-->
+<!--					<th><strong>--><?php //echo $this->escapeHtml($_label)?><!--</strong></th>-->
+<!--				</tr>-->
+<!--    		--><?php //endif; ?>
+<!--    		--><?php //foreach($_value AS $_v_label => $_v_value): ?>
+<!--    			--><?php //if (!is_numeric($_v_label)): ?>
+<!--					<tr>-->
+<!--						<th><strong>--><?php //echo $this->escapeHtml($_v_label)?><!--:</strong></th>-->
+<!--					</tr>-->
+<!--					<tr>-->
+<!--						<td>--><?php //echo nl2br(implode($this->getValueAsArray($_v_value, true), "\n"))?><!--</td>-->
+<!--					</tr>-->
+<!--				--><?php //else: ?>
+<!--					<tr>-->
+<!--						<td colspan="2">--><?php //echo nl2br(implode($this->getValueAsArray($_v_value, true), "\n"))?><!--</td>-->
+<!--					</tr>-->
+<!--				--><?php //endif; ?>
+<!--			--><?php //endforeach; ?><!--    		-->
+<!--    	--><?php //else: ?>
+<!--			--><?php //if (!is_numeric($_label)): ?>
+<!--				<tr>-->
+<!--					<th><strong>--><?php //echo $this->escapeHtml($_label)?><!--:</strong></th>-->
+<!--				</tr>-->
+<!--				<tr>-->
+<!--					<td>--><?php //echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?><!--</td>-->
+<!--				</tr>-->
+<!--			--><?php //else: ?>
+<!--				<tr>-->
+<!--					<td colspan="2">--><?php //echo nl2br(implode($this->getValueAsArray($_value, true), "\n"))?><!--</td>-->
+<!--				</tr>-->
+<!--	        --><?php //endif; ?>
+<!--        --><?php //endif; ?>
+<!--    --><?php //endforeach; ?>
+<!--    </tbody>-->
+<!--</table>-->
+<?php //endif;?>
+<!---->
+<?php //echo $this->getChildHtml()?>

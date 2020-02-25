@@ -1,0 +1,175 @@
+<!--<h2>--><?php //echo $this->__('Some payments was Pending') ?><!--</h2>-->
+<?php //$_code = $this->getMethodCode(); ?>
+<?php //$_paymentRequestIndex = 3; ?>
+<!--<form id="payment_form_--><?php //echo $_code ?><!--" method="POST">-->
+<!--<ul class="form-list" >-->
+<!--    <li>-->
+<!--        <h4>--><?php //echo $this->__('Credit Card 1') ?><!--</h4>-->
+<!--    </li>-->
+<!--    <li id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_total_div">-->
+<!--        <div class="input-box">-->
+<!--            <input type="hidden" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][type]" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_payment_type" value="braspag_creditcard" />-->
+<!--            <input type="hidden" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_total" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][amount]" value="--><?php //echo $this->getAmount(); ?><!--" />-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_type_div">-->
+<!--        <p class="required">--><?php //echo $this->__('* Required Fields') ?><!--</p>-->
+<!--        <label for="--><?php //echo $_code ?><!--_cc_type" class="required"><em>*</em>--><?php //echo $this->__('Credit Card Type') ?><!--</label>-->
+<!--        <div class="input-box">-->
+<!--            <select autocomplete="off" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_type" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_type]" class="required-entry" title="--><?php //echo $this->__('Credit Card Type') ?><!--">-->
+<!--            --><?php //foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+<!--                <option value="--><?php //echo $_typeCode ?><!--">--><?php //echo $_typeName ?><!--</option>-->
+<!--            --><?php //endforeach ?>
+<!--            </select>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_owner_div">-->
+<!--        <label for="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_owner" class="required"><em>*</em>--><?php //echo $this->__('Name on Card') ?><!--</label>-->
+<!--        <div class="input-box">-->
+<!--            <input autocomplete="off" type="text" title="--><?php //echo $this->__('Name on Card') ?><!--" class="input-text required-entry" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_owner" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_owner]" value="--><?php //if (isset($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner'])) { echo $this->escapeHtml($_additionalInformation['payment_request'][$_paymentRequestIndex]['cc_owner']); } ?><!--" />-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li>-->
+<!--        <label for="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_number" class="required"><em>*</em>--><?php //echo $this->__('Credit Card Number') ?><!--</label>-->
+<!--        <div class="input-box">-->
+<!--            <input autocomplete="off" type="text" pattern="\d*" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_number" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_number]" title="--><?php //echo $this->__('Credit Card Number') ?><!--" class="input-text required-entry" value="" />-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_type_exp_div">-->
+<!--        <label for="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_expiration" class="required"><em>*</em>--><?php //echo $this->__('Expiration Date') ?><!--</label>-->
+<!--        <div class="input-box">-->
+<!--            <div class="v-fix">-->
+<!--                <select autocomplete="off" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_expiration" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_exp_month]" class="month validate-cc-exp required-entry">-->
+<!--                --><?php //foreach ($this->getCardMonths() as $k=>$v): ?>
+<!--                    <option value="--><?php //echo $k?$k:'' ?><!--">--><?php //echo $v ?><!--</option>-->
+<!--                --><?php //endforeach ?>
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="v-fix">-->
+<!--                <select autocomplete="off" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_expiration_yr" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_exp_year]" class="year required-entry">-->
+<!--                --><?php //foreach ($this->getCardYears() as $k=>$v): ?>
+<!--                    <option value="--><?php //echo $k?$k:'' ?><!--">--><?php //echo $v ?><!--</option>-->
+<!--                --><?php //endforeach ?>
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    --><?php //echo $this->getChildHtml() ?>
+<!--    <li id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_type_cvv_div">-->
+<!--        <label for="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_cid" class="required"><em>*</em>--><?php //echo $this->__('Card Verification Number') ?><!--</label>-->
+<!--        <div class="input-box">-->
+<!--            <div class="v-fix">-->
+<!--                <input autocomplete="off" type="text" pattern="\d*" title="--><?php //echo $this->__('Card Verification Number') ?><!--" class="input-text cvv required-entry" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_cid" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_cid]" value="" />-->
+<!--            </div>-->
+<!--            <a href="#" class="cvv-what-is-this">--><?php //echo $this->__('What is this?') ?><!--</a>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li>-->
+<!--        <label for="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_installments" class="required"><em>*</em>--><?php //echo $this->__('Installments') ?><!--</label>-->
+<!--        <div class="input-box">-->
+<!--            <div class="v-fix">-->
+<!--                <select autocomplete="off" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_installments" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][installments]" class="number required-entry">-->
+<!--                    --><?php //echo $this->getInstallmentsSelectOptions(); ?>
+<!--                </select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    --><?php //if ($this->isShowJustclickOption()): ?>
+<!--        <li>-->
+<!--            <div class="input-box">-->
+<!--                <div class="v-fix">-->
+<!--                    <input autocomplete="off" type="checkbox" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][cc_justclick]" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_justclick"/><label for="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_cc_justclick"><em>*</em>--><?php //echo $this->__('add To Braspag JustClick') ?><!--</label>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
+<!--    --><?php //endif ?>
+<!--    <li>-->
+<!--        <button id="submitButton" title="--><?php //echo $this->__('Place Order') ?><!--" class="button btn-checkout"><span><span>--><?php //echo $this->__('Place Order') ?><!--</span></span></button>-->
+<!--    </li>-->
+<!--</ul>-->
+<!--</form> -->
+<!--<script type="text/javascript">  -->
+<!--    // <![CDATA[  -->
+<!--        document.observe('dom:loaded', function() {  -->
+<!--              -->
+<!--            function sendForm(event){  -->
+<!--                Event.stop(event);  -->
+<!--                var form = $('payment_form_--><?php //echo $_code ?>//');
+//                var validator = new Validation(form);
+//                if (validator.validate()) {
+//                    var request = new Ajax.Request(
+//                        "<?php //echo $this->getUrl('braspag/payment/reorder') ?>//?order=<?php //echo $this->getOrderId() ?>//&ajax=true",
+//                        {
+//                            method:'post',
+//                            parameters: Form.serialize(form),
+//                            asynchronous: true,
+//                            onSuccess: function(oXHR) {
+//                                console.log(oXHR.responseJSON.success);
+//                               if (oXHR.responseJSON.success) {
+//                                    return window.location="<?php //echo $this->getUrl('checkout/onepage/success') ?>//";
+//                               };
+//                               alert(oXHR.responseJSON.error);
+//                            },
+//
+//                        }
+//                    );
+//                }
+//            }
+//
+//            Event.observe('submitButton', 'click', sendForm, false);
+//
+//        });
+//    // ]]>
+//</script>
+//<p>&nbsp;</p>
+//<hr />
+//<p>&nbsp;</p>
+//<h2><?php //echo $this->__('Or pay with Boleto') ?><!--</h2>-->
+<?php
+//$_code = 'braspag_billet';
+//$_paymentInstructions = Mage::getSingleton('braspag_pagador/method_transaction_boleto')->getPaymentInstructions();
+//?>
+<!--<form id="payment_form_--><?php //echo $_code ?><!--" method="POST">-->
+<!--    <ul class="form-list" id="payment_form_--><?php //echo $_code ?><!--">-->
+<!--        <li>-->
+<!--            <p>--><?php //echo $_paymentInstructions; ?><!--</p>-->
+<!--            <input type="hidden" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][boleto_type]" value="--><?php //echo $this->getBoletoType();?><!--">-->
+<!--<input type="hidden" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][type]" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_boleto_payment_type" value="--><?php //echo $_code ?><!--" />-->
+<!--            <input type="hidden" id="--><?php //echo $_code ?><!--_--><?php //echo $_paymentRequestIndex; ?><!--_boleto_total" name="payment[payment_request][--><?php //echo $_paymentRequestIndex; ?><!--][amount]" value="--><?php //echo $this->getAmount(); ?><!--" />           -->
+<!--        </li>-->
+<!--    </ul>-->
+<!--    <button id="submitButtonPayWithBoleto" title="--><?php //echo $this->__('Pay with Boleto') ?><!--" class="button btn-checkout"><span><span>--><?php //echo $this->__('Pay with Boleto') ?><!--</span></span></button>-->
+<!--</form>-->
+<!--<script type="text/javascript">  -->
+<!--    // <![CDATA[  -->
+<!--        document.observe('dom:loaded', function() {  -->
+<!--              -->
+<!--            function sendBoleto(event){  -->
+<!--                Event.stop(event);  -->
+<!--                var form = $('payment_form_--><?php //echo $_code ?>//');
+//                var validator = new Validation(form);
+//                if (validator.validate()) {
+//                    var request = new Ajax.Request(
+//                        "<?php //echo $this->getUrl('braspag/payment/reorder') ?>//?order=<?php //echo $this->getOrderId() ?>//&ajax=true",
+//                        {
+//                            method:'post',
+//                            parameters: Form.serialize(form),
+//                            asynchronous: true,
+//                            onSuccess: function(oXHR) {
+//                                console.log(oXHR.responseJSON.success);
+//                               if (oXHR.responseJSON.success) {
+//                                    return window.location="<?php //echo $this->getUrl('checkout/onepage/success') ?>//";
+//                               };
+//                               alert(oXHR.responseJSON.error);
+//                            },
+//
+//                        }
+//                    );
+//                }
+//            }
+//
+//            Event.observe('submitButtonPayWithBoleto', 'click', sendBoleto, false);
+//
+//        });
+//    // ]]>
+//</script>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <braspag_devicefingerprint>
+        <reference name="before_body_end">
+            <block type="braspag_antifraud/checkout_deviceFingerPrint" name="braspag.antifraud.deviceFingerPrint" as="antifraud.deviceFingerPrint" template="braspag/antifraud/checkout/device_finger_print.phtml" />
+        </reference>
+    </braspag_devicefingerprint>
+
+    <checkout_onepage_index>
+        <update handle="braspag_devicefingerprint" />
+    </checkout_onepage_index>
+</layout>

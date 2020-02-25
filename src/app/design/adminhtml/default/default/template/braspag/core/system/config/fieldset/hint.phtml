@@ -1,0 +1,9 @@
+<?php
+    if ($this->getHint()):
+?>
+<div class="braspag-core-payment-notice">
+    <?php echo Mage::helper('braspag_core')->__($this->getHint()); ?><br /><br />
+</div>
+<?php
+    endif;
+?>
