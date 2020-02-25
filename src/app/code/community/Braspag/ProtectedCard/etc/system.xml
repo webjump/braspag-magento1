@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <braspag_pagador translate="label" module="braspag_pagador">
+            <groups>
+                <justclick translate="label comment" module="braspag_protectedcard">
+                    <label>CreditCard - JustClick</label>
+                    <comment><![CDATA[]]></comment>
+                    <sort_order>15</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <config_path>payment/braspag_justclick/active</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <config_path>payment/braspag_justclick/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <payment_action translate="label">
+                            <label>Payment Action</label>
+                            <config_path>payment/braspag_justclick/payment_action</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>braspag_pagador/source_paymentAction</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </payment_action>
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+                            <config_path>payment/braspag_justclick/order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>braspag_pagador/source_status_newPending</source_model>
+                            <sort_order>31</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+                        <installments_min_amount translate="label">
+                            <label>Minimum Amount of Installment</label>
+                            <config_path>payment/braspag_justclick/installments_min_amount</config_path>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-number</validate>
+                            <sort_order>34</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </installments_min_amount>
+                        <installments translate="label">
+                            <label>Maximum Installments</label>
+                            <config_path>payment/braspag_justclick/installments</config_path>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-digits</validate>
+                            <sort_order>36</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </installments>
+                        <cvv_required translate="label">
+                            <label>Card Verification Number</label>
+                            <frontend_type>select</frontend_type>
+                            <config_path>payment/braspag_justclick/cvv_required</config_path>
+                            <sort_order>100</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </cvv_required>
+                        <allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <config_path>payment/braspag_justclick/allowspecific</config_path>
+                            <sort_order>200</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <config_path>payment/braspag_justclick/specificcountry</config_path>
+                            <sort_order>210</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <config_path>payment/braspag_justclick/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </sort_order>
+                    </fields>
+                </justclick>
+            </groups>
+        </braspag_pagador>
+    </sections>
+</config>

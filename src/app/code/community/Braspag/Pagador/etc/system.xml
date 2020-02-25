@@ -1,0 +1,409 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+		<braspag_pagador translate="label" module="braspag_pagador">
+			<label>Pagador Transaction</label>
+            <tab>braspag</tab>
+			<sort_order>200</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<creditcard translate="label comment" module="braspag_pagador">
+					<label>Credit Card</label>
+					<comment><![CDATA[]]></comment>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+							<config_path>payment/braspag_creditcard/active</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+							<config_path>payment/braspag_creditcard/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+						<payment_action translate="label">
+							<label>Payment Action</label>
+							<config_path>payment/braspag_creditcard/payment_action</config_path>
+							<frontend_type>select</frontend_type>
+                            <source_model>braspag_pagador/source_paymentAction</source_model>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</payment_action>
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+							<config_path>payment/braspag_creditcard/order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>braspag_pagador/source_status_newPending</source_model>
+                            <sort_order>31</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+						<installments_min_amount translate="label">
+                            <label>Minimum Amount of Installment</label>
+							<config_path>payment/braspag_creditcard/installments_min_amount</config_path>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-number</validate>
+                            <sort_order>34</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </installments_min_amount>
+						<installments translate="label">
+                            <label>Maximum Installments</label>
+							<config_path>payment/braspag_creditcard/installments</config_path>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry validate-digits</validate>
+                            <sort_order>36</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </installments>
+
+                        <acquirers translate="label">
+                            <label>Payment Methods</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <config_path>payment/braspag_creditcard/acquirers</config_path>
+                            <source_model>braspag_pagador/source_acquirer_creditcard</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </acquirers>
+
+                        <allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+							<config_path>payment/braspag_creditcard/allowspecific</config_path>
+                            <sort_order>200</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+							<config_path>payment/braspag_creditcard/specificcountry</config_path>
+                            <sort_order>210</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+							<config_path>payment/braspag_creditcard/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </sort_order>
+                    </fields>
+				</creditcard>
+				<debitcard translate="label comment" module="braspag_pagador">
+					<label>Debit Card</label>
+					<comment><![CDATA[]]></comment>
+					<sort_order>20</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+							<config_path>payment/braspag_debitcard/active</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+							<config_path>payment/braspag_debitcard/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <!--<order_status translate="label">-->
+                            <!--<label>New Order Status</label>-->
+                            <!--<config_path>payment/braspag_debitcard/order_status</config_path>-->
+                            <!--<frontend_type>select</frontend_type>-->
+                            <!--<validate>required-entry</validate>-->
+                            <!--<source_model>braspag_pagador/source_status_newPending</source_model>-->
+                            <!--<sort_order>31</sort_order>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                        <!--</order_status>-->
+                        <debitcardtypes translate="label">
+                            <label>Debit Card Types</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <config_path>payment/braspag_debitcard/debitcardtypes</config_path>
+                            <source_model>braspag_pagador/source_acquirer_debitcard</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </debitcardtypes>
+                        <payment_button_label translate="label">
+                            <label>Label for print button at checkout</label>
+							<config_path>payment/braspag_debitcard/payment_button_label</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </payment_button_label>
+                        <autoredirect translate="label,comment">
+                            <label>Automatically redirect to bank page</label>
+                            <comment>Leave empty to not redirect automatically or type the delayed time in seconds</comment>
+                            <config_path>payment/braspag_debitcard/autoredirect</config_path>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </autoredirect>
+                        <return_url translate="label,comment">
+                            <label>Return URL after payment</label>
+                            <comment>URL to return after payment</comment>
+                            <config_path>payment/braspag_debitcard/return_url</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </return_url>
+
+						<allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+							<config_path>payment/braspag_debitcard/allowspecific</config_path>
+                            <sort_order>200</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+							<config_path>payment/braspag_debitcard/specificcountry</config_path>
+                            <sort_order>210</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+							<config_path>payment/braspag_debitcard/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </sort_order>
+                    </fields>
+				</debitcard>
+				<boleto translate="label comment" module="braspag_pagador">
+					<label>Boleto Bancário</label>
+					<comment><![CDATA[]]></comment>
+					<sort_order>30</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+							<config_path>payment/braspag_boleto/active</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+							<config_path>payment/braspag_boleto/title</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <order_status translate="label">
+                            <label>New Order Status</label>
+							<config_path>payment/braspag_boleto/order_status</config_path>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>braspag_pagador/source_status_newPending</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+                        <boleto_type translate="label">
+                            <label>Boleto Types</label>
+							<config_path>payment/braspag_boleto/boleto_type</config_path>
+                            <frontend_type>select</frontend_type>
+							<source_model>braspag_pagador/source_boletoType</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </boleto_type>
+                        <payment_instructions translate="label">
+                            <label>Payment instructions for customer at checkout</label>
+							<config_path>payment/braspag_boleto/payment_instructions</config_path>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </payment_instructions>
+                        <payment_button_label translate="label">
+                            <label>Label for print button at checkout</label>
+							<config_path>payment/braspag_boleto/payment_button_label</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>45</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </payment_button_label>
+                        <boleto_expiration_date translate="label comment">
+                            <label>Days for expiration</label>
+                            <comment>If empty, we will use the days configured by affiliation.</comment>
+							<config_path>payment/braspag_boleto/boleto_expiration_date</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </boleto_expiration_date>
+                        <boleto_instructions translate="label">
+                            <label>Instructions to be printed on the Boleto</label>
+							<config_path>payment/braspag_boleto/boleto_instructions</config_path>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </boleto_instructions>
+						<allowspecific translate="label">
+                            <label>Payment from Applicable Countries</label>
+                            <frontend_type>allowspecific</frontend_type>
+							<config_path>payment/braspag_boleto/allowspecific</config_path>
+                            <sort_order>200</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Payment from Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+							<config_path>payment/braspag_boleto/specificcountry</config_path>
+                            <sort_order>210</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+							<config_path>payment/braspag_boleto/sort_order</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>220</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_class>validate-number</frontend_class>
+                        </sort_order>
+                    </fields>
+				</boleto>
+                <status_update translate="label hint" module="braspag_pagador">
+                    <label>Status Update</label>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[This feature automatically update order status when customer pay an Boleto or a payment with authentication on issuer.<br />To use this feature, you must ask for Braspag setup the update status post to url: "{{secure_url}}/braspag_pagador/status/update".<br />If you don't know which are your store secure_url, access System->Configuration->Web->Secure.]]></comment>
+                    <fields>
+                        <order_status_paid translate="label">
+                            <label>Order Status Paid</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>adminhtml/system_config_source_order_status_processing</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status_paid>
+                        <autoinvoice translate="label">
+                            <label>Auto generate invoice</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </autoinvoice>
+                        <send_email translate="label">
+                            <label>E-mail invoice to customer</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <autoinvoice>1</autoinvoice>
+                            </depends>
+                        </send_email>
+                        <allowed_ips translate="label comment">
+                            <label>Allowed IPs from Braspag</label>
+                            <comment><![CDATA[The order status update for security reasons must only accept requests from Braspag IPs. For more details, consult the integration manual.<br />Type one IP address per line.]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowed_ips>
+                    </fields>
+                </status_update>
+			</groups>
+        </braspag_pagador>
+    </sections>
+</config>

@@ -1,0 +1,14 @@
+<?php 
+$_code = $this->getMethodCode();
+
+$_paymentInstructions = $this->getPaymentInstructions();
+?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+	<li>
+        <p><?php echo $_paymentInstructions; ?></p>
+        <input type="hidden" name="payment[payment_request][billet_type]" value="<?php echo $this->getBilletType();?>">
+        <input type="hidden" name="payment[payment_request][type]" id="<?php echo $_code ?>_billet_payment_type" value="<?php echo $_code ?>" />
+        <input type="hidden" id="<?php echo $_code ?>_billet_total" name="payment[payment_request][amount]" value="<?php echo $this->getAmount(); ?>" />
+	</li>
+    <?php echo $this->getChildHtml() ?>
+</ul>

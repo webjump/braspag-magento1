@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Braspag_Auth3ds20>
+            <active>true</active>
+            <codePool>community</codePool>
+             <depends>
+                 <Braspag_Core/>
+                 <Braspag_Pagador/>
+             </depends>
+        </Braspag_Auth3ds20>
+    </modules>
+</config>

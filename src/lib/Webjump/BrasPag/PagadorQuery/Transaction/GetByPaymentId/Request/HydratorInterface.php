@@ -1,6 +1,0 @@
-<?php
-
-interface Webjump_BrasPag_PagadorQuery_Transaction_GetByPaymentId_Request_HydratorInterface
-{
-	public function hydrate(array $data, Webjump_BrasPag_PagadorQuery_Transaction_GetByPaymentId_RequestInterface $request);
-}

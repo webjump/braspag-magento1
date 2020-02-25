@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Braspag_PaymentSplit>
+            <active>true</active>
+            <codePool>community</codePool>
+             <depends>
+                 <Braspag_Core/>
+                 <Braspag_Pagador/>
+                 <Braspag_AntiFraud/>
+             </depends>
+        </Braspag_PaymentSplit>
+    </modules>
+</config>

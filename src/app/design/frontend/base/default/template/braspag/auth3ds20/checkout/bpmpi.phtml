@@ -1,0 +1,111 @@
+<div id="bpmpi_data">
+
+    <div id="bpmpi_data_auth">
+        <input type="hidden" name="test_environment" class="test_environment" value="1"/>
+        <input type="hidden" name="bpmpi_accesstoken" class="bpmpi_accesstoken"/>
+        <input type="hidden" name="bpmpi_auth" class="bpmpi_auth" value="true"/>
+        <input type="hidden" name="bpmpi_auth_notifyonly" class="bpmpi_auth_notifyonly" value=""/>
+        <input type="hidden" name="bpmpi_auth_suppresschallenge" class="bpmpi_auth_suppresschallenge" value="false"/>
+        <input type="hidden" name="bpmpi_auth_failure_type" class="bpmpi_auth_failure_type" value=""/>
+        <input type="hidden" name="bpmpi_auth_cavv" class="bpmpi_auth_cavv" value=""/>
+        <input type="hidden" name="bpmpi_auth_xid" class="bpmpi_auth_xid" value=""/>
+        <input type="hidden" name="bpmpi_auth_eci" class="bpmpi_auth_eci" value=""/>
+        <input type="hidden" name="bpmpi_auth_version" class="bpmpi_auth_version" value=""/>
+        <input type="hidden" name="bpmpi_auth_reference_id" class="bpmpi_auth_reference_id" value=""/>
+    </div>
+
+    <div id="bpmpi_data_recurring">
+        <input type="hidden" name="bpmpi_recurring_enddate" class="bpmpi_recurring_enddate" value=""/>
+        <input type="hidden" name="bpmpi_recurring_frequency" class="bpmpi_recurring_frequency" value=""/>
+        <input type="hidden" name="bpmpi_recurring_originalpurchasedate" class="bpmpi_recurring_originalpurchasedate" value=""/>
+    </div>
+
+    <div id="bpmpi_data_payment">
+        <input type="hidden" class="bpmpi_paymentmethod" value=""/>
+        <input type="hidden" class="bpmpi_cardnumber" value=""/>
+        <input type="hidden" class="bpmpi_billto_name" value=""/>
+        <input type="hidden" class="bpmpi_cardexpirationmonth" value=""/>
+        <input type="hidden" class="bpmpi_cardexpirationyear" value=""/>
+        <input type="hidden" class="bpmpi_installments" value=""/>
+
+        <input type="hidden" class="bpmpi_totalamount" value=""/>
+        <input type="hidden" class="bpmpi_currency" value=""/>
+        <input type="hidden" class="bpmpi_ordernumber" value=""/>
+        <input type="hidden" class="bpmpi_transaction_mode" value=""/>
+        <input type="hidden" class="bpmpi_merchant_url" value=""/>
+    </div>
+
+    <div id="bpmpi_data_billto">
+        <input type="hidden" class="bpmpi_billto_contactname" value=""/>
+        <input type="hidden" class="bpmpi_billto_phonenumber" value=""/>
+        <input type="hidden" class="bpmpi_billto_customerid" value=""/>
+        <input type="hidden" class="bpmpi_billto_email" value=""/>
+        <input type="hidden" class="bpmpi_billto_street1" value=""/>
+        <input type="hidden" class="bpmpi_billto_street2" value=""/>
+        <input type="hidden" class="bpmpi_billto_city" value=""/>
+        <input type="hidden" class="bpmpi_billto_state" value=""/>
+        <input type="hidden" class="bpmpi_billto_zipcode" value=""/>
+        <input type="hidden" class="bpmpi_billto_country" value=""/>
+    </div>
+
+    <div id="bpmpi_data_shipto">
+        <input type="hidden" class="bpmpi_shipto_sameasbillto" value=""/>
+        <input type="hidden" class="bpmpi_shipto_addressee" value=""/>
+        <input type="hidden" class="bpmpi_shipto_phonenumber" value=""/>
+        <input type="hidden" class="bpmpi_shipto_email" value=""/>
+        <input type="hidden" class="bpmpi_shipto_street1" value=""/>
+        <input type="hidden" class="bpmpi_shipto_street2" value=""/>
+        <input type="hidden" class="bpmpi_shipto_city" value=""/>
+        <input type="hidden" class="bpmpi_shipto_state" value=""/>
+        <input type="hidden" class="bpmpi_shipto_zipcode" value=""/>
+        <input type="hidden" class="bpmpi_shipto_country" value=""/>
+    </div>
+
+    <div id="bpmpi_data_cart">
+        <input type="hidden" class="bpmpi_cart_0_description" value=""/>
+        <input type="hidden" class="bpmpi_cart_0_name" value=""/>
+        <input type="hidden" class="bpmpi_cart_0_sku" value=""/>
+        <input type="hidden" class="bpmpi_cart_0_quantity" value=""/>
+        <input type="hidden" class="bpmpi_cart_0_unitprice" value=""/>
+    </div>
+
+    <div id="bpmpi_data_useraccount">
+        <input type="hidden" class="bpmpi_useraccount_guest" value=""/>
+        <input type="hidden" class="bpmpi_useraccount_createddate" value=""/>
+        <input type="hidden" class="bpmpi_useraccount_changeddate" value=""/>
+        <input type="hidden" class="bpmpi_useraccount_authenticationmethod" value=""/>
+        <input type="hidden" class="bpmpi_useraccount_authenticationprotocol" value=""/>
+    </div>
+
+    <div id="bpmpi_data_device">
+        <input type="hidden" name="bpmpi_device_ipaddress" class="bpmpi_device_ipaddress" value=""/>
+        <input type="hidden" class="bpmpi_device_0_fingerprint" value=""/>
+        <input type="hidden" class="bpmpi_device_0_provider" value=""/>
+    </div>
+
+    <div id="bpmpi_data_mdd">
+        <input type="hidden" class="bpmpi_mdd1" value=""/>
+        <input type="hidden" class="bpmpi_mdd2" value=""/>
+        <input type="hidden" class="bpmpi_mdd3" value=""/>
+        <input type="hidden" class="bpmpi_mdd4" value=""/>
+        <input type="hidden" class="bpmpi_mdd5" value=""/>
+    </div>
+</div>
+
+<script type="text/javascript">
+  var bpMpi3ds20Conf = new BpmpiConf();
+  bpMpi3ds20Conf.Environment = '<?php echo ($this->isTestEnvironmentEnabled() ? 'SDB' : 'PROD'); ?>';
+  bpMpi3ds20Conf.Debug = <?php echo ($this->isTestEnvironmentEnabled() ? 'true' : 'false'); ?>;
+</script>
+
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('braspag/auth3ds20/js/bpmpi/lib/BP.Mpi.3ds20.lib.js') ?>"></script>
+
+<script type="text/javascript">
+  var bpmpi = new Bpmpi();
+  bpmpi.isTestEnvironment = <?php echo ($this->isTestEnvironmentEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiEnabledCC = <?php echo ($this->isBpmpiCreditCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiEnabledDC = <?php echo ($this->isBpmpiDebitCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledCC = <?php echo ($this->isBpmpiMcNotifyOnlyCreditCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.isBpmpiMasterCardNotifyOnlyEnabledDC = <?php echo ($this->isBpmpiMcNotifyOnlyDebitCardEnabled() ? 'true' : 'false'); ?>;
+  bpmpi.startTransaction();
+</script>

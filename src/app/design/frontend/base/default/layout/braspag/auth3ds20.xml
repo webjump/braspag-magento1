@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+
+    <checkout_onepage_review>
+        <reference name="checkout.onepage.review.button">
+            <action method="setTemplate">
+                <template>braspag/auth3ds20/checkout/bpmpi/review/button.phtml</template>
+                <block>braspag_auth3ds20/checkout_bpmpi_review_button</block>
+            </action>
+        </reference>
+    </checkout_onepage_review>
+
+    <braspag_auth3ds20>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>braspag/auth3ds20/js/bpmpi/lib/BP.Mpi.3ds20.conf.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>braspag/auth3ds20/js/bpmpi/bpmpi.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>braspag/auth3ds20/js/bpmpi/bpmpi-renderer.js</name>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="braspag_auth3ds20/checkout_bpmpi" name="braspag.pagador.bpmpi" as="bpmpi" template="braspag/auth3ds20/checkout/bpmpi.phtml" />
+        </reference>
+    </braspag_auth3ds20>
+
+    <checkout_onepage_index>
+        <update handle="braspag_auth3ds20" />
+    </checkout_onepage_index>
+</layout>
