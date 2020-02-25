@@ -69,7 +69,6 @@ class Webjump_BraspagPagador_Block_Post_Passthru_Form_CcTest extends \Codeceptio
         $result = $this->block->getInstallments();
 
         // test the results
-        $this->assertTrue($this->block->isInstallmentsEnabled());
         $this->assertEquals($expected, $result);
     }
 

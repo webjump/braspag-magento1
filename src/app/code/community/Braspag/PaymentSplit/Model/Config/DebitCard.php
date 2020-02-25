@@ -28,33 +28,4 @@ class Braspag_PaymentSplit_Model_Config_DebitCard extends Mage_Core_Model_Abstra
     {
         return Mage::getStoreConfig('braspag_paymentsplit/debitcard_transaction/default_fee', $storeId);
     }
-
-    /**
-     * @param null $storeId
-     * @return bool
-     */
-    public function isActiveStoreParticipateOnSales($storeId = null)
-    {
-        return (bool) Mage::getStoreConfig(
-            'braspag_paymentsplit/debitcard_transaction/is_active_store_participate_on_sales', $storeId);
-    }
-
-    /**
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getDefaultStorePercentageOnSales($storeId = null)
-    {
-        return Mage::getStoreConfig('braspag_paymentsplit/debitcard_transaction/default_store_percentage_on_sales', $storeId);
-    }
-
-    /**
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getDefaultStoreAmountValueOnSales($storeId = null)
-    {
-        return Mage::getStoreConfig('braspag_paymentsplit/debitcard_transaction/default_store_amount_value_on_sales', $storeId);
-    }
-
 }

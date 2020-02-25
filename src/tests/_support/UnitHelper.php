@@ -14,8 +14,8 @@ class UnitHelper extends \Codeception\Module
     public function getFakeServiceManageConfig()
     {
         return array(
-            'webservice_namespace' => 'https://homologacao.pagador.com.br/webservice/pagador',
-            'webservice_wsdl' => 'https://transactionsandbox.pagador.com.br/webservice/pagadortransaction.asmx?WSDL',
+            'webservice_url' => 'https://homologacao.pagador.com.br/webservice/pagador',
+            'webservice_url' => 'https://transactionsandbox.pagador.com.br/webservice/pagadortransaction.asmx?WSDL',
             'webservice_version' => '1.0',
             'webservice_options' => array(),
         );
