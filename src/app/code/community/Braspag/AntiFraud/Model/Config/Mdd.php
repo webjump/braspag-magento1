@@ -6,44 +6,71 @@ class Braspag_AntiFraud_Model_Config_Mdd extends Mage_Core_Model_Abstract
      * @param null $storeId
      * @return string
      */
-    public function getMddFetchSelfShippingMethod($storeId = null)
+    public function getMddSalesChannel($storeId = null)
     {
-        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/fetch_self_shipping_method', $storeId);
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/sales_channel', $storeId);
     }
 
     /**
      * @param null $storeId
      * @return string
      */
-    public function getMddStoreCodeToFetchSelf($storeId = null)
+    public function getMddMerchantCategory($storeId = null)
     {
-        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/store_code_to_fetch_self', $storeId);
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/merchant_category', $storeId);
     }
 
     /**
      * @param null $storeId
      * @return string
      */
-    public function getMddVerticalSegment($storeId = null)
+    public function getMddMerchantSegment($storeId = null)
     {
-        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/vertical_segment', $storeId);
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/merchant_segment', $storeId);
     }
 
     /**
      * @param null $storeId
      * @return string
      */
-    public function getMddStoreIdentity($storeId = null)
+    public function getMddExtraData1($storeId = null)
     {
-        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/store_identity', $storeId);
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/extra_data1', $storeId);
     }
 
     /**
      * @param null $storeId
      * @return string
      */
-    public function getMddCategoryAttributeCode($storeId = null)
+    public function getMddExtraData2($storeId = null)
     {
-        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/category_attribute_code', $storeId);
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/extra_data2', $storeId);
+    }
+
+    /**
+     * @param null $storeId
+     * @return string
+     */
+    public function getMddExtraData3($storeId = null)
+    {
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/extra_data3', $storeId);
+    }
+
+    /**
+     * @param null $storeId
+     * @return string
+     */
+    public function getMddExtraData4($storeId = null)
+    {
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/extra_data4', $storeId);
+    }
+
+    /**
+     * @param null $storeId
+     * @return string
+     */
+    public function getMddExtraData5($storeId = null)
+    {
+        return (string) Mage::getStoreConfig('braspag_antifraud/mdd/extra_data5', $storeId);
     }
 }

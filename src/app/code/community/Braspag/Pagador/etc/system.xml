@@ -359,7 +359,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <comment><![CDATA[This feature automatically update order status when customer pay an Boleto or a payment with authentication on issuer.<br />To use this feature, you must ask for Braspag setup the update status post to url: "{{secure_url}}/braspag_pagador/status/update".<br />If you don't know which are your store secure_url, access System->Configuration->Web->Secure.]]></comment>
+                    <comment><![CDATA[This feature automatically update order status when customer pay an Boleto or a payment with authentication on issuer.<br />To use this feature, you must ask for Braspag setup the update status post to url: "{{secure_url}}/braspag_pagador/post/notification".<br />If you don't know which are your store secure_url, access System->Configuration->Web->Secure.]]></comment>
                     <fields>
                         <order_status_paid translate="label">
                             <label>Order Status Paid</label>

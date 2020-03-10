@@ -346,7 +346,10 @@ class Braspag_Lib_Pagador_Transaction_Authorize_Request_Builder
         ];
 
         if (!empty($merchantDefinedFields)) {
-            $data['MerchantDefinedFields'] = $merchantDefinedFields;
+            $data['MerchantDefinedFields'] = [];
+            foreach ($merchantDefinedFields as $merchantDefinedField) {
+                $data['MerchantDefinedFields'][] = $merchantDefinedField->getArrayCopy();
+            }
         }
 
         return $data;

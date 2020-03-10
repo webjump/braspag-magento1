@@ -138,8 +138,8 @@
     <default>
         <payment>
             <braspag_creditcard translate="title" module="braspag_pagador">
-                <active>10</active>
-                <sort_order>1</sort_order>
+                <active>1</active>
+                <sort_order>10</sort_order>
                 <model>braspag_pagador/method_creditcard</model>
                 <title>Credit Card</title>
                 <group>braspag</group>

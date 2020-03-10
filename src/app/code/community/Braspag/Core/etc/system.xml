@@ -115,7 +115,7 @@
                     </fields>
 				</merchant>
                 <auth translate="label comment" module="braspag_core">
-                    <label>Auth (OAuth 2.0)</label>
+                    <label>Auth - OAuth 2.0 Credentials</label>
                     <comment><![CDATA[]]></comment>
                     <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
