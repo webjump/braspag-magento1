@@ -79,8 +79,6 @@ Bpmpi.prototype = {
 
           var response = data.responseJSON;
 
-          console.log(response);
-
           self.bpmpiRenderer.renderBpmpiData('bpmpi_totalamount', false, response.cart_total_amount);
           self.bpmpiRenderer.renderBpmpiData('bpmpi_currency', false, response.cart_currency);
           self.bpmpiRenderer.renderBpmpiData('bpmpi_ordernumber', false, response.cart_order_number);

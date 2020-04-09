@@ -12,7 +12,7 @@
 			<groups>
 				<braspag translate="label comment" module="braspag_core">
 					<label>Braspag</label>
-					<comment><![CDATA[Pagador Braspag<br />Accept all the main payment method in an easy and safe manner.<br /><a href="javascript:document.location.href = document.location.href.replace(/\/section\/payment/, '/section/braspag_core_general');">Click here to configure</a>]]></comment>
+					<comment><![CDATA[Pagador Braspag<br />Accept all the main payment method in an easy and safe manner.<br /><a href="javascript:document.location.href = document.location.href.replace(/\/section\/payment/, '/section/braspag_core');">Click here to configure</a>]]></comment>
 					<sort_order>10</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>

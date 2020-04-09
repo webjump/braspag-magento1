@@ -154,7 +154,14 @@ class Braspag_Lib_Core_Http_Client extends \Zend_Http_Client
                 break;
 
             case 'PUT':
+
                 $this->setMethod("PUT");
+                if (is_string($dataRequest['Body'])) {
+                    $this->setRawData($dataRequest['Body']);
+                    break;
+                }
+
+                $this->setParameterPost($dataRequest['Body']);
                 break;
 
             default:

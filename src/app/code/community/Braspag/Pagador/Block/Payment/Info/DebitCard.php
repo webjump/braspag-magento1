@@ -83,6 +83,7 @@ class Braspag_Pagador_Block_Payment_Info_DebitCard extends Braspag_Pagador_Block
                 $order &&
                 $order->getBaseTotalDue() &&
                 !empty($additionalData['payment_response']) &&
+                !empty($paymentResponse['authenticationUrl']) &&
                 $additionalData['payment_response']['integrationType'] == 'TRANSACTION_DEBITCARD'
             ) {
                 $paymentResponse = $additionalData['payment_response'];

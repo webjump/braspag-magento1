@@ -96,15 +96,15 @@
                     <authorize>
                         <credit_card>
                             <response>
-                                <processor>
+                                <handler>
                                     <composite>
                                         <protected_card>
                                             <class>
-                                                Braspag_ProtectedCard_Model_Transaction_Resource_Authorize_CreditCard_Response_Processor_ProtectedCard
+                                                Braspag_ProtectedCard_Model_Transaction_Resource_Authorize_CreditCard_Response_Handler_ProtectedCard
                                             </class>
                                         </protected_card>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                             <request>
                                 <builder>

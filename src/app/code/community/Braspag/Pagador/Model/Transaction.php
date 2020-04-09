@@ -15,4 +15,12 @@ class Braspag_Pagador_Model_Transaction extends Mage_Core_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * @return Braspag_Lib_Core_Service_Manager
+     */
+    public function getServiceManager()
+    {
+        return new Braspag_Lib_Core_Service_Manager(Mage::getModel('braspag_paymentsplit/config')->getConfig());
+    }
 }

@@ -41,6 +41,15 @@
                 <class>Braspag_PaymentSplit_Helper</class>
             </braspag_paymentsplit>
         </helpers>
+        <braspag_services>
+            <split>
+                <transaction_post>
+                    <send>
+                        <class>Braspag_Lib_Split_TransactionPost_SendService</class>
+                    </send>
+                </transaction_post>
+            </split>
+        </braspag_services>
     </global>
 	<adminhtml>
         <translate>
@@ -53,7 +62,29 @@
             </modules>
         </translate>
 	</adminhtml>
+    <crontab>
+        <jobs>
+            <braspag_splitpayment_transaction_post>
+                <schedule><cron_expr>*/10 * * * *</cron_expr></schedule>
+                <run>
+                    <model>braspag_paymentsplit/cron_paymentSplitTransactionPost::execute</model>
+                </run>
+            </braspag_splitpayment_transaction_post>
+        </jobs>
+    </crontab>
     <default>
+        <braspag_splitpayment>
+            <api>
+                <config>
+                    <sandbox>
+                        <webservice_url>https://splitsandbox.braspag.com.br/</webservice_url>
+                    </sandbox>
+                    <production>
+                        <webservice_url>https://split.braspag.com.br/</webservice_url>
+                    </production>
+                </config>
+            </api>
+        </braspag_splitpayment>
         <braspag_pagador>
             <transaction>
                 <command>
@@ -78,26 +109,26 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
+                                <handler>
                                     <composite>
                                         <payment_split>
                                             <class>
-                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_CreditCard_Request_Processor_PaymentSplit
+                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_CreditCard_Request_Handler_PaymentSplit
                                             </class>
                                         </payment_split>
                                     </composite>
-                                </processor>
+                                </handler>
                             </request>
                             <response>
-                                <processor>
+                                <handler>
                                     <composite>
                                         <payment_split>
                                             <class>
-                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_CreditCard_Response_Processor_PaymentSplit
+                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_CreditCard_Response_Handler_PaymentSplit
                                             </class>
                                         </payment_split>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </credit_card>
                         <debit_card>
@@ -120,29 +151,68 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
+                                <handler>
                                     <composite>
                                         <payment_split>
                                             <class>
-                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_DebitCard_Request_Processor_PaymentSplit
+                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_DebitCard_Request_Handler_PaymentSplit
                                             </class>
                                         </payment_split>
                                     </composite>
-                                </processor>
+                                </handler>
                             </request>
                             <response>
-                                <processor>
+                                <handler>
                                     <composite>
                                         <payment_split>
                                             <class>
-                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_DebitCard_Response_Processor_PaymentSplit
+                                                Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_DebitCard_Response_Handler_PaymentSplit
                                             </class>
                                         </payment_split>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </debit_card>
                     </authorize>
+                    <capture>
+                        <credit_card>
+                            <request>
+                                <builder>
+                                    <composite>
+                                        <payment>
+                                            <composite>
+                                                <split_payment>
+                                                    <class>
+                                                        Braspag_PaymentSplit_Model_Transaction_Resource_Capture_CreditCard_Request_Builder_Payment_SplitPayments
+                                                    </class>
+                                                </split_payment>
+                                            </composite>
+                                        </payment>
+                                    </composite>
+                                </builder>
+                                <handler>
+                                    <composite>
+                                        <payment_split>
+                                            <class>
+                                                Braspag_PaymentSplit_Model_Transaction_Resource_Capture_CreditCard_Request_Handler_PaymentSplit
+                                            </class>
+                                        </payment_split>
+                                    </composite>
+                                </handler>
+                            </request>
+                            <response>
+                                <handler>
+                                    <composite>
+                                        <payment_split>
+                                            <class>
+                                                Braspag_PaymentSplit_Model_Transaction_Resource_Capture_CreditCard_Response_Handler_PaymentSplit
+                                            </class>
+                                        </payment_split>
+                                    </composite>
+                                </handler>
+                            </response>
+                        </credit_card>
+                    </capture>
                 </command>
             </transaction>
         </braspag_pagador>

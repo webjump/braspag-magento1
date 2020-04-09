@@ -58,11 +58,11 @@ abstract class Braspag_Pagador_Model_Transaction_AbstractCommand extends Mage_Co
 
             $this->getRequestValidator()->validate($payment, $request);
 
-            $requestTransaction = $this->getRequestProcessor()->process($payment, $request);
+            $requestTransaction = $this->getRequestHandler()->handle($payment, $request);
 
             $this->getResponseValidator()->validate($requestTransaction->getResponse());
 
-            $this->getResponseProcessor()->process($payment, $requestTransaction->getResponse());
+            $this->getResponseHandler()->handle($payment, $requestTransaction->getResponse());
 
         } catch (\Exception $e) {
             throw new \Mage_Core_Exception($e->getMessage());

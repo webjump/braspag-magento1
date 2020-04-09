@@ -28,7 +28,7 @@ class Braspag_Pagador_Block_Checkout_Success extends Mage_Checkout_Block_Onepage
                         'label' => Mage::getStoreConfig('payment/braspag_boleto/payment_button_label'),
                         'url' => $payment['url'],
                     );
-                } elseif ($payment['integrationType'] == 'TRANSACTION_DEBITCARD') {
+                } elseif ($payment['integrationType'] == 'TRANSACTION_DEBITCARD' && !empty($payment['authenticationUrl'])) {
                     $data[] = array(
                         'target' => '',
                         'label' => Mage::getStoreConfig('payment/braspag_debitcard/payment_button_label'),

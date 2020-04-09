@@ -95,24 +95,6 @@ class Braspag_Pagador_Model_Config extends Mage_Core_Model_Abstract
     }
 
     /**
-     * @param null $storeId
-     * @return mixed
-     */
-//    public function getTransactionEndpoint($storeId = null)
-//    {
-//        $sandboxFlag = Mage::getSingleton('braspag_core/config_general')
-//            ->isTestEnvironmentEnabled($storeId);
-//
-//        if ($sandboxFlag) {
-//            $wsConfig = Mage::getStoreConfig('braspag_pagador/api/config/sandbox', $storeId);
-//        } else {
-//            $wsConfig = Mage::getStoreConfig('braspag_pagador/api/config/production', $storeId);
-//        }
-//
-//        return $wsConfig;
-//    }
-
-    /**
      * @return mixed
      */
     public function getConfig($storeId = null)

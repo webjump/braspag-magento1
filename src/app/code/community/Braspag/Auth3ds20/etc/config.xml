@@ -105,6 +105,13 @@
                                         </payment>
                                     </composite>
                                 </builder>
+                                <validator>
+                                    <composite>
+                                        <auth3ds20>
+                                            <class>Braspag_Auth3ds20_Model_Transaction_Resource_Authorize_CreditCard_Request_Validator_Auth3ds20</class>
+                                        </auth3ds20>
+                                    </composite>
+                                </validator>
                             </request>
                         </credit_card>
                         <debit_card>
@@ -122,6 +129,13 @@
                                         </payment>
                                     </composite>
                                 </builder>
+                                <validator>
+                                    <composite>
+                                        <auth3ds20>
+                                            <class>Braspag_Auth3ds20_Model_Transaction_Resource_Authorize_DebitCard_Request_Validator_Auth3ds20</class>
+                                        </auth3ds20>
+                                    </composite>
+                                </validator>
                             </request>
                         </debit_card>
                     </authorize>

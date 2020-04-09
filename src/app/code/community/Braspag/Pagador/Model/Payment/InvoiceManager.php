@@ -11,7 +11,7 @@ class Braspag_Pagador_Model_Payment_InvoiceManager extends Braspag_Pagador_Model
     {
         $order = $payment->getOrder();
 
-        if (//($paymentMethod == 'braspag_cc' || $paymentMethod == 'braspag_justclick') &&
+        if (($paymentMethod == 'braspag_creditcard' || $paymentMethod == 'braspag_justclick') &&
             !$payment->getIsFraudDetected() &&
             !$payment->getIsTransactionPending() &&
             $order->canInvoice() &&

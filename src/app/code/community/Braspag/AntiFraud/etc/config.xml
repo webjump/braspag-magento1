@@ -178,15 +178,15 @@
                                 </builder>
                             </request>
                             <response>
-                                <processor>
+                                <handler>
                                     <composite>
                                         <anti_fraund>
                                             <class>
-                                                Braspag_AntiFraud_Model_Transaction_Resource_Authorize_CreditCard_Response_Processor_AntiFraud
+                                                Braspag_AntiFraud_Model_Transaction_Resource_Authorize_CreditCard_Response_Handler_AntiFraud
                                             </class>
                                         </anti_fraund>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </credit_card>
                     </authorize>

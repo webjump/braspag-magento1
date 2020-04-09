@@ -41,7 +41,7 @@ class Braspag_Lib_Pagador_Transaction_Capture_Request_Builder
     public function build()
     {
         try{
-            $this->data["Header"] = [];
+            $this->data["Header"] = $this->data["Body"] = [];
             $this->data["Params"] = [
                 'PaymentId' => $this->getRequest()->getOrder()->getBraspagOrderId(),
                 'ServiceTaxAmount' => $this->getRequest()->getPayment()->getServiceTaxAmount(),
@@ -49,6 +49,7 @@ class Braspag_Lib_Pagador_Transaction_Capture_Request_Builder
             ];
 
             $this->prepareHeader();
+            $this->prepareBody();
 
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -69,5 +70,45 @@ class Braspag_Lib_Pagador_Transaction_Capture_Request_Builder
         ];
 
         return $this->data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function prepareBody()
+    {
+        $splitPayments = $this->getRequest()->getPayment()->getSplitPayments();
+
+        if (!empty($splitPayments)) {
+            $this->data["Body"] = [
+                'SplitPayments' => $this->getSplitPaymentsData($splitPayments)
+            ];
+
+            $this->data["Body"] = json_encode($this->data["Body"]);
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * @param $splitPayments
+     * @return array
+     */
+    protected function getSplitPaymentsData($splitPayments)
+    {
+        $data = [];
+        foreach ($splitPayments as $subordinate) {
+
+            $data[] = [
+                "SubordinateMerchantId" => $subordinate->getSubordinateMerchantId(),
+                "Amount" => $subordinate->getAmount(),
+                "Fares" => [
+                    "Mdr" => $subordinate->getFares()->getMdr(),
+                    "Fee" => $subordinate->getFares()->getFee()
+                ]
+            ];
+        }
+
+        return $data;
     }
 }

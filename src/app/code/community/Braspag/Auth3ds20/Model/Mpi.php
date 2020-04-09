@@ -42,9 +42,7 @@ class Braspag_Auth3ds20_Model_Mpi extends Mage_Core_Model_Abstract
     	    $api = \Mage::getSingleton('braspag_auth3ds20/mpi_auth');
 //
 //    	    $resultData = Mage::getSingleton('core/session')->getMpiTokenResult();
-//
 //            $result = unserialize($resultData);
-//
 //            $dateNow = new \DateTime('now');
 //
 //            if (!$result || $dateNow > $result->getExpirationDate()) {

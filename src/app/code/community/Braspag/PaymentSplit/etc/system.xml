@@ -28,13 +28,56 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </split_is_active>
+                        <split_transaction_type translate="label">
+                            <label>Split Type</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/creditcard_transaction/transaction_type</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>braspag_paymentsplit/source_transactionType</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                            </depends>
+                        </split_transaction_type>
+                        <split_transaction_post_send_request_automatically translate="label">
+                            <label>Transaction Post send Request Automatically?</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/creditcard_transaction/transaction_post_send_request_automatically</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                            </depends>
+                        </split_transaction_post_send_request_automatically>
+                        <split_transaction_post_send_request_automatically_after_x_days translate="label">
+                            <label>Transaction Post send Request Automatically After</label>
+                            <comment><![CDATA[Days.]]></comment>
+                            <config_path>braspag_paymentsplit/creditcard_transaction/transaction_post_send_request_automatically_after_x_days</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                                <split_transaction_post_send_request_automatically>1</split_transaction_post_send_request_automatically>
+                            </depends>
+                        </split_transaction_post_send_request_automatically_after_x_days>
                         <split_default_mdr translate="label">
                             <label>Default Store MDR</label>
                             <comment><![CDATA[Default MDR from Store.]]></comment>
                             <config_path>braspag_paymentsplit/creditcard_transaction/default_mdr</config_path>
                             <frontend_type>text</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -47,7 +90,7 @@
                             <comment><![CDATA[Default Fee from Store.]]></comment>
                             <config_path>braspag_paymentsplit/creditcard_transaction/default_fee</config_path>
                             <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
+                            <sort_order>60</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -76,6 +119,50 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </split_is_active>
+                        <split_transaction_type translate="label">
+                            <label>Split Type</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/transaction_type</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>braspag_paymentsplit/source_transactionType</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                            </depends>
+                        </split_transaction_type>
+                        <split_transaction_post_send_request_automatically translate="label">
+                            <label>Transaction Post send Request Automatically?</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/transaction_post_send_request_automatically</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                            </depends>
+                        </split_transaction_post_send_request_automatically>
+                        <split_transaction_post_send_request_automatically_after_x_days translate="label">
+                            <label>Transaction Post send Request Automatically After</label>
+                            <comment><![CDATA[Days.]]></comment>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/transaction_post_send_request_automatically_after_x_days</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                                <split_transaction_post_send_request_automatically>1</split_transaction_post_send_request_automatically>
+                            </depends>
+                        </split_transaction_post_send_request_automatically_after_x_days>
                         <split_default_mdr translate="label">
                             <label>Default Store MDR</label>
                             <comment><![CDATA[Default MDR from Store.]]></comment>

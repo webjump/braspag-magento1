@@ -30,7 +30,7 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Webjump_BraspagPagador_Model_Auth extends Mage_Core_Model_Abstract
+class Braspag_Core_Model_Auth extends Mage_Core_Model_Abstract
 {
     /**
      * @return mixed
@@ -75,6 +75,7 @@ class Webjump_BraspagPagador_Model_Auth extends Mage_Core_Model_Abstract
                 }
                 throw new Exception(implode(PHP_EOL, $error_msg));
             }
+
             return $result;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
