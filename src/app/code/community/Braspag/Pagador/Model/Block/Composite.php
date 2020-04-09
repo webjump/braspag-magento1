@@ -19,11 +19,11 @@ class Braspag_Pagador_Model_Block_Composite
     }
 
     /**
-     * @param Mage_Core_Block_Template $process
+     * @param Mage_Core_Block_Template $handler
      */
-    public function addChild(Mage_Core_Block_Template $process)
+    public function addChild(Mage_Core_Block_Template $handler)
     {
-        $this->children->attach($process);
+        $this->children->attach($handler);
     }
 
     /**

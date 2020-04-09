@@ -51,8 +51,8 @@ class Braspag_Core_Model_Auth_Token extends Mage_Core_Model_Abstract
 
     public function __construct()
     {
-        $this->generalConfig = Mage::getSingleton('braspag_core/config_global_general');
-        $this->authConfig = Mage::getSingleton('braspag_core/config_global_auth');
+        $this->generalConfig = Mage::getModel('braspag_core/config_global_general');
+        $this->authConfig = Mage::getSingleton('braspag_core/config_auth');
         $this->authHelper = Mage::helper('braspag_core/auth');
     }
 
@@ -90,6 +90,6 @@ class Braspag_Core_Model_Auth_Token extends Mage_Core_Model_Abstract
      */
     protected function getServiceManager()
     {
-        return new Webjump_BrasPag_Core_Service_Manager($this->authConfig->getEndPoint());
+        return new Braspag_Lib_Core_Service_Manager($this->authConfig->getEndPoint());
     }
 }

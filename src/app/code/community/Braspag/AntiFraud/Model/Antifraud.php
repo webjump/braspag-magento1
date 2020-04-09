@@ -142,14 +142,14 @@ class Braspag_AntiFraud_Model_Antifraud extends Mage_Core_Model_Abstract
     public function getMerchantDefinedFieldsData()
     {
         $data = new Varien_Object();
-    	try{
-            $mddCollection = [];
-
+    	try {
             $result = [];
-            foreach ($mddCollection as $mdd) {
-                if ($mdd['Value']) {
-                    $result[] = $mdd;
+            foreach ($this->getMerchantDefinedFieldsCollectionData() as $key => $mdd) {
+                if (empty($mdd)) {
+                    continue;
                 }
+
+                $result[] = ['id' => $key, 'value' => $mdd];
             }
 
             $data->addData($result);
@@ -159,6 +159,55 @@ class Braspag_AntiFraud_Model_Antifraud extends Mage_Core_Model_Abstract
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
+    }
+
+    /**
+     * @return array
+     */
+    public function getMerchantDefinedFieldsCollectionData()
+    {
+        $helper = Mage::helper('braspag_antifraud');
+        $helperIdentityValidation = Mage::helper('braspag_core/identityValidation');
+        $antiFraudMddConfig = Mage::getSingleton('braspag_antifraud/config')->getMddConfig();
+
+        $customerSession = Mage::getSingleton('customer/session');
+        $customerSessionData = $customerSession->getCustomer();
+
+        $customerPaymentAdditionalInfo = new Varien_Object();
+        if (!empty($this->quote->getPayment()->getAdditionalInformation('payment_request'))) {
+            $customerPaymentAdditionalInfo
+                ->addData($this->quote->getPayment()->getAdditionalInformation('payment_request'));
+        }
+
+        preg_match('#\d{4}$#is', $customerPaymentAdditionalInfo->getCcNumberMasked(), $customerCreditCardSufixResult);
+        preg_match('#^\d{4}#is', $customerPaymentAdditionalInfo->getCcNumberMasked(), $customerCreditCardPrefixResult);
+
+        return [
+            1 => $customerSession->isLoggedIn() ? $customerSessionData->getEmail() : 'Guest',
+            2 => $helper->getDaysQtyUntilNowFromDate($customerSessionData->getCreatedAt()),
+            3 => intval($this->quote->getPayment()->getAdditionalInformation('payment_request')['installments']),
+            4 => $antiFraudMddConfig->getMddSalesChannel(),
+            5 => $this->quote->getCouponCode(),
+            21 => ($this->quote->getShippingAddress()) ? $this->quote->getShippingAddress()->getShippingAmount() : null,
+            23 => reset($customerCreditCardSufixResult),
+            25 => $customerSessionData->getCustomerGender(),
+            26 => reset($customerCreditCardPrefixResult),
+            34 => $customerSessionData->getConfirmation(),
+            36 => floatval($this->quote->getGiftCardsAmount()) > 0 ? "SIM" : 'NÃO',
+            41 => $helperIdentityValidation->isCpfOrCnpj($customerSessionData->getTaxvat()),
+            42 => $helper->getYearsQtyUntilNowFromDate($customerSessionData->getCustomerDob()),
+            46 => $this->quote->getPayment()->getAdditionalInformation('payment_request')['cc_owner'],
+            48 => 1,
+            52 => $antiFraudMddConfig->getMddMerchantCategory(),
+            60 => $helper->getDaysQtyUntilNowFromDate($customerSessionData->getUpdatedAt()),
+            83 => $antiFraudMddConfig->getMddMerchantSegment(),
+            84 => 'Magento',
+            85 => $antiFraudMddConfig->getMddExtraData1(),
+            86 => $antiFraudMddConfig->getMddExtraData2(),
+            87 => $antiFraudMddConfig->getMddExtraData3(),
+            88 => $antiFraudMddConfig->getMddExtraData4(),
+            89 => $antiFraudMddConfig->getMddExtraData5(),
+        ];
     }
 
     /**

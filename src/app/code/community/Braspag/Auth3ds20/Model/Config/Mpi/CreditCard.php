@@ -60,4 +60,13 @@ class Braspag_Auth3ds20_Model_Config_Mpi_CreditCard extends Mage_Core_Model_Abst
     {
         return (bool) Mage::getStoreConfig('braspag_auth3ds20/creditcard_transaction/authorize_on_unenrolled', $storeId);
     }
+
+    /**
+     * @param null $storeId
+     * @return bool
+     */
+    public function isBpmpiCreditCardAuthorizedOnUnsupportedBrand($storeId = null)
+    {
+        return (bool) Mage::getStoreConfig('braspag_auth3ds20/creditcard_transaction/authorize_on_unsupported_brand', $storeId);
+    }
 }

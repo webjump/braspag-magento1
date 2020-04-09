@@ -63,18 +63,18 @@ class Braspag_Pagador_Model_Transaction_Command_Refund_CreditCard
     /**
      * @return mixed
      */
-    public function getRequestProcessor()
+    public function getRequestHandler()
     {
         return $this->getBraspagCoreConfigHelper()
-            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/refund/credit_card/request/processor');
+            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/refund/credit_card/request/handler');
     }
 
     /**
      * @return mixed
      */
-    public function getResponseProcessor()
+    public function getResponseHandler()
     {
         return $this->getBraspagCoreConfigHelper()
-            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/refund/credit_card/response/processor');
+            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/refund/credit_card/response/handler');
     }
 }

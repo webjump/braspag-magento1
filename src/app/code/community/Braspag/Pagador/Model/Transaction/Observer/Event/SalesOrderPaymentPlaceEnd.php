@@ -63,7 +63,7 @@ extends Braspag_Pagador_Model_Transaction_Observer_AbstractEvent
 
                 $amount = $payment->getAmountOrdered();
 
-                $paymentInvoiceManager->create($payment, $amount, $sendEmail, true);
+                $paymentInvoiceManager->create($payment, $amount, $sendEmail, false);
             }
 
             return $observer;

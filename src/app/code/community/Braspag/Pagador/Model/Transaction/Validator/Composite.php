@@ -19,11 +19,11 @@ class Braspag_Pagador_Model_Transaction_Validator_Composite
     }
 
     /**
-     * @param Mage_Core_Model_Abstract $process
+     * @param Mage_Core_Model_Abstract $handler
      */
-    public function addValidator(Mage_Core_Model_Abstract $process)
+    public function addValidator(Mage_Core_Model_Abstract $handler)
     {
-        $this->validators->attach($process);
+        $this->validators->attach($handler);
     }
 
     /**

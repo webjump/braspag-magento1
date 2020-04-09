@@ -14,11 +14,11 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
 
     /**
      * @param $transactionId
-     * @param $recurrentPaymentId
+     * @param null $recurrentPaymentId
      * @return mixed
      * @throws Exception
      */
-    public function notify($transactionId, $recurrentPaymentId)
+    public function notify($transactionId, $recurrentPaymentId = null)
     {
         $braspagTransactionManager = Mage::getModel('braspag_pagador/payment_braspagTransactionManager');
 
@@ -26,6 +26,8 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
 
         try{
             $magentoTransaction = $transactionManager->loadByTxnId($transactionId);
+
+            $payment = $magentoTransaction->getOrder()->getPayment();
 
             if (empty($magentoTransaction->getId())) {
                 throw new Exception('Invalid Transaction Id.');
@@ -39,6 +41,11 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
 
             $transactionDataPayment = $braspagTransaction->getPayment();
 
+            if (in_array($transactionDataPayment->getStatus(), [0])) {
+                $errorMsg = 'There is no update for the payment.';
+                Mage::throwException($this->getHelper()->__($errorMsg));
+            }
+
             $statusUpdateCommandPool = $this->getBraspagCoreConfigHelper()
                 ->getDefaultConfigPath('braspag_pagador/post_notification/change_type/composite/status_update/command');
 
@@ -49,8 +56,6 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
                 $errorMsg = 'Error: While retrieving transaction data';
                 Mage::throwException($this->getHelper()->__($errorMsg));
             }
-
-            $payment = $magentoTransaction->getOrder()->getPayment();
 
             $paymentMethodToExecute = $this->getCommandPaymentMethodToExecute($statusToExecute, $payment->getMethod());
 
@@ -65,12 +70,10 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
             $order = $payment->getOrder();
             if ($order && $order->getId()) {
                 $order->addStatusHistoryComment(
-                    $this->getHelper()->
-                    __(
-                        'Order status updated (2º Post): Exception occurred during update action. Exception message: %s.'
+                    $this->getHelper()->__(
+                        'Message from update action : %s.'
                         , $e->getMessage()
-                    )
-                    , false);
+                    ), false);
                 $order->save();
             }
 

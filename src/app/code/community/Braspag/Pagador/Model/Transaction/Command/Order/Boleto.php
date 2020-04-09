@@ -63,18 +63,18 @@ class Braspag_Pagador_Model_Transaction_Command_Order_Boleto
     /**
      * @return mixed
      */
-    public function getRequestProcessor()
+    public function getRequestHandler()
     {
         return $this->getBraspagCoreConfigHelper()
-            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/order/boleto/request/processor');
+            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/order/boleto/request/handler');
     }
 
     /**
      * @return mixed
      */
-    public function getResponseProcessor()
+    public function getResponseHandler()
     {
         return $this->getBraspagCoreConfigHelper()
-            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/order/boleto/response/processor');
+            ->getDefaultConfigClassModel('braspag_pagador/transaction/command/order/boleto/response/handler');
     }
 }

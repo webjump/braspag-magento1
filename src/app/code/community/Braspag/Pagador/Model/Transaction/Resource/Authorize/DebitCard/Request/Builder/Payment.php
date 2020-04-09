@@ -55,21 +55,10 @@ extends Braspag_Pagador_Model_Transaction_Builder_Payment
         $paymentCompositeData = $paymentComposite->getData($payment, $amount);
         $paymentData->addData($paymentCompositeData->getData());
 
-
         if (!empty($paymentData->getData('ExternalAuthentication'))) {
             $paymentData->setData('Authenticate', true);
-            $paymentData->unsetData('FraudAnalysis');
             $paymentData->setData('DoSplit', false);
             $paymentData->unsetData('SplitPayments');
-        }
-
-        if (!empty($paymentData->getData('SplitPayments')) && empty($paymentData->getData('FraudAnalysis'))) {
-            $paymentData->setData('DoSplit', false);
-            $paymentData->unsetData('SplitPayments');
-        }
-
-        if (!empty($paymentData->getData('SplitPayments'))) {
-            $paymentData->setData('DoSplit', true);
         }
 
         $this->setDataBuild($paymentData->getData());

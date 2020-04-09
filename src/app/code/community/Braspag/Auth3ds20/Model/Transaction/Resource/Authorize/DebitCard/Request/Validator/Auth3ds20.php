@@ -38,51 +38,63 @@ extends Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Request_V
     const BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_UNENROLLED = 2;
     const BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_DISABLED = 3;
     const BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_ERROR = 4;
+    const BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_UNSUPPORTED_BRAND = 5;
 
     /**
-     * @param $paymentRequest
-     * @return Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Request_Validator
+     * @param $dataObject
+     * @return mixed
      * @throws Mage_Core_Exception
      */
-    public function validate($paymentRequest)
+    public function isValid($dataObject)
     {
-        $generalConfig = Mage::getSingleton('braspag_pagador/config_global_general');
-        $mpiDebitcardConfig = Mage::getSingleton('braspag_pagador/config_mpi_debitcard');
+        $generalConfig = Mage::getSingleton('braspag_core/config_general');
+        $mpiDebitCardConfig = Mage::getSingleton('braspag_auth3ds20/config_mpi_debitCard');
 
-        if ($mpiDebitcardConfig->isMpiDebitCardActive()) {
+        $payment = $dataObject->getPayment();
 
-            $failureType = $paymentRequest['authentication_failure_type'];
+        $paymentRequestData = $payment->getPaymentRequest();
+
+        if ($mpiDebitCardConfig->isMpiDebitCardActive()) {
+
+            $failureType = $paymentRequestData['authentication_failure_type'];
 
             if ($failureType == self::BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_ERROR
-                && !$mpiDebitcardConfig->isBpmpiDebitCardAuthorizedOnError()
+                && !$mpiDebitCardConfig->isBpmpiDebitCardAuthorizedOnError()
             ) {
-                Mage::throwException(Mage::helper('braspag_pagador')
+                Mage::throwException(Mage::helper('braspag_auth3ds20')
                     ->__("Debit Card Payment Failure. #MPI{$failureType}"));
             }
 
             if ($failureType == self::BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_FAILURE
-                && !$mpiDebitcardConfig->isBpmpiDebitCardAuthorizedOnFailure()
+                && !$mpiDebitCardConfig->isBpmpiDebitCardAuthorizedOnFailure()
             ) {
-                Mage::throwException(Mage::helper('braspag_pagador')
+                Mage::throwException(Mage::helper('braspag_auth3ds20')
                     ->__("Debit Card Payment Failure. #MPI{$failureType}"));
             }
 
             if ($failureType == self::BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_UNENROLLED
-                && !$mpiDebitcardConfig->isBpmpiDebitCardAuthorizedOnUnenrolled()
+                && !$mpiDebitCardConfig->isBpmpiDebitCardAuthorizedOnUnenrolled()
             ) {
-                Mage::throwException(Mage::helper('braspag_pagador')
+                Mage::throwException(Mage::helper('braspag_auth3ds20')
+                    ->__("Debit Card Payment Failure. #MPI{$failureType}"));
+            }
+
+            if ($failureType == self::BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_UNSUPPORTED_BRAND
+                && !$mpiDebitCardConfig->isBpmpiDebitCardAuthorizedOnUnsupportedBrand()
+            ) {
+                Mage::throwException(Mage::helper('braspag_auth3ds20')
                     ->__("Debit Card Payment Failure. #MPI{$failureType}"));
             }
 
             if (!$generalConfig->isTestEnvironmentEnabled()
-                && !preg_match("#cielo#is", $paymentRequest['cc_type_label'])
+                && !preg_match("#cielo#is", $paymentRequestData['cc_type_label'])
                 && $failureType != self::BRASPAG_PAGADOR_DEBITCARD_AUTHENTICATION_3DS_20_RETURN_TYPE_DISABLED
             ) {
-                Mage::throwException(Mage::helper('braspag_pagador')
+                Mage::throwException(Mage::helper('braspag_auth3ds20')
                     ->__("Debit Card Payment Failure. #MPI{$failureType}"));
             }
         }
 
-        return $paymentRequest;
+        return $paymentRequestData;
     }
 }

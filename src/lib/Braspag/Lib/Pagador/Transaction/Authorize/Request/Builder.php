@@ -273,7 +273,7 @@ class Braspag_Lib_Pagador_Transaction_Authorize_Request_Builder
      */
     protected function getDebitCardData($payment)
     {
-        $debitCardData = [
+        $debitCardCardData = [
             "CardNumber" => $payment->getCard()->getCardNumber(),
             "Holder" => $payment->getCard()->getCardHolder(),
             "ExpirationDate" => $payment->getCard()->getCardExpirationDate(),
@@ -281,7 +281,7 @@ class Braspag_Lib_Pagador_Transaction_Authorize_Request_Builder
             "Brand" => $payment->getCard()->getCardBrand()
         ];
 
-        return [
+        $debitCardData = [
             "Provider" => $payment->getProvider(),
             "Type" => $payment->getType(),
             "Amount" => $payment->getAmount(),
@@ -291,12 +291,22 @@ class Braspag_Lib_Pagador_Transaction_Authorize_Request_Builder
             "Interest" => $payment->getInterest(),
             "Capture" => $payment->getCapture(),
             "Authenticate" => $payment->getAuthenticate(),
-            "ExternalAuthentication" => $payment->getExternalAuthentication(),
             "Recurrent" => $payment->getRecurrent(),
             "SoftDescriptor" => $payment->getSoftDescriptor(),
-            "DebitCard" => $debitCardData,
+            "DoSplit" => (bool) $payment->getDoSplit(),
+            "DebitCard" => $debitCardCardData,
             "ReturnUrl" => $payment->getReturnUrl(),
         ];
+
+        if (!empty($payment->getExternalAuthentication())) {
+            $debitCardData['ExternalAuthentication'] = $payment->getExternalAuthentication();
+        }
+
+        if (!empty($payment->getSplitPayments())) {
+            $debitCardData['SplitPayments'] = $this->getSplitPaymentsData($payment->getSplitPayments());
+        }
+
+        return $debitCardData;
     }
 
     /**
@@ -346,7 +356,10 @@ class Braspag_Lib_Pagador_Transaction_Authorize_Request_Builder
         ];
 
         if (!empty($merchantDefinedFields)) {
-            $data['MerchantDefinedFields'] = $merchantDefinedFields;
+            $data['MerchantDefinedFields'] = [];
+            foreach ($merchantDefinedFields as $merchantDefinedField) {
+                $data['MerchantDefinedFields'][] = $merchantDefinedField->getArrayCopy();
+            }
         }
 
         return $data;

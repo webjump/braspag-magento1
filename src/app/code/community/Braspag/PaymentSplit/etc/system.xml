@@ -28,13 +28,56 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </split_is_active>
+                        <split_transaction_type translate="label">
+                            <label>Split Type</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/creditcard_transaction/transaction_type</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>braspag_paymentsplit/source_transactionType</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                            </depends>
+                        </split_transaction_type>
+                        <split_transaction_post_send_request_automatically translate="label">
+                            <label>Transaction Post send Request Automatically?</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/creditcard_transaction/transaction_post_send_request_automatically</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                            </depends>
+                        </split_transaction_post_send_request_automatically>
+                        <split_transaction_post_send_request_automatically_after_x_days translate="label">
+                            <label>Transaction Post send Request Automatically After</label>
+                            <comment><![CDATA[Days.]]></comment>
+                            <config_path>braspag_paymentsplit/creditcard_transaction/transaction_post_send_request_automatically_after_x_days</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                                <split_transaction_post_send_request_automatically>1</split_transaction_post_send_request_automatically>
+                            </depends>
+                        </split_transaction_post_send_request_automatically_after_x_days>
                         <split_default_mdr translate="label">
                             <label>Default Store MDR</label>
                             <comment><![CDATA[Default MDR from Store.]]></comment>
                             <config_path>braspag_paymentsplit/creditcard_transaction/default_mdr</config_path>
                             <frontend_type>text</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -47,7 +90,7 @@
                             <comment><![CDATA[Default Fee from Store.]]></comment>
                             <config_path>braspag_paymentsplit/creditcard_transaction/default_fee</config_path>
                             <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
+                            <sort_order>60</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -55,48 +98,6 @@
                                 <split_is_active>1</split_is_active>
                             </depends>
                         </split_default_fee>
-                        <split_is_active_store_participate_on_sales translate="label">
-                            <label>Is active the store participation on sales?</label>
-                            <comment><![CDATA[Indicates if is active the store participation on sales.]]></comment>
-                            <config_path>braspag_paymentsplit/creditcard_transaction/is_active_store_participate_on_sales</config_path>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <split_is_active>1</split_is_active>
-                            </depends>
-                        </split_is_active_store_participate_on_sales>
-                        <split_default_store_percentage_on_sales translate="label">
-                            <label>Default Store Percentage on Sales</label>
-                            <comment><![CDATA[Default Store Percentage on Sales.]]></comment>
-                            <config_path>braspag_paymentsplit/creditcard_transaction/default_store_percentage_on_sales</config_path>
-                            <frontend_type>text</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <split_is_active_store_participate_on_sales>1</split_is_active_store_participate_on_sales>
-                            </depends>
-                        </split_default_store_percentage_on_sales>
-                        <split_default_store_amount_value_on_sales translate="label">
-                            <label>Default Store Amount Value on Sales</label>
-                            <comment><![CDATA[Default Store Amount Value on Sales.]]></comment>
-                            <config_path>braspag_paymentsplit/creditcard_transaction/default_store_amount_value_on_sales</config_path>
-                            <frontend_type>text</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <split_is_active_store_participate_on_sales>1</split_is_active_store_participate_on_sales>
-                            </depends>
-                        </split_default_store_amount_value_on_sales>
                     </fields>
                 </creditcard_transaction>
                 <debitcard_transaction translate="label comment" module="braspag_paymentsplit">
@@ -118,10 +119,54 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </split_is_active>
-                        <split_default_mdr_percent translate="label">
+                        <split_transaction_type translate="label">
+                            <label>Split Type</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/transaction_type</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>braspag_paymentsplit/source_transactionType</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                            </depends>
+                        </split_transaction_type>
+                        <split_transaction_post_send_request_automatically translate="label">
+                            <label>Transaction Post send Request Automatically?</label>
+                            <comment><![CDATA[]]></comment>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/transaction_post_send_request_automatically</config_path>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                            </depends>
+                        </split_transaction_post_send_request_automatically>
+                        <split_transaction_post_send_request_automatically_after_x_days translate="label">
+                            <label>Transaction Post send Request Automatically After</label>
+                            <comment><![CDATA[Days.]]></comment>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/transaction_post_send_request_automatically_after_x_days</config_path>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <split_is_active>1</split_is_active>
+                                <split_transaction_type>transaction-post</split_transaction_type>
+                                <split_transaction_post_send_request_automatically>1</split_transaction_post_send_request_automatically>
+                            </depends>
+                        </split_transaction_post_send_request_automatically_after_x_days>
+                        <split_default_mdr translate="label">
                             <label>Default Store MDR</label>
                             <comment><![CDATA[Default MDR from Store.]]></comment>
-                            <config_path>braspag_paymentsplit/debitcard_transaction/default_mdr_percent</config_path>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/default_mdr</config_path>
                             <frontend_type>text</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>20</sort_order>
@@ -131,11 +176,11 @@
                             <depends>
                                 <split_is_active>1</split_is_active>
                             </depends>
-                        </split_default_mdr_percent>
-                        <split_default_fee_amount translate="label">
+                        </split_default_mdr>
+                        <split_default_fee translate="label">
                             <label>Default Store Fee</label>
                             <comment><![CDATA[Default Fee from Store.]]></comment>
-                            <config_path>braspag_paymentsplit/debitcard_transaction/default_fee_amount</config_path>
+                            <config_path>braspag_paymentsplit/debitcard_transaction/default_fee</config_path>
                             <frontend_type>text</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
@@ -144,49 +189,7 @@
                             <depends>
                                 <split_is_active>1</split_is_active>
                             </depends>
-                        </split_default_fee_amount>
-                        <split_is_active_store_participate_on_sales translate="label">
-                            <label>Is active the store participation on sales?</label>
-                            <comment><![CDATA[Indicates if is active the store participation on sales.]]></comment>
-                            <config_path>braspag_paymentsplit/debitcard_transaction/is_active_store_participate_on_sales</config_path>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <split_is_active>1</split_is_active>
-                            </depends>
-                        </split_is_active_store_participate_on_sales>
-                        <split_default_store_percentage_on_sales translate="label">
-                            <label>Default Store Percentage on Sales</label>
-                            <comment><![CDATA[Default Store Percentage on Sales.]]></comment>
-                            <config_path>braspag_paymentsplit/debitcard_transaction/default_store_percentage_on_sales</config_path>
-                            <frontend_type>text</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <split_is_active_store_participate_on_sales>1</split_is_active_store_participate_on_sales>
-                            </depends>
-                        </split_default_store_percentage_on_sales>
-                        <split_default_store_amount_value_on_sales translate="label">
-                            <label>Default Store Amount Value on Sales</label>
-                            <comment><![CDATA[Default Store Amount Value on Sales.]]></comment>
-                            <config_path>braspag_paymentsplit/debitcard_transaction/default_store_amount_value_on_sales</config_path>
-                            <frontend_type>text</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <split_is_active_store_participate_on_sales>1</split_is_active_store_participate_on_sales>
-                            </depends>
-                        </split_default_store_amount_value_on_sales>
+                        </split_default_fee>
                     </fields>
                 </debitcard_transaction>
             </groups>

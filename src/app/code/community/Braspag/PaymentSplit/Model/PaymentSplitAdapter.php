@@ -22,7 +22,7 @@ class Braspag_PaymentSplit_Model_PaymentSplitAdapter extends Mage_Core_Model_Abs
                 "mdr" => floatval(isset($subordinate['Fares']['Mdr']) ?
                     $subordinate['Fares']['Mdr'] : $subordinate['fares']['mdr']
                 ),
-                "fee" => floatval(isset($subordinate['Fares']['Fee']) ?
+                "fee" => intval(isset($subordinate['Fares']['Fee']) ?
                     $subordinate['Fares']['Fee'] : $subordinate['fares']['fee']
                 )
             ];

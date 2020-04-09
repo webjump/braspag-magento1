@@ -39,6 +39,12 @@ class Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_DebitCard_Reques
      */
     public function build($payment)
     {
-        return false;
+        $splitPaymentConfigModel = Mage::getSingleton('braspag_paymentsplit/config_debitCard');
+
+        if (!$splitPaymentConfigModel->isActive()) {
+            return false;
+        }
+
+        return true;
     }
 }

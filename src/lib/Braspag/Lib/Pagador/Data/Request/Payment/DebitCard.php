@@ -13,15 +13,17 @@ class Braspag_Lib_Pagador_Data_Request_Payment_DebitCard
     extends Braspag_Lib_Pagador_Data_Request_Payment
     implements Braspag_Lib_Pagador_Data_Request_Payment_DebitCardInterface
 {
-    public $interest;
-    public $installments;
-    public $capture;
-    public $authenticate;
-    public $externalAuthentication;
-    public $recurrent;
-    public $card;
-    public $softDescriptor;
-    public $returnUrl;
+    protected $interest;
+    protected $installments;
+    protected $capture;
+    protected $authenticate;
+    protected $externalAuthentication;
+    protected $recurrent;
+    protected $doSplit;
+    protected $card;
+    protected $softDescriptor;
+    protected $returnUrl;
+    protected $splitPayments;
 
     const METHOD = 'Braspag_Lib_dc';
 
@@ -124,6 +126,22 @@ class Braspag_Lib_Pagador_Data_Request_Payment_DebitCard
     /**
      * @return mixed
      */
+    public function getDoSplit()
+    {
+        return $this->doSplit;
+    }
+
+    /**
+     * @param mixed $doSplit
+     */
+    public function setDoSplit($doSplit)
+    {
+        $this->doSplit = $doSplit;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getCard()
     {
         return $this->card;
@@ -167,5 +185,21 @@ class Braspag_Lib_Pagador_Data_Request_Payment_DebitCard
     public function setReturnUrl($returnUrl)
     {
         $this->returnUrl = $returnUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSplitPayments()
+    {
+        return $this->splitPayments;
+    }
+
+    /**
+     * @param mixed $splitPayments
+     */
+    public function setSplitPayments($splitPayments)
+    {
+        $this->splitPayments = $splitPayments;
     }
 }

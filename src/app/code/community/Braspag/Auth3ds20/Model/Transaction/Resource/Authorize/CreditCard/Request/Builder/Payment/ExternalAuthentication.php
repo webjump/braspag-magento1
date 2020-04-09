@@ -50,7 +50,7 @@ class Braspag_Auth3ds20_Model_Transaction_Resource_Authorize_CreditCard_Request_
                 "ReferenceID" => $dataPayment['authentication_reference_id']
             ];
 
-            return ['ExternalAuthentication' => $dataCard];
+            return $dataCard;
         }
 
         return [];

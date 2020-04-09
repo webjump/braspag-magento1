@@ -165,12 +165,9 @@ class Braspag_Pagador_Model_Method_Debitcard
      */
     public function fetchTransactionInfo(Varien_Object $payment, $transactionId)
     {
-        $response = Mage::getModel('braspag_pagador/status_update')
-            ->process($transactionId);
+        Mage::getModel('braspag_pagador/postNotification_changeType_statusUpdate')->notify($transactionId);
 
-        if ($response->getIsTransactionApproved()) {
-            $payment->setIsTransactionApproved(true);
-        }
+        $payment->setIsTransactionApproved(true);
 
         return $this;
     }

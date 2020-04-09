@@ -19,12 +19,11 @@ class Braspag_Core_Helper_Auth extends Mage_Core_Helper_Abstract
 
     public function __construct()
     {
-        $this->authConfig = Mage::getSingleton('braspag_core/config_global_auth');
+        $this->authConfig = Mage::getSingleton('braspag_core/config_auth');
     }
 
     /**
      * @return string
-     * @throws Exception
      */
     public function getAuthorizationHeader()
     {

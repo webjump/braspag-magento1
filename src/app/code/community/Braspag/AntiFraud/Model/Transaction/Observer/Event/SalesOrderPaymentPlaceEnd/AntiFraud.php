@@ -51,12 +51,15 @@ extends Mage_Core_Model_Abstract
         }
 
         $antiFraudConfigModel = Mage::getModel('braspag_antifraud/config')->getGeneralConfig();
-        if (!$fraudAnalysisStatus = $antiFraud['Status']
-            || !$antiFraudConfigModel->getGeneralConfig()->isAntifraudActive()
-            || !in_array($paymentMethod, ['braspag_cc', 'braspag_justclick'])
+
+        if (!isset($antiFraud['Status'])
+            || !$antiFraudConfigModel->isAntifraudActive()
+            || !in_array($paymentMethod, ['braspag_creditcard', 'braspag_justclick'])
         ) {
             return $this;
         }
+
+        $fraudAnalysisStatus = (int) $antiFraud['Status'];
 
         if (($fraudAnalysisStatus == Braspag_Lib_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_REJECT
             || $fraudAnalysisStatus == Braspag_Lib_Pagador_TransactionInterface::TRANSACTION_FRAUD_STATUS_ABORTED
@@ -71,6 +74,9 @@ extends Mage_Core_Model_Abstract
             }
 
             if ($status == 'canceled') {
+
+                Mage::getModel('braspag_pagador/method_creditcard')->void($payment);
+
                 $paymentOrderManager->setOrderStatusCanceled($payment);
                 return $this;
             }
@@ -91,6 +97,9 @@ extends Mage_Core_Model_Abstract
             }
 
             if ($status == 'canceled') {
+
+                Mage::getModel('braspag_pagador/method_creditcard')->void($payment);
+
                 $paymentOrderManager->setOrderStatusCanceled($payment);
                 return $this;
             }

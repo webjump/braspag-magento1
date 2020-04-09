@@ -138,8 +138,8 @@
     <default>
         <payment>
             <braspag_creditcard translate="title" module="braspag_pagador">
-                <active>10</active>
-                <sort_order>1</sort_order>
+                <active>1</active>
+                <sort_order>10</sort_order>
                 <model>braspag_pagador/method_creditcard</model>
                 <title>Credit Card</title>
                 <group>braspag</group>
@@ -507,9 +507,9 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Request_Processor</class>
-                                </processor>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Request_Handler</class>
+                                </handler>
                             </request>
                             <response>
                                 <validator>
@@ -520,17 +520,17 @@
                                         </payment_status>
                                     </composite>
                                 </validator>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Response_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Response_Handler</class>
                                     <composite>
                                         <info_data>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Response_Processor_InfoData</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Response_Handler_InfoData</class>
                                         </info_data>
                                         <raw_details>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Response_Processor_RawDetails</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Order_Boleto_Response_Handler_RawDetails</class>
                                         </raw_details>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </boleto>
                     </order>
@@ -597,11 +597,11 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Request_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Request_Handler</class>
                                     <composite>
                                     </composite>
-                                </processor>
+                                </handler>
                             </request>
                             <response>
                                 <validator>
@@ -612,17 +612,17 @@
                                         </payment_status>
                                     </composite>
                                 </validator>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Response_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Response_Handler</class>
                                     <composite>
                                         <info_data>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Response_Processor_InfoData</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Response_Handler_InfoData</class>
                                         </info_data>
                                         <raw_details>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Response_Processor_RawDetails</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Response_Handler_RawDetails</class>
                                         </raw_details>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </credit_card>
                         <debit_card>
@@ -687,11 +687,11 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Request_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Request_Handler</class>
                                     <composite>
                                     </composite>
-                                </processor>
+                                </handler>
                             </request>
                             <response>
                                 <validator>
@@ -702,17 +702,17 @@
                                         </payment_status>
                                     </composite>
                                 </validator>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Response_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Response_Handler</class>
                                     <composite>
                                         <info_data>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Response_Processor_InfoData</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Response_Handler_InfoData</class>
                                         </info_data>
                                         <raw_details>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Response_Processor_RawDetails</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Response_Handler_RawDetails</class>
                                         </raw_details>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </debit_card>
                     </authorize>
@@ -743,9 +743,9 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Request_Processor</class>
-                                </processor>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Request_Handler</class>
+                                </handler>
                             </request>
                             <response>
                                 <validator>
@@ -756,17 +756,17 @@
                                         </payment_status>
                                     </composite>
                                 </validator>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Response_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Response_Handler</class>
                                     <composite>
                                         <info_data>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Response_Processor_InfoData</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Response_Handler_InfoData</class>
                                         </info_data>
                                         <raw_details>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Response_Processor_RawDetails</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Capture_CreditCard_Response_Handler_RawDetails</class>
                                         </raw_details>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </credit_card>
                     </capture>
@@ -792,9 +792,9 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Request_Processor</class>
-                                </processor>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Request_Handler</class>
+                                </handler>
                             </request>
                             <response>
                                 <validator>
@@ -805,17 +805,17 @@
                                         </payment_status>
                                     </composite>
                                 </validator>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Response_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Response_Handler</class>
                                     <composite>
                                         <info_data>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Response_Processor_InfoData</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Response_Handler_InfoData</class>
                                         </info_data>
                                         <raw_details>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Response_Processor_RawDetails</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Refund_CreditCard_Response_Handler_RawDetails</class>
                                         </raw_details>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </credit_card>
                     </refund>
@@ -841,9 +841,9 @@
                                         </payment>
                                     </composite>
                                 </builder>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Request_Processor</class>
-                                </processor>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Request_Handler</class>
+                                </handler>
                             </request>
                             <response>
                                 <validator>
@@ -854,17 +854,17 @@
                                         </payment_status>
                                     </composite>
                                 </validator>
-                                <processor>
-                                    <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Response_Processor</class>
+                                <handler>
+                                    <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Response_Handler</class>
                                     <composite>
                                         <info_data>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Response_Processor_InfoData</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Response_Handler_InfoData</class>
                                         </info_data>
                                         <raw_details>
-                                            <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Response_Processor_RawDetails</class>
+                                            <class>Braspag_Pagador_Model_Transaction_Resource_Void_CreditCard_Response_Handler_RawDetails</class>
                                         </raw_details>
                                     </composite>
-                                </processor>
+                                </handler>
                             </response>
                         </credit_card>
                     </void>

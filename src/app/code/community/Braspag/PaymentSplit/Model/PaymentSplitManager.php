@@ -68,7 +68,7 @@ class Braspag_PaymentSplit_Model_PaymentSplitManager extends Mage_Core_Model_Abs
         foreach ($splitPaymentData->getSubordinates() as $splitSubordinate) {
 
             $paymentSplitCollection = Mage::getModel('braspag_paymentsplit/split')->getCollection();
-            $paymentSplitCollection->addFieldToFilter('sales_quote_id', $order->getQuote()->getId());
+            $paymentSplitCollection->addFieldToFilter('sales_quote_id', $order->getQuoteId());
             $paymentSplitCollection->addFieldToFilter('store_id', $order->getStoreId());
             $paymentSplitCollection->addFieldToFilter('subordinate_merchant_id', $splitSubordinate->getSubordinateMerchantId());
             $paymentSplit = $paymentSplitCollection->getFirstItem();
@@ -84,7 +84,7 @@ class Braspag_PaymentSplit_Model_PaymentSplitManager extends Mage_Core_Model_Abs
             foreach ($splitSubordinate->getSplits() as $split) {
 
                 $paymentSplitsCollection = Mage::getModel('braspag_paymentsplit/split')->getCollection();
-                $paymentSplitsCollection->addFieldToFilter('sales_quote_id', $order->getQuote()->getId());
+                $paymentSplitsCollection->addFieldToFilter('sales_quote_id', $order->getQuoteId());
                 $paymentSplitsCollection->addFieldToFilter('store_id', $order->getStoreId());
                 $paymentSplitsCollection->addFieldToFilter('subordinate_merchant_id', $split->getMerchantId());
                 $paymentSplits = $paymentSplitsCollection->getFirstItem();
@@ -92,7 +92,6 @@ class Braspag_PaymentSplit_Model_PaymentSplitManager extends Mage_Core_Model_Abs
                 $paymentSplits->setAmount($paymentSplits->getAmount() + $split->getAmount())
                     ->setSalesOrderId($order->getId())
                     ->save();
-
             }
 
             foreach ($order->getAllVisibleItems() as $item) {
@@ -110,5 +109,27 @@ class Braspag_PaymentSplit_Model_PaymentSplitManager extends Mage_Core_Model_Abs
         }
 
         return $this;
+    }
+
+    /**
+     * @param int $days
+     * @param string $paymentMethod
+     * @return object
+     */
+    public function getTransactionPostOrdersToExecuteByDays($days = 20, $paymentMethod = \Braspag_Pagador_Model_Config::METHOD_CREDITCARD)
+    {
+        $collection = Mage::getModel('sales/order')->getCollection();
+
+        $collection->getSelect()
+            ->joinLeft(['bps' => 'braspag_payment_split'], 'main_table.entity_id = bps.sales_order_id', [])
+            ->joinInner(['sin' => 'sales_flat_invoice'], 'main_table.entity_id = sin.order_id', [])
+            ->joinInner(['sop' => 'sales_flat_order_payment'], 'main_table.entity_id = sop.parent_id', [])
+            ->where("bps.sales_order_id IS NULL")
+            ->where("sop.method = '".$paymentMethod."'")
+            ->where("DATE_FORMAT(DATE_ADD(main_table.created_at, INTERVAL {$days} DAY), \"%Y-%m-%d\") = DATE_FORMAT(NOW(), \"%Y-%m-%d\")")
+            ->group("main_table.entity_id")
+            ->limit(100);
+
+        return $collection;
     }
 }

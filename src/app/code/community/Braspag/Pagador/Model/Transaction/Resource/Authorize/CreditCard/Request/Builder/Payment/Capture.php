@@ -34,10 +34,15 @@ class Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Request_Bu
     extends Braspag_Pagador_Model_Transaction_Resource_Authorize_CreditCard_Request_Builder_Payment
 {
     /**
+     * @param $payment
+     * @param $amount
      * @return array|bool|mixed
      */
-    public function build()
+    public function build($payment, $amount)
     {
-        return (bool) false;
+        if ($payment->getMethodInstance()->getConfigData('payment_action') != 'authorize_capture') {
+            return (bool) false;
+        }
+        return (bool) true;
     }
 }

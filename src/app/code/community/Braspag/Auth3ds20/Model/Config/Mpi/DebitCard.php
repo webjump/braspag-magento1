@@ -60,4 +60,13 @@ class Braspag_Auth3ds20_Model_Config_Mpi_Debitcard extends Mage_Core_Model_Abstr
     {
         return (bool) Mage::getStoreConfig('braspag_auth3ds20/debitcard_transaction/authorize_on_unenrolled', $storeId);
     }
+
+    /**
+     * @param null $storeId
+     * @return bool
+     */
+    public function isBpmpiDebitCardAuthorizedOnUnsupportedBrand($storeId = null)
+    {
+        return (bool) Mage::getStoreConfig('braspag_auth3ds20/debitcard_transaction/authorize_on_unsupported_brand', $storeId);
+    }
 }

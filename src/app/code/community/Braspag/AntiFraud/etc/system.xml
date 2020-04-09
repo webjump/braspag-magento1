@@ -157,7 +157,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[Tipo de Fluxo para realização da análise de fraude.</br>Primeiro Analise (Analyse First) </br>Primeiro Autorização (Authorize First)]]></comment>
+                            <comment><![CDATA[
+Tipo de Fluxo para realização da análise de fraude.</br>
+<b>Analyse First</b> (Primeiro Analise) </br>
+<b>Authorize First</b> (Primeiro Autorização)]]></comment>
                         </sequence>
                         <sequence_criteria translate="label,comment">
                             <label>Sequence Criteria</label>
@@ -168,7 +171,10 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[Critério do fluxo</br>On Success - Só realiza a analise se tiver sucesso na transação.</br>Always - Sempre realiza a analise ]]></comment>
+                            <comment><![CDATA[
+Critério do fluxo</br>
+<b>On Success</b> (Só realiza a analise se tiver sucesso na transação)</br>
+<b>Always</b> (Sempre realiza a analise) ]]></comment>
                         </sequence_criteria>
                         <capture_on_low_risk translate="label,comment">
                             <label>Capture On Low Risk</label>
@@ -202,58 +208,120 @@
                     <show_in_store>1</show_in_store>
                     <comment></comment>
                     <fields>
-                        <fetch_self_shipping_method translate="label,comment">
-                            <label>Customer fetch self Shipping Method</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_shipping_allmethods</source_model>
-                            <config_path>braspag_antifraud/mdd/fetch_self_shipping_method</config_path>
+                        <sales_channel translate="label,comment">
+                            <label>Sales Channel</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>braspag_antifraud/mdd/sales_channel</config_path>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[]]></comment>
-                        </fetch_self_shipping_method>
-                        <store_code_to_fetch_self translate="label,comment">
-                            <label>Store Code From Customer Fetch Self</label>
+                            <comment><![CDATA[
+                            Possíveis valores: </br>
+<b>Call Center</b> (Compra pelo Telefone) </br>
+<b>Web</b> (Compra pela Web) </br>
+<b>Portal</b> (Um agente fazendo a compra para o cliente) </br>
+<b>Quiosque</b> (Compras em quiosques) </br>
+<b>Móvel</b> (Compras feitas em celulares ou tablets)]]></comment>
+                        </sales_channel>
+                        <merchant_category translate="label,comment">
+                            <label>Merchant Category</label>
                             <frontend_type>text</frontend_type>
-                            <config_path>braspag_antifraud/mdd/store_code_to_fetch_self</config_path>
+                            <config_path>braspag_antifraud/mdd/merchant_category</config_path>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[]]></comment>
-                        </store_code_to_fetch_self>
-                        <vertical_segment translate="label,comment">
-                            <label>Vertical Segment</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>braspag_antifraud/source_verticalSegment</source_model>
-                            <config_path>braspag_antifraud/mdd/vertical_segment</config_path>
+                            <comment><![CDATA[
+Possíveis valores: </br>
+<b>Animais e Bichos de Estimação</b> </br>
+<b>Roupas e Acessórios</b> </br>
+<b>Negócios e Indústria</b> </br>
+<b>Câmeras e Óticas</b> </br>
+<b>Eletrônicos</b> </br>
+<b>Comidas, Bebidas e Cigarro</b> </br>
+<b>Móveis</b> </br>
+<b>Ferramentas</b> </br>
+<b>Saúde e Beleza</b> </br>
+<b>Casa e Jardim</b> </br>
+<b>Malas e Bagagens</b> </br>
+<b>Adulto</b> </br>
+<b>Armas e Munição</b> </br>
+<b>Materiais de Escritório</b> </br>
+<b>Religião e Cerimoniais</b> </br>
+<b>Software</b> </br>
+<b>Equipamentos de Esporte</b> </br>
+<b>Brinquedos e Jogos</b> </br>
+<b>Veículos e Peças</b> </br>
+<b>Livros</b> </br>
+<b>DVDs e Vídeos</b> </br>
+<b>Revistas e Jornais</b> </br>
+<b>Música</b> </br>
+<b>Outras Categorias Não Especificadas</b>]]></comment>
+                        </merchant_category>
+                        <merchant_segment translate="label,comment">
+                            <label>Merchant Segment</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>braspag_antifraud/mdd/merchant_segment</config_path>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <comment><![CDATA[]]></comment>
-                        </vertical_segment>
-                        <store_identity translate="label,comment">
-                            <label>Store Identity (CNPJ)</label>
+                            <comment><![CDATA[
+                            Possíveis valores: </br>
+<b>Varejo<b> </br>
+<b>Atacado</b>]]></comment>
+                        </merchant_segment>
+                        <extra_data1 translate="label,comment">
+                            <label>Extra Data 1</label>
                             <frontend_type>text</frontend_type>
-                            <config_path>braspag_antifraud/mdd/store_identity</config_path>
+                            <config_path>braspag_antifraud/mdd/extra_data1</config_path>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <comment><![CDATA[]]></comment>
-                        </store_identity>
-                        <category_attribute_code translate="label,comment">
-                            <label>Category Attribute Code</label>
+                        </extra_data1>
+                        <extra_data2 translate="label,comment">
+                            <label>Extra Data 2</label>
                             <frontend_type>text</frontend_type>
-                            <config_path>braspag_antifraud/mdd/category_attribute_code</config_path>
+                            <config_path>braspag_antifraud/mdd/extra_data2</config_path>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                             <comment><![CDATA[]]></comment>
-                        </category_attribute_code>
+                        </extra_data2>
+                        <extra_data3 translate="label,comment">
+                            <label>Extra Data 3</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>braspag_antifraud/mdd/extra_data3</config_path>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </extra_data3>
+                        <extra_data4 translate="label,comment">
+                            <label>Extra Data 4</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>braspag_antifraud/mdd/extra_data4</config_path>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </extra_data4>
+                        <extra_data5 translate="label,comment">
+                            <label>Extra Data 5</label>
+                            <frontend_type>text</frontend_type>
+                            <config_path>braspag_antifraud/mdd/extra_data5</config_path>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[]]></comment>
+                        </extra_data5>
                     </fields>
                 </mdd>
             </groups>

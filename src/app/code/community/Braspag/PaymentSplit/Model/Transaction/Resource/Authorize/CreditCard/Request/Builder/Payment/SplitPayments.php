@@ -49,7 +49,13 @@ class Braspag_PaymentSplit_Model_Transaction_Resource_Authorize_CreditCard_Reque
         $paymentSplitData = Mage::getModel('braspag_paymentsplit/paymentSplit')
             ->getPaymentSplitDataFromQuote($quote, $splitPaymentConfigModel);
 
-        if (!$paymentSplitData->getIsActive()) {
+        if (!$splitPaymentConfigModel->isActive()
+            || $payment->getMethodInstance()->getConfigData('payment_action') == 'authorize'
+            || (
+                $payment->getMethodInstance()->getConfigData('payment_action') == 'authorize_capture'
+                && $splitPaymentConfigModel->getSplitType() == Braspag_PaymentSplit_Model_Source_TransactionType::BRASPAG_PAYMENT_SPLIT_TRANSACTION_TYPE_TRANSACTION_POST
+            )
+        ) {
             return [];
         }
 
