@@ -57,8 +57,6 @@ extends Braspag_Pagador_Model_Transaction_Builder_Payment
 
         if (!empty($paymentData->getData('ExternalAuthentication'))) {
             $paymentData->setData('Authenticate', true);
-            $paymentData->setData('DoSplit', false);
-            $paymentData->unsetData('SplitPayments');
         }
 
         $this->setDataBuild($paymentData->getData());

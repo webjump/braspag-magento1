@@ -77,7 +77,7 @@ class Braspag_PaymentSplit_Model_PaymentSplit extends Mage_Core_Model_Abstract
 
         $subordinates = [];
 
-        foreach ($order->getAllItems() as $item) {
+        foreach ($order->getAllVisibleItems() as $item) {
 
             $product = $item->getProduct();
 
