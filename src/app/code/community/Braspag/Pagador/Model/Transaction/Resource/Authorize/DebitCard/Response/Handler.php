@@ -43,7 +43,15 @@ extends Braspag_Pagador_Model_Transaction_AbstractHandler
     {
         $paymentDataResponse = $response->getPayment();
 
-        $payment->setIsTransactionPending(true);
+        if ($paymentDataResponse->getStatus() == Braspag_Lib_Pagador_TransactionInterface::TRANSACTION_STATUS_PENDING
+            || $paymentDataResponse->getStatus() == Braspag_Lib_Pagador_TransactionInterface::TRANSACTION_STATUS_NOT_FINISHED
+        ) {
+            $payment->setIsTransactionPending(true);
+        }
+
+        if (!$payment->getIsTransactionPending()) {
+            $payment->getOrder()->setStatus();
+        }
 
         $payment->setTransactionParentId($response->getOrder()->getBraspagOrderId())
             ->setTransactionId($response->getOrder()->getBraspagOrderId())

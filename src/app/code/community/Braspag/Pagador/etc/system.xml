@@ -191,7 +191,7 @@
                             <show_in_store>1</show_in_store>
                         </autoredirect>
                         <return_url translate="label,comment">
-                            <label>Return URL after payment</label>
+                            <label>Return URL after payment. Example: https://STORE_URL/sales/order/view/order_id/{ORDER_ID} will return to order page.</label>
                             <comment>URL to return after payment</comment>
                             <config_path>payment/braspag_debitcard/return_url</config_path>
                             <frontend_type>text</frontend_type>
@@ -392,15 +392,6 @@
                                 <autoinvoice>1</autoinvoice>
                             </depends>
                         </send_email>
-                        <allowed_ips translate="label comment">
-                            <label>Allowed IPs from Braspag</label>
-                            <comment><![CDATA[The order status update for security reasons must only accept requests from Braspag IPs. For more details, consult the integration manual.<br />Type one IP address per line.]]></comment>
-                            <frontend_type>textarea</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </allowed_ips>
                     </fields>
                 </status_update>
 			</groups>

@@ -15,22 +15,24 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
     /**
      * @param $transactionId
      * @param null $recurrentPaymentId
+     * @param null $payment
      * @return mixed
      * @throws Exception
      */
-    public function notify($transactionId, $recurrentPaymentId = null)
+    public function notify($transactionId, $recurrentPaymentId = null, $payment = null)
     {
         $braspagTransactionManager = Mage::getModel('braspag_pagador/payment_braspagTransactionManager');
 
-        $transactionManager = $this->getTransactionManager();
-
         try{
-            $magentoTransaction = $transactionManager->loadByTxnId($transactionId);
+            
+            if (empty($payment)) {
+                $magentoTransaction = $this->getTransactionManager()->loadByTxnId($transactionId);
 
-            $payment = $magentoTransaction->getOrder()->getPayment();
+                $payment = $magentoTransaction->getOrder()->getPayment();
 
-            if (empty($magentoTransaction->getId())) {
-                throw new Exception('Invalid Transaction Id.');
+                if (empty($magentoTransaction->getId())) {
+                    throw new Exception('Invalid Transaction Id.');
+                }
             }
 
             $braspagTransaction = $braspagTransactionManager->getTransactionByPaymentId($transactionId);
@@ -64,7 +66,7 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
                 Mage::throwException($this->getHelper()->__($errorMsg));
             }
 
-            $paymentMethodToExecute->execute($payment, $transactionDataPayment);
+            return $paymentMethodToExecute->execute($payment, $transactionDataPayment);
 
         } catch(\Exception $e) {
             $order = $payment->getOrder();
@@ -79,8 +81,6 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate
 
             throw $e;
         }
-
-        return $payment;
     }
 
     /**

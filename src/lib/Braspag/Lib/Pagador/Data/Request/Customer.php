@@ -16,6 +16,7 @@ class Braspag_Lib_Pagador_Data_Request_Customer extends Braspag_Lib_Core_Data_Ab
     protected $name;
     protected $email;
     protected $birthDate;
+    protected $phone;
     protected $address;
     protected $deliveryAddress;
 
@@ -77,6 +78,22 @@ class Braspag_Lib_Pagador_Data_Request_Customer extends Braspag_Lib_Core_Data_Ab
         $this->birthDate = $birthDate;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
     }
 
     public function getAddress()

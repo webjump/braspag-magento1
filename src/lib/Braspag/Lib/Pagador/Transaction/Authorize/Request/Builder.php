@@ -110,6 +110,7 @@ class Braspag_Lib_Pagador_Transaction_Authorize_Request_Builder
                 'IdentityType' => $customer->getIdentityType(),
                 'Email' => $customer->getEmail(),
                 'Birthdate' => $customer->getBirthdate(),
+                'Phone' => $customer->getPhone(),
                 'Address' => [],
                 'DeliveryAddress' => [],
             ];

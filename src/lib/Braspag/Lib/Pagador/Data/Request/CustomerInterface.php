@@ -19,6 +19,8 @@ interface Braspag_Lib_Pagador_Data_Request_CustomerInterface
 
     public function getBirthDate();
 
+    public function getPhone();
+
     public function getAddress();
 
     public function getDeliveryAddress();

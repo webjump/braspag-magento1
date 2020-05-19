@@ -11,12 +11,17 @@ class Braspag_Pagador_Model_Payment_InvoiceManager extends Braspag_Pagador_Model
     {
         $order = $payment->getOrder();
 
-        if (($paymentMethod == 'braspag_creditcard' || $paymentMethod == 'braspag_justclick') &&
-            !$payment->getIsFraudDetected() &&
-            !$payment->getIsTransactionPending() &&
-            $order->canInvoice() &&
-            $payment->getMethodInstance()->getConfigPaymentAction() == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
-        ) {
+        if ($payment->getIsFraudDetected() || $payment->getIsTransactionPending() || !$order->canInvoice()) {
+            return false;
+        }
+
+        if (($paymentMethod == Braspag_Pagador_Model_Config::METHOD_CREDITCARD
+            || $paymentMethod == Braspag_Pagador_Model_Config::METHOD_JUSTCLICK)
+            && $payment->getMethodInstance()->getConfigPaymentAction() != Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE) {
+            return false;
+        }
+
+        if ($paymentMethod == Braspag_Pagador_Model_Config::METHOD_DEBITCARD) {
             return true;
         }
 
@@ -66,6 +71,7 @@ class Braspag_Pagador_Model_Payment_InvoiceManager extends Braspag_Pagador_Model
             $invoice->getOrder()->setCustomerNoteNotify(true);
         }
 
+        $invoice->getOrder()->setStatus(Mage::getModel('braspag_pagador/config_statusUpdate')->getOrderStatusPaid());
         $invoice->getOrder()->setIsInProcess(true);
 
         $invoice->register();
@@ -96,10 +102,6 @@ class Braspag_Pagador_Model_Payment_InvoiceManager extends Braspag_Pagador_Model
      */
     public function registerCaptureNotification($payment, $amount, $transactionDataPayment, $sendEmail)
     {
-        $order = $payment->getOrder();
-
-        $payment->registerCaptureNotification($amount, true);
-
         $raw_details = [];
         foreach ($transactionDataPayment->getArrayCopy() as $r_key => $r_value) {
             $raw_details['payment_capture_'. $r_key] = is_array($r_value) ? json_encode($r_value) : $r_value;
@@ -110,9 +112,13 @@ class Braspag_Pagador_Model_Payment_InvoiceManager extends Braspag_Pagador_Model
         $payment->setParentTransactionId($transactionDataPayment->getPaymentId())
             ->setTransactionId($transactionDataPayment->getPaymentId()."-capture");
 
-        $order->save();
+        $payment->registerCaptureNotification($amount, true);
 
         $invoice = $payment->getCreatedInvoice();
+
+        $payment->setIsTransactionApproved(true);
+
+        $payment->getOrder()->save();
 
         if ($sendEmail) {
             $invoice->sendEmail(true);

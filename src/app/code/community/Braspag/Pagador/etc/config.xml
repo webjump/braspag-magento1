@@ -200,7 +200,6 @@
             <status_update>
                 <order_status_paid>processing</order_status_paid>
                 <order_status_pending_payment>pending_payment</order_status_pending_payment>
-                <allowed_ips>209.134.55.130</allowed_ips>
             </status_update>
             <api>
                 <config>
@@ -341,6 +340,9 @@
                             <birth_date>
                                 <class>Braspag_Pagador_Model_Transaction_Builder_Customer_BirthDate</class>
                             </birth_date>
+                            <phone>
+                                <class>Braspag_Pagador_Model_Transaction_Builder_Customer_Phone</class>
+                            </phone>
                             <address>
                                 <class>Braspag_Pagador_Model_Transaction_Builder_Customer_Address</class>
                                 <composite>

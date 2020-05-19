@@ -5,6 +5,7 @@ class Braspag_Pagador_Model_Config extends Mage_Core_Model_Abstract
     const MERCHANT_KEY_DEMO_ACCOUNT = '3uZkdtNRS1xbedqv0VtlcDwtEgONbL9KWTrFkvgm';
 
     const METHOD_CREDITCARD = 'braspag_creditcard';
+    const METHOD_JUSTCLICK = 'braspag_justclick';
     const METHOD_DEBITCARD = 'braspag_debitcard';
     const METHOD_BOLETO = 'braspag_boleto';
 
@@ -58,23 +59,16 @@ class Braspag_Pagador_Model_Config extends Mage_Core_Model_Abstract
     public function getAcquirers()
     {
         $return = array(
+            'Simulado' => '',
             'Cielo' => 'Cielo',
-            'Cielo30' => 'Cielo 3.0',
-            'Redecard' => 'Redecard',
-            'Rede2' => 'Rede 2',
+            'Cielo30' => 'Cielo 30',
             'Getnet' => 'Getnet',
+            'Rede' => 'Rede',
+            'Rede2' => 'Rede 2',
             'GlobalPayments' => 'Global Payments',
             'Stone' => 'Stone',
+            'Safra' => 'Safra',
             'FirstData' => 'First Data',
-            'Sub1' => 'Sub 1',
-            'Banorte' => 'Banorte',
-            'Credibanco' => 'Credibanco',
-            'Transbank' => 'Transbank',
-            'RedeSitef' => 'Rede Sitef',
-            'CieloSitef' => 'Cielo Sitef',
-            'SantanderSitef' => 'SantanderSitef',
-            'DMCard' => 'DMCard',
-            'Simulado' => '',
         );
 
         return $return;
