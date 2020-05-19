@@ -40,12 +40,12 @@ class Braspag_Auth3ds20_Model_Mpi extends Mage_Core_Model_Abstract
     {
     	try{
     	    $api = \Mage::getSingleton('braspag_auth3ds20/mpi_auth');
-//
-//    	    $resultData = Mage::getSingleton('core/session')->getMpiTokenResult();
-//            $result = unserialize($resultData);
-//            $dateNow = new \DateTime('now');
-//
-//            if (!$result || $dateNow > $result->getExpirationDate()) {
+
+    	    $resultData = Mage::getSingleton('core/session')->getMpiTokenResult();
+            $result = unserialize($resultData);
+            $dateNow = new \DateTime('now');
+
+            if (!$result || $dateNow > $result->getExpirationDate()) {
 
                 $result = $api->getToken();
 
@@ -58,7 +58,7 @@ class Braspag_Auth3ds20_Model_Mpi extends Mage_Core_Model_Abstract
                 $result->setExpirationDate($dateToExpire);
 
                 \Mage::getSingleton('core/session')->setMpiTokenResult(serialize($result));
-//            }
+            }
 
             if ($errors = $result->getErrorReport()->getErrors()) {
 

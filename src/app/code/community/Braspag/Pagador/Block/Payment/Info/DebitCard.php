@@ -57,6 +57,7 @@ class Braspag_Pagador_Block_Payment_Info_DebitCard extends Braspag_Pagador_Block
 
         $additionalData = $this->getInfo()->getAdditionalInformation();
         $paymentRequest = (isset($additionalData['payment_request'])) ? $additionalData['payment_request'] : array();
+        $paymentResponse = (isset($additionalData['payment_response'])) ? $additionalData['payment_response'] : array();
 
         $_hlp = Mage::helper('braspag_pagador');
 

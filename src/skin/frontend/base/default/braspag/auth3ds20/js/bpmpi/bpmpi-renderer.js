@@ -19,7 +19,7 @@ BpmpiRenderer.prototype = {
     }
 
     if (item) {
-      $j('.'+item).val(value);
+      jQuery('.'+item).val(value);
     }
   },
 
@@ -27,7 +27,7 @@ BpmpiRenderer.prototype = {
 
     if (elementName != '' && appendToElement.find("input[name='"+elementName+"']").length == 0) {
       appendToElement.append(
-        $j('<input>')
+        jQuery('<input>')
           .attr('type', 'hidden')
           .attr('name', elementName)
           .addClass(elementClass)
@@ -38,7 +38,7 @@ BpmpiRenderer.prototype = {
     } else if (elementClass != '' && appendToElement.find("input[class='"+elementClass+"']").length == 0) {
 
       appendToElement.append(
-        $j('<input>')
+        jQuery('<input>')
           .attr('type', 'hidden')
           .addClass(elementClass)
       );

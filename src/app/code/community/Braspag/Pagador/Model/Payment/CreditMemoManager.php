@@ -43,7 +43,7 @@ class Braspag_Pagador_Model_Payment_CreditMemoManager extends Braspag_Pagador_Mo
             ->addObject($payment);
         $transactionSave->save();
 
-        $order->save();
+        $payment->getOrder()->save();
 
         if ($sendEmail) {
             $creditMemo->sendEmail(true);

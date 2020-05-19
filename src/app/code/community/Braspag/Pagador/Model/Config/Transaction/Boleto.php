@@ -8,14 +8,15 @@ class Braspag_Pagador_Model_Config_Transaction_Boleto extends Mage_Core_Model_Ab
     {
 
         $return = array(
-            "Bradesco2" => "Boleto Registrado Bradesco",
             "BancoDoBrasil2" => "Boleto Registrado Banco do Brasil",
-            "ItauShopline" => "Boleto Registrado Itau Shopline",
-            "Itau2" => "Boleto Registrado Itau",
-            "Santander2" => "Boleto Registrado Santander",
+            "BankofAmerica" => "Boleto Registrado Bank Of America",
+            "Bradesco2" => "Boleto Registrado Bradesco",
+            "Braspag" => "Boleto Registrado Braspag",
             "Caixa2" => "Boleto Registrado Caixa",
-            "CitiBank2" => "Boleto Registrado Citi Bank",
-            "BankOfAmerica" => "Boleto Registrado Bank Of America",
+            "Citibank2" => "Boleto Registrado Citi Bank",
+            "Itau2" => "Boleto Registrado Itau",
+            "ItauShopline" => "Boleto Registrado Itau Shopline",
+            "Santander2" => "Boleto Registrado Santander",
             "Simulado" => "Simulado"
         );
 

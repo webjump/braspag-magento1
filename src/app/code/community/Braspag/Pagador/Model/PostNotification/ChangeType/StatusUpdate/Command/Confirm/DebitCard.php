@@ -15,7 +15,7 @@ class Braspag_Pagador_Model_PostNotification_ChangeType_StatusUpdate_Command_Con
      * @param $payment
      * @param $transactionDataPayment
      * @return mixed
-     * @throws Mage_Core_Exception
+     * @throws Exception
      */
     public function execute($payment, $transactionDataPayment)
     {

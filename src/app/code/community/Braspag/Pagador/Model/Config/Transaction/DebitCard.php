@@ -26,12 +26,13 @@ class Braspag_Pagador_Model_Config_Transaction_DebitCard extends Mage_Core_Model
     public function getAcquirersDebitCardPaymentMethods()
     {
         $return = array(
-            'Cielo' => array("Visa", "Master"),
-            'Cielo30' => array("Visa", "Master"),
-            'Getnet' => array("Visa", "Master"),
-            'FirstData' => array("Visa", "Master"),
-            'GlobalPayments' => array("Visa", "Master"),
-            'Simulado' => array('Simulado')
+            'Simulado' => array('Simulado'),
+            'Cielo' => array('Visa', 'Master'),
+            'Cielo30' => array('Visa', 'Master'),
+            'Getnet' => array('Visa', 'Master'),
+            'Rede2' => array('Visa', 'Master'),
+            'FirstData' => array('Visa', 'Master'),
+            'GlobalPayments' => array('Visa', 'Master'),
         );
 
         return $return;

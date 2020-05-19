@@ -19,7 +19,6 @@ Bpmpi.prototype = {
     this.isBpmpiMasterCardNotifyOnlyEnabledDC = false;
     this.isTestEnvironment = false;
     this.paymentType = '';
-    this.saveOrderTriggered = false;
   },
 
   startTransaction: function(){
@@ -102,13 +101,13 @@ Bpmpi.prototype = {
         .then(function(){
 
           var returnData = {
-            'bpmpiAuthFailureType' : $j('.bpmpi_auth_failure_type').val(),
-            'bpmpiAuthCavv' : $j('.bpmpi_auth_cavv').val(),
-            'bpmpiAuthVersion' : $j('.bpmpi_auth_version').val(),
-            'bpmpiAuthXid' : $j('.bpmpi_auth_xid').val(),
-            'bpmpiAuthEci' : $j('.bpmpi_auth_eci').val(),
-            'bpmpiAuthVersion' : $j('.bpmpi_auth_version').val(),
-            'bpmpiAuthReferenceId' : $j('.bpmpi_auth_reference_id').val()
+            'bpmpiAuthFailureType' : jQuery('.bpmpi_auth_failure_type').val(),
+            'bpmpiAuthCavv' : jQuery('.bpmpi_auth_cavv').val(),
+            'bpmpiAuthVersion' : jQuery('.bpmpi_auth_version').val(),
+            'bpmpiAuthXid' : jQuery('.bpmpi_auth_xid').val(),
+            'bpmpiAuthEci' : jQuery('.bpmpi_auth_eci').val(),
+            'bpmpiAuthVersion' : jQuery('.bpmpi_auth_version').val(),
+            'bpmpiAuthReferenceId' : jQuery('.bpmpi_auth_reference_id').val()
           };
 
           console.log(returnData);
@@ -135,20 +134,20 @@ Bpmpi.prototype = {
     return;
   },
 
-  placeOrder: function () {
+  placeOrder: async function () {
 
     var self = this;
 
-    $j('.bpmpi_auth_failure_type').change(function () {
+    jQuery('.bpmpi_auth_failure_type').one('change', function () {
 
       if (self.isBpmpiEnabled()) {
 
         if (self.paymentType == 'creditcard') {
 
-          var paymentForm = $j("#" + payment.form + ' #braspag_creditcard_creditcard_type_div');
+          var paymentForm = jQuery("#" + payment.form + ' #braspag_creditcard_creditcard_type_div');
         } else if (self.paymentType == 'debitcard') {
 
-          var paymentForm = $j("#" + payment.form + ' #braspag_debitcard_debitcard_type_div');
+          var paymentForm = jQuery("#" + payment.form + ' #braspag_debitcard_debitcard_type_div');
         } else {
 
           checkout.setLoadWaiting(false);
@@ -179,21 +178,21 @@ Bpmpi.prototype = {
           paymentForm, 'payment[payment_request][authentication_reference_id]', 'authentication_reference_id', ''
         );
 
-        $j('.authentication_failure_type').val($j('.bpmpi_auth_failure_type').val());
-        $j('.authentication_cavv').val($j('.bpmpi_auth_cavv').val());
-        $j('.authentication_xid').val($j('.bpmpi_auth_xid').val());
-        $j('.authentication_eci').val($j('.bpmpi_auth_eci').val());
-        $j('.authentication_version').val($j('.bpmpi_auth_version').val());
-        $j('.authentication_reference_id').val($j('.bpmpi_auth_reference_id').val());
+        jQuery('.authentication_failure_type').val(jQuery('.bpmpi_auth_failure_type').val());
+        jQuery('.authentication_cavv').val(jQuery('.bpmpi_auth_cavv').val());
+        jQuery('.authentication_xid').val(jQuery('.bpmpi_auth_xid').val());
+        jQuery('.authentication_eci').val(jQuery('.bpmpi_auth_eci').val());
+        jQuery('.authentication_version').val(jQuery('.bpmpi_auth_version').val());
+        jQuery('.authentication_reference_id').val(jQuery('.bpmpi_auth_reference_id').val());
 
         checkout.setLoadWaiting(false);
       }
 
       review.save();
 
-    });
+    }).bind();
 
-    var paymentMethod = $j('input[name="payment[method]"]:checked').val();
+    var paymentMethod = jQuery('input[name="payment[method]"]:checked').val();
 
     if (paymentMethod == 'braspag_creditcard') {
       this.paymentType = 'creditcard';
@@ -207,46 +206,30 @@ Bpmpi.prototype = {
       return;
     }
 
-    if (self.saveOrderTriggered) {
-      review.save();
-      return;
-    }
-
-    self.saveOrderTriggered = true;
-
     checkout.setLoadWaiting('review');
 
-    self.renderData()
-      .then(function () {
-        self.getAuthenticateData()
-          .then(function(){
+    try {
 
-          }).catch(function (err) {
+      await self.renderData();
+      await self.getAuthenticateData();
 
-            self.disableBpmpi();
+    } catch (err) {
 
-            if (self.isTestEnvironment) {
-              console.log(err);
-            }
-            review.save();
-          })
-      }).catch(function (err) {
+      self.disableBpmpi();
 
-        self.disableBpmpi();
+      if (self.isTestEnvironment) {
+        console.log(err);
+      }
 
-        if (self.isTestEnvironment) {
-          console.log(err);
-        }
-
-        review.save();
-      });
+      review.save();
+    }
   },
 
   validateAuthenticate: function() {
     var self = this;
 
     if (self.paymentType == 'creditcard'){
-      var providerCC = $j('#braspag_creditcard_creditcard_type').val();
+      var providerCC = jQuery('#braspag_creditcard_creditcard_type').val();
 
       if (!this.isBpmpiEnabledCC) {
         return false;
@@ -258,7 +241,7 @@ Bpmpi.prototype = {
     }
 
     if (self.paymentType == 'debitcard') {
-      var providerDC = $j('#braspag_debitcard_debitcard_type').val();
+      var providerDC = jQuery('#braspag_debitcard_debitcard_type').val();
 
       if (!this.isBpmpiEnabledDC) {
           return false;
@@ -327,11 +310,11 @@ Bpmpi.prototype = {
     this.bpmpiRenderer.renderBpmpiData('bpmpi_paymentmethod', '', 'Credit');
     this.bpmpiRenderer.renderBpmpiData('bpmpi_auth_notifyonly', false, this.isBpmpiMasterCardNotifyOnlyEnabledCC);
 
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardnumber', false, $j('#braspag_creditcard_creditcard_number').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_billto_contactname', false, $j('#braspag_creditcard_creditcard_owner').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationmonth', false, $j('#braspag_creditcard_expiration').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationyear', false, $j('#braspag_creditcard_expiration_yr').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_installments', false, $j('#braspag_creditcard_installments').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardnumber', false, jQuery('#braspag_creditcard_creditcard_number').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_billto_contactname', false, jQuery('#braspag_creditcard_creditcard_owner').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationmonth', false, jQuery('#braspag_creditcard_expiration').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationyear', false, jQuery('#braspag_creditcard_expiration_yr').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_installments', false, jQuery('#braspag_creditcard_installments').val());
   },
 
   renderDebitcardData: function() {
@@ -339,10 +322,10 @@ Bpmpi.prototype = {
     this.bpmpiRenderer.renderBpmpiData('bpmpi_paymentmethod', '', 'Debit');
     this.bpmpiRenderer.renderBpmpiData('bpmpi_auth_notifyonly', false, this.isBpmpiMasterCardNotifyOnlyEnabledDC);
 
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardnumber', false, $j('#braspag_debitcard_debitcard_number').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_billto_contactname', false, $j('#braspag_debitcard_debitcard_owner').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationmonth', false, $j('#braspag_debitcard_expiration').val());
-    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationyear', false, $j('#braspag_debitcard_expiration_yr').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardnumber', false, jQuery('#braspag_debitcard_debitcard_number').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_billto_contactname', false, jQuery('#braspag_debitcard_debitcard_owner').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationmonth', false, jQuery('#braspag_debitcard_expiration').val());
+    this.bpmpiRenderer.renderBpmpiData('bpmpi_cardexpirationyear', false, jQuery('#braspag_debitcard_expiration_yr').val());
     this.bpmpiRenderer.renderBpmpiData('bpmpi_installments', false, 1);
   },
   
@@ -382,9 +365,9 @@ Bpmpi.prototype = {
 
   renderCartData: function (cart) {
     var self = this;
-    var bpmpiDataCartItems = $j('#bpmpi_data_cart');
+    var bpmpiDataCartItems = jQuery('#bpmpi_data_cart');
 
-    $j.each(cart.items, function (k, i) {
+    jQuery.each(cart.items, function (k, i) {
       k++;
       self.bpmpiRenderer
         .createInputHiddenElement(bpmpiDataCartItems, '', 'bpmpi_cart_' + k + '_description', i.bpmpi_cart_description);

@@ -13,10 +13,10 @@ class Braspag_Pagador_Model_Source_Acquirer_Abstract
         if(!$this->_options){
 
             $acquirers = $this->getConfig()->getAcquirers();
-                $ccAcquirers = $this->getPaymentMethods();
+            $ccAcquirers = $this->getPaymentMethods();
 
             $this->_options = array();
-            foreach($ccAcquirers AS $acquirerKey => $brands){
+            foreach($ccAcquirers as $acquirerKey => $brands){
 
                 foreach ($brands as $brand) {
                     $this->_options[] = array(

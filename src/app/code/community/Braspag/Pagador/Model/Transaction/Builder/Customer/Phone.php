@@ -30,17 +30,17 @@
  * @license   http://www.webjump.com.br  Copyright
  * @link      http://www.webjump.com.br
  **/
-class Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Request_Builder_Payment_ReturnUrl
-    extends Braspag_Pagador_Model_Transaction_Resource_Authorize_DebitCard_Request_Builder_Payment
+class Braspag_Pagador_Model_Transaction_Builder_Customer_Phone
+    extends Braspag_Pagador_Model_Transaction_Builder_Customer
 {
     /**
      * @param $payment
-     * @return array|mixed|string
+     * @return array
      */
     public function build($payment)
     {
-        $orderId = $payment->getOrder()->getId();
+        $phoneNumber = $payment->getOrder()->getBillingAddress()->getTelephone();
 
-        return str_replace("{ORDER_ID}", $orderId, trim($payment->getMethodInstance()->getConfigData('return_url')));
+        return $this->getBraspagCoreHelper()->clearPhoneNumber($phoneNumber);
     }
 }

@@ -46,8 +46,6 @@ class Braspag_Pagador_Model_Transaction_Builder_Customer_Identity
             return null;
         }
 
-        $taxvat = $this->getBraspagCoreHelper()->clearTaxVat($taxvat);
-
-        return $taxvat;
+        return $this->getBraspagCoreHelper()->clearTaxVat($taxvat);
     }
 }
